@@ -1,0 +1,69 @@
+# AUTO QA THEME DEPLOYMENT WORKFLOW
+# ---------------------------------
+# This workflow is automatically triggered when a PR is merged into the develop branch
+# This ensures the QA theme is always up to date with the latest changes
+# It can also be ran manually by clicking the "Run workflow" button in the Github Actions tab
+
+# NOTE: JSON config files will not be pushed as they are being ignored in the .shopifyignore file
+
+# Required Github enviroment secrets / variables:
+# - SHOPIFY_CLI_THEME_TOKEN: Shopify CLI token
+# - SHOPIFY_FLAG_STORE: Shopify store URL
+# - QA_THEME_ID: Shopify theme ID
+
+# These need to be added via the Github repo settings under "Environments"
+
+name: 🚀 Update QA theme
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+run-name: Deploying ${{ github.head_ref || github.ref_name || github.ref || github.event.ref }} to ${{ inputs.store }} (@${{ github.actor }})
+
+jobs:
+  deploy:
+    if: ${{ vars.QA_THEME_ID }} != null
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [Development, Sales Eng]
+    environment: ${{ matrix.environment }}
+    # Set the environment value to the name of the environment in the Github repo settings
+    env:
+      SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
+      SHOPIFY_FLAG_STORE: '${{ vars.SHOPIFY_FLAG_STORE }}'
+      QA_THEME_ID: '${{ vars.QA_THEME_ID }}'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+          bundler: 'latest'
+
+      - name: Install Shopify CLI
+        run: npm install -g @shopify/cli@3.67.1
+
+      - name: Install Dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Build
+        run: npx turbo build
+
+      - name: Deploy theme
+        # NOTE: JSON config files will not be pushed as they are being ignored in the .shopifyignore file
+        run: shopify theme push --theme "${{ env.QA_THEME_ID }}"
+
+      - uses: devil1991/shopify-jsons-sync@v1.4.2
+        # This action is used to sync new JSON content (locale strings & JSON templates) to the theme
+        # Note: No existing content on the theme being deployed too will be edited or pushed
+        with:
+          store: '${{ env.SHOPIFY_FLAG_STORE }}'
+          theme: '${{ env.QA_THEME_ID }}'

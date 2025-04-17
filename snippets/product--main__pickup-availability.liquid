@@ -1,0 +1,15 @@
+{%- render '@needs-script', entries: 'core-inject-section' -%}
+
+{%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities
+  | where: 'pick_up_enabled', true
+-%}
+
+{%- if pick_up_availabilities.size > 0 -%}
+  <section-injection
+    sub-section-id='pickup-availability-preview'
+    id='pickup-availability'
+    section-name='pickup-availability'
+    base-url='{{ routes.root_url }}variants/{{ product.selected_or_first_available_variant.id }}/'
+  >
+  </section-injection>
+{%- endif -%}

@@ -1,0 +1,56 @@
+<script>
+  var Shopify = Shopify || {};
+  Shopify.nosto = {}
+  Shopify.nosto.money_format = {{ shop.money_format | json }};
+</script>
+
+{% comment %}
+  Example Nosto Templates
+
+  Consider extracting these into a `nosto-templates.liquid` snippet
+
+  We need to pass the following attributes to the Nosto templates:
+  - result_id: The unique identifier for the recommendation result
+  - title: The title of the recommendation
+  - products: An array of product objects
+
+  <template id='nosto-templates'>
+    <div data-template-type='nosto-cart-slideshow'>
+      <cart-slideshow-nosto
+        result-id='%%result_id%%'
+        title='%%title%%'
+        products='%%products%%'
+      >
+      </cart-slideshow-nosto>
+    </div>
+  </template>
+{% endcomment %}
+
+<template id='nosto-templates'>
+  <div data-template-type='nosto-products-carousel'>
+    <nosto-products-carousel
+      result-id='%%result_id%%'
+      title='%%title%%'
+      products='%%products%%'
+    >
+    </nosto-products-carousel>
+  </div>
+</template>
+
+<!-- Global nosto -->
+<script type='text/javascript'>
+  ;(() => {
+    window.nostojs =
+      window.nostojs ||
+      ((cb) => {
+        ;(window.nostojs.q = window.nostojs.q || []).push(cb)
+      })
+  })()
+</script>
+
+<script src='{{ "-nosto-recommendations.js" | asset_url }}' type='module'></script>
+
+<script type='text/javascript'>
+  nostojs((api) => api.setAutoLoad(false))
+</script>
+<script src='//connect.nosto.com/include/{{- settings.nosto_api_key -}}' async></script>

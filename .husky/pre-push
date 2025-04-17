@@ -1,0 +1,6 @@
+npm run json:lint
+npm run build
+npm run format
+npm run lint:theme -- --auto-correct
+npm run lint:js -- --fix
+npm run typecheck

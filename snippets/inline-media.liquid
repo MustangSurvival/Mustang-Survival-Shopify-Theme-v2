@@ -1,0 +1,106 @@
+{% comment %}
+  Renders a deferred media element that loads a video when the user interacts with the poster image.
+
+  Accepts the following parameters:
+  - title: The title for the video.
+  - cover_image: The poster image for the video, if not preview_image from media is used.
+  - video: The video object for the video
+  - loop: Whether the video should loop.
+  - autoplay: Whether the video should autoplay.
+  - video_url: Video url for external videos (Youtube, Vimeo, etc).
+{% endcomment %}
+
+{%- liquid
+  assign video_title = title
+  assign video_id = video.id
+  assign video_url = video_url
+  assign video_alt = 'sections.video.load_video' | t: description: video_title | escape
+  assign poster = cover_image | default: video.preview_image
+  assign autoplay = autoplay | default: true, allow_false: true
+  assign loop = loop | default: false, allow_false: true
+  assign muted = muted | default: false, allow_false: true
+  assign controls = controls | default: true, allow_false: true
+  assign object_fit = object_fit | default: 'object-contain'
+  assign class = class | default: 'relative w-full aspect-[16/9]'
+  assign poster_loading = poster_loading | default: 'lazy'
+  assign toggle_muting = toggle_muting | default: false, allow_false: true
+-%}
+
+{%- if video_id != blank or video_url != blank -%}
+  {%- render '@needs-script', entries: 'core-inline-media' -%}
+  <inline-media
+    class='{{ class }} group'
+  >
+    <div
+      aria-label='{{ alt }}'
+      class='absolute inset-0 w-full h-full flex justify-end items-end z-10'
+    >
+      {%- if poster != null -%}
+        {%- render 'image',
+          width: 1440,
+          image: poster,
+          sizes: '50vw',
+          alt: video_alt,
+          class: 'absolute inset-0 w-full h-full group-[[playing="true"]]:opacity-0 transition-opacity duration-300 pointer-events-none',
+          loading: poster_loading,
+          format: 'pjpg'
+        -%}
+      {%- else -%}
+        {{ 'hero-apparel-3' | placeholder_svg_tag: 'absolute inset-0 w-full h-full' }}
+      {%- endif -%}
+      <div class='flex items-center justify-end gap-xs m-sm'>
+        <button
+          type='button'
+          play-toggle
+          class='size-10 text-t-foreground rounded bg-t-background bg-opacity-40 inline-flex items-center justify-center z-10 drop-shadow'
+        >
+          {%- render 'icon' with 'icon-play', size: 16, class: 'group-[[playing="true"]]:hidden' -%}
+          {%- render 'icon' with 'icon-pause', size: 16, class: 'group-[[playing="false"]]:hidden' -%}
+        </button>
+
+        {%- if toggle_muting -%}
+          <button
+            type='button'
+            volume-toggle
+            class='size-10 text-t-foreground rounded bg-t-background bg-opacity-40 inline-flex items-center justify-center z-10 drop-shadow'
+          >
+            {%- render 'icon' with 'icon-unmute', size: 16, class: 'group-[[muted="true"]]:hidden' -%}
+            {%- render 'icon' with 'icon-mute', size: 16, class: 'group-[[muted="false"]]:hidden' -%}
+          </button>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- assign video_class = 'absolute w-full h-full inset-0' | append: ' ' | append: object_fit -%}
+    {% if video_url != blank %}
+      {% if video_url contains 'vimeo' %}
+        {% assign video_id = video_url | split: '/' | last %}
+        {% assign formatted_url = 'https://player.vimeo.com/video/' | append: video_id %}
+      {% else %}
+        {% assign formatted_url = video_url %}
+      {% endif %}
+
+      <iframe
+        src='{{ formatted_url }}?autoplay={{ autoplay | downcase }}&loop={{ loop | downcase }}&muted={{ muted | downcase }}&controls={{ controls | downcase }}'
+        frameborder='0'
+        title='{{ video_title }}'
+        webkitallowfullscreen
+        mozallowfullscreen
+        allowfullscreen
+        class='{{ video_class }}'
+      ></iframe>
+    {%- else -%}
+      {{
+        video
+        | video_tag:
+          image_size: '1100x',
+          autoplay: autoplay,
+          loop: loop,
+          controls: controls,
+          muted: muted,
+          playsinline: true,
+          class: video_class
+      }}
+    {%- endif -%}
+  </inline-media>
+{%- endif -%}

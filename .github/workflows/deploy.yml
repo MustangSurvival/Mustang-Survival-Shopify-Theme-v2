@@ -1,0 +1,89 @@
+# THEME DEPLOYMENT WORKFLOW
+# -------------------------
+# This workflow is ran manually by clicking the "Run workflow" button in the Github Actions tab
+
+# NOTE: JSON config files will not be pushed as they are being ignored in the .shopifyignore file
+
+# Required Github enviroment secrets / variables:
+# - SHOPIFY_CLI_THEME_TOKEN: Shopify CLI token
+# - SHOPIFY_FLAG_STORE: Shopify store URL
+
+# These need to be added via the Github repo settings under "Environments"
+
+name: 🚀 Deploy V3
+
+on:
+  workflow_dispatch:
+    inputs:
+      store:
+        description: 'Store'
+        type: environment
+        required: true
+      theme_override:
+        description: 'Theme Override'
+        type: string
+      publish_theme:
+        description: 'Publish Theme'
+        type: boolean
+        default: false
+
+run-name: Deploying ${{ github.head_ref || github.ref_name || github.ref || github.event.ref }} to ${{ inputs.store }} (@${{ github.actor }})
+
+jobs:
+  deploy:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.store }}
+    env:
+      SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
+      SHOPIFY_FLAG_STORE: '${{ vars.SHOPIFY_FLAG_STORE }}'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+          bundler: 'latest'
+
+      - name: Install Shopify CLI
+        run: npm install -g @shopify/cli@3.67.1
+
+      - name: Install Dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Build
+        run: npx turbo build
+
+        # NOTE: Duplicate Action does not work if the Store is using Translate and Localise App from Shopify, please remove this Step
+        # Along with this step remove all instance of `inputs.theme_override == '' && steps.duplicate.outputs.themeId ||` from the workflow
+      - uses: devil1991/shopify-dupliate-theme@v1.4.4
+        id: duplicate
+        if: ${{ inputs.theme_override == '' }}
+        with:
+          store: '${{ env.SHOPIFY_FLAG_STORE }}'
+          env: ${{ inputs.store }}-${{ github.head_ref || github.ref_name || github.ref || github.event.ref }}
+
+      - name: Deploy theme
+        run: shopify theme push --theme $THEME_ID
+        if: ${{ inputs.store }} && ${{ github.head_ref || github.ref_name || github.ref || github.event.ref }}
+        env:
+          # Theme ID is read from variable of previous step
+          THEME_ID: ${{ inputs.theme_override == '' && steps.duplicate.outputs.themeId || inputs.theme_override }}
+
+      - uses: devil1991/shopify-jsons-sync@v1.4.2
+        # This action is used to sync new JSON content (locale strings & JSON templates) to the theme
+        # Note: No existing content on the theme being deployed too will be edited or pushed
+        with:
+          store: '${{ env.SHOPIFY_FLAG_STORE }}'
+          theme: ${{ inputs.theme_override == '' && steps.duplicate.outputs.themeId || inputs.theme_override }}
+
+      - name: Publish theme
+        run: shopify theme publish --theme $THEME_ID --force
+        if: ${{ inputs.publish_theme }}
+        env:
+          # Theme ID is read from variable of previous step
+          THEME_ID: ${{ inputs.theme_override == '' && steps.duplicate.outputs.themeId || inputs.theme_override }}

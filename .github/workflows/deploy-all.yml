@@ -1,0 +1,68 @@
+name: Deploy to Multi Environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish_theme:
+        description: 'Publish Theme'
+        type: boolean
+        default: false
+
+run-name: Deploying ${{ github.head_ref || github.ref_name || github.ref || github.event.ref }} to ${{ inputs.store }} (@${{ github.actor }})
+
+jobs:
+  deploy:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [Development, Plus Dev]
+    environment: ${{ matrix.environment }}
+    env:
+      SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
+      SHOPIFY_FLAG_STORE: '${{ vars.SHOPIFY_FLAG_STORE }}'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+          bundler: 'latest'
+
+      - name: Install Shopify CLI
+        run: npm install -g @shopify/cli@3.67.1
+
+      - name: Install Dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Build
+        run: npx turbo build
+
+      - uses: devil1991/shopify-dupliate-theme@v1.4.4
+        id: duplicate
+        with:
+          store: '${{ env.SHOPIFY_FLAG_STORE }}'
+          env: ${{ matrix.environment }}-${{ github.head_ref || github.ref_name || github.ref || github.event.ref }}
+
+      - name: Deploy theme
+        run: shopify theme push --theme $THEME_ID
+        if: ${{ matrix.environment }} && ${{ github.head_ref || github.ref_name || github.ref || github.event.ref }}
+        env:
+          # Theme ID is read from variable of previous step
+          THEME_ID: ${{ steps.duplicate.outputs.themeId }}
+
+      - uses: devil1991/shopify-jsons-sync@v1.4.2
+        with:
+          store: '${{ env.SHOPIFY_FLAG_STORE }}'
+          theme: ${{ steps.duplicate.outputs.themeId }}
+
+      - name: Publish theme
+        run: shopify theme publish --theme $THEME_ID --force
+        if: ${{ inputs.publish_theme }}
+        env:
+          # Theme ID is read from variable of previous step
+          THEME_ID: ${{ steps.duplicate.outputs.themeId }}

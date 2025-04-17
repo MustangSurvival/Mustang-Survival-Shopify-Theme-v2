@@ -1,0 +1,301 @@
+{%- liquid
+  assign fetch_priority = 'auto'
+  if section.index == 1
+    assign fetch_priority = 'high'
+  endif
+-%}
+
+{% capture image_overlay %}
+  {% if section.settings.image_overlay %}
+    <div class='absolute inset-0 z-10 pointer-events-none bg-p-darkest bg-opacity-10'></div>
+  {% endif %}
+{% endcapture %}
+
+{% capture content %}
+  <div class='container z-20 grid items-center w-full h-full grid-cols-1 py-pagemargin'>
+    <div class='flex flex-col items-center xl:items-start gap-y-[14px] text-center xl:text-left px-[10px] xl:px-0 mx-[15px] my-[10px] xl:mx-[100px]'>
+      {%- for block in section.blocks -%}
+        {% case block.type %}
+          {%- when 'heading' -%}
+            <h2 class='text-balance {{ block.settings.heading_size }}' {{ block.shopify_attributes }}>
+              {{ block.settings.heading }}
+            </h2>
+          {%- when 'text' -%}
+            <div class='rte max-w-[549px] {{ block.settings.text_size }}' {{ block.shopify_attributes }}>
+              {{ block.settings.text }}
+            </div>
+          {%- when 'button' -%}
+            {%- if block.settings.button_label != blank -%}
+              <a
+                {% if block.settings.button_link == blank %}
+                  role='link' aria-disabled='true'
+                {% else %}
+                  href='{{ block.settings.button_link }}'
+                {% endif %}
+                class='my-2 btn'
+                variant='{% if block.settings.button_style_secondary %}secondary{% else %}primary{% endif %}'
+                {{ block.shopify_attributes }}
+              >
+                {{ block.settings.button_label | escape }}
+              </a>
+            {%- endif -%}
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+{% endcapture %}
+
+<div class='mx-auto xl:mx-0 text-p-lightest'>
+  <div class='flex flex-col xl:grid xl:grid-cols-2'>
+    <!-- Desktop Image -->
+    {% if section.settings.image != blank %}
+      <div class='relative hidden xl:aspect-square max-w-none xl:block'>
+        {% capture sizes %}(min-width: 1100px) 100vw, (min-width: 750px) 50vw{% endcapture %}
+        {% assign preload = true %}
+        {% if section.index > 2 %}
+          {% assign preload = false %}
+        {% endif %}
+        {% render 'image',
+          image: section.settings.image,
+          sizes: sizes,
+          widths: '600, 900, 1100, 1440, 2180',
+          preload: preload,
+          class: 'w-full aspect-square absolute inset-0 -z-10',
+          fetchpriority: fetch_priority
+        %}
+
+        {{ image_overlay }}
+
+        {% if content != blank and section.settings.layout == 'text_first' %}
+          {{ content }}
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <!-- Mobile Image -->
+    {% if section.settings.mobile_image != blank %}
+      <div class='relative max-w-none xl:hidden {% if section.settings.layout != 'text_first' %}aspect-square{% endif %}'>
+        {% assign preload = true %}
+        {% if section.index > 2 %}
+          {% assign preload = false %}
+        {% endif %}
+        {% render 'image',
+          image: section.settings.mobile_image,
+          sizes: '100vw',
+          widths: '400, 600, 750',
+          preload: preload,
+          class: 'w-full h-full absolute inset-0 -z-10',
+          fetchpriority: fetch_priority
+        %}
+
+        {{ image_overlay }}
+
+        {% if content != blank and section.settings.layout == 'text_first' %}
+          {{ content }}
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <!-- Second image (desktop only if layout is text_last) -->
+    {% if section.settings.second_image != blank %}
+      <div class='relative hidden xl:aspect-square max-w-none xl:block'>
+        {% capture sizes %}(min-width: 1100px) 100vw, (min-width: 750px) 50vw{% endcapture %}
+        {% assign preload = true %}
+        {% if section.index > 2 %}
+          {% assign preload = false %}
+        {% endif %}
+        {% render 'image',
+          image: section.settings.second_image,
+          sizes: sizes,
+          widths: '600, 900, 1100, 1440, 2180',
+          preload: preload,
+          class: 'w-full aspect-square absolute inset-0 -z-10',
+          fetchpriority: fetch_priority
+        %}
+
+        {{ image_overlay }}
+
+        {% if content != blank and section.settings.layout == 'text_last' %}
+          {{ content }}
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <!-- Second Image (mobile) -->
+    {% if section.settings.second_mobile_image != blank %}
+      <div class='relative max-w-none xl:hidden {% if section.settings.layout == 'text_first' %}aspect-square{% endif %}'>
+        {% assign preload = true %}
+        {% if section.index > 2 %}
+          {% assign preload = false %}
+        {% endif %}
+        {% render 'image',
+          image: section.settings.second_mobile_image,
+          sizes: '100vw',
+          widths: '400, 600, 750',
+          preload: preload,
+          class: 'w-full h-full absolute inset-0 -z-10',
+          fetchpriority: fetch_priority
+        %}
+
+        {{ image_overlay }}
+
+        {% if content != blank and section.settings.layout == 'text_last' %}
+          {{ content }}
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Hero — Static",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "second_image",
+      "label": "Second Image (for other side)"
+    },
+    {
+      "type": "image_picker",
+      "id": "second_mobile_image",
+      "label": "Second Mobile Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "image_overlay",
+      "label": "Add gradient overlay on image",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "options": [
+        {
+          "value": "text_first",
+          "label": "Text first"
+        },
+        {
+          "value": "text_last",
+          "label": "Text last"
+        }
+      ],
+      "default": "text_first",
+      "label": "Layout",
+      "info": "Control the position of the text."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Add a heading",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "h2",
+              "label": "Medium"
+            },
+            {
+              "value": "h1",
+              "label": "Large"
+            }
+          ],
+          "default": "h2",
+          "label": "Heading size"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Use this section to welcome customers or highlight your store’s main features.</p>",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text size",
+          "options": [
+            {
+              "value": "text-body",
+              "label": "Body"
+            },
+            {
+              "value": "text-body-large",
+              "label": "Large body"
+            }
+          ],
+          "default": "text-body"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Shop now",
+          "label": "Button label",
+          "info": "Leave the label blank to hide the button."
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_style_secondary",
+          "default": false,
+          "label": "Use outline style"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero — Static",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

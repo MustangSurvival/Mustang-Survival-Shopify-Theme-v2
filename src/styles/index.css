@@ -1,0 +1,237 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply pr-[--scrollbar-width];
+    @apply text-t-foreground;
+  }
+
+  .announcement-bar-wrapper {
+    @apply -mr-[--scrollbar-width] transition-[margin];
+  }
+
+  .clip-auto {
+    clip: auto;
+  }
+
+  .skip-to-content-link:focus {
+    @apply clip-auto absolute z-[9999] block h-auto w-auto overflow-auto;
+  }
+
+  details > summary {
+    list-style: none;
+  }
+
+  details > summary::marker, /* Latest Chrome, Edge, Firefox */
+  details > summary::-webkit-details-marker /* Safari */ {
+    display: none;
+  }
+
+  :root {
+    --font-family-primary: 'Gotham Narrow';
+    --font-family-secondary: 'Gotham Narrow';
+    --font-family-tertiary: 'Tungsten';
+    --font-family-quaternary: 'Tungsten';
+  }
+
+  .remove-arrow::-webkit-inner-spin-button,
+  .remove-arrow::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .remove-arrow {
+    -moz-appearance: textfield;
+  }
+
+  html:has(modal-dialog[open]) {
+    @apply overflow-hidden;
+  }
+
+  swiper-container {
+    @apply text-t-foreground;
+    --swiper-theme-color: currentColor;
+    --swiper-pagination-bottom: 0;
+  }
+
+  accessible-link {
+    @apply cursor-pointer;
+  }
+}
+
+@layer components {
+  .rte > *:first-child {
+    @apply mt-0;
+  }
+
+  .rte > *:last-child {
+    @apply mb-0;
+  }
+
+  .rte table {
+    @apply table-fixed;
+  }
+
+  .rte img {
+    @apply mb-4 h-auto max-w-full rounded border;
+  }
+
+  .rte > ul > li,
+  .rte > ol > li {
+    @apply list-outside last:mb-0;
+  }
+
+  .rte a {
+    @apply underline hover:decoration-2;
+  }
+
+  .rte blockquote {
+    @apply inline-flex;
+  }
+
+  .rte blockquote > * {
+    @apply -my-2;
+  }
+
+  @media sm {
+    .order-mobile-table thead,
+    .order-mobile-table th,
+    .order-mobile-table tfoot td:first-of-type {
+      @apply hidden;
+    }
+
+    .order-mobile-table td {
+      @apply flex text-right;
+    }
+
+    .order-mobile-table tbody tr {
+      @apply border-t py-4;
+    }
+
+    .order-mobile-table td[data-label]:before {
+      @apply text-body flex-grow pr-8 text-left uppercase;
+      content: attr(data-label);
+    }
+
+    .order-mobile-table td:first-of-type {
+      @apply flex items-center;
+    }
+
+    .order-mobile-table tr {
+      @apply flex w-full flex-col justify-start;
+    }
+  }
+
+  .rte em,
+  .rte i {
+    font-style: italic;
+  }
+
+  .rte strong {
+    font-weight: bold;
+  }
+
+  .rte table {
+    @apply w-full;
+  }
+
+  .rte table th {
+    @apply border-collapse border font-bold;
+  }
+
+  .rte table td {
+    @apply border-collapse border p-2;
+  }
+
+  @screen sm {
+    .rte table td {
+      @apply px-5;
+    }
+  }
+
+  .rte iframe {
+    @apply max-w-full;
+  }
+
+  .rte ol,
+  .rte ul {
+    @apply ml-3 w-fit pl-2;
+  }
+
+  .rte ol li,
+  .rte ul li {
+    @apply mt-2;
+  }
+
+  .rte ol {
+    list-style-type: decimal;
+  }
+
+  .rte ol ul {
+    list-style-type: disc;
+  }
+
+  .rte ul {
+    list-style-type: disc;
+  }
+
+  .rte ul li li {
+    margin-left: 2.5em;
+    list-style: circle;
+  }
+
+  .rte ul li li li {
+    list-style: square;
+  }
+
+  .rte h1 {
+    @apply h1 mb-sm;
+  }
+
+  .rte h2 {
+    @apply h2 mb-sm;
+  }
+
+  .rte h3 {
+    @apply h3 mb-sm;
+  }
+
+  .rte h4 {
+    @apply h4 mb-sm;
+  }
+
+  .rte h5 {
+    @apply h5 mb-sm;
+  }
+
+  .rte h6 {
+    @apply h6 mb-sm;
+  }
+
+  .rte p {
+    @apply mb-sm;
+    font-size: inherit;
+  }
+
+  .rte > ul,
+  .rte > ol,
+  .rte > div > ul,
+  .rte > div > ol {
+    @apply mb-sm;
+  }
+
+  /* Pandectes GDPR Compliance */
+  .cc-window.cc-floating {
+    @apply !bg-p-lightest !rounded-md !bg-opacity-60 !backdrop-blur-md;
+  }
+
+  .cc-btn {
+    @apply !text-body !bg-p-brand-01 !rounded-forms-radius hover:!bg-t-brand-secondary hover:!text-t-foreground;
+  }
+
+  .cc-message {
+    @apply !text-body;
+  }
+}

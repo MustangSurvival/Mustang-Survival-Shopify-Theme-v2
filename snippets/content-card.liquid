@@ -1,0 +1,84 @@
+{%- comment -%}
+  Renders a content card
+
+  Accepts:
+  - image: {Object} Image object (optional)
+  - title: {String} Card title (optional)
+  - text: {String} Card text (optional)
+  - url: {String} Card URL (optional)
+  - media_aspect_ratio: {String} Size of the content image card. Values are "square" and "portrait". Default is "square" (optional)
+  - lazy_load: {Boolean} Image should be lazy loaded. Default: true (optional)
+
+  Usage:
+  {% render 'content-card', title: "Card Title" %}
+{%- endcomment -%}
+
+{%- capture sizes -%}(min-width: 1440px) 300px, (min-width: 1024px) 33vw, 50vw{%- endcapture -%}
+{%- assign image_widths = '300, 500, 750, 800' -%}
+
+{%- liquid
+  assign image_class = 'h-full object-cover object-center sm:h-full sm:w-full'
+  assign media_aspect_ratio = media_aspect_ratio | default: 'portrait'
+  assign lazy_load = lazy_load | default: true, allow_false: true
+
+  if media_aspect_ratio == 'square'
+    assign ratio = 'aspect-square'
+    assign image_class = image_class | append: ' absolute'
+  elsif media_aspect_ratio == 'portrait'
+    assign ratio = 'aspect-[3/4]'
+    assign image_class = image_class | append: ' absolute'
+  else
+    assign ratio = false
+  endif
+
+  if lazy_load
+    assign loading = 'lazy'
+  else
+    assign loading = 'eager'
+  endif
+-%}
+
+<div
+  class='w-full group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white {{ class }}'
+>
+  {% if url != blank %}
+    <a class='block' href='{{ url }}'>
+  {% endif %}
+  <div class='{% if ratio %}{{ ratio }}{% else %}aspect-auto{% endif %} bg-gray-200 group-hover:opacity-75 relative group'>
+    {% if image != blank %}
+      {%- render 'image',
+        image: image,
+        class: image_class,
+        sizes: sizes,
+        width: 300,
+        widths: image_widths,
+        loading: loading
+      -%}
+    {% else %}
+      <div class='h-full w-full min-h-40 min-w-40 bg-p-neutral'></div>
+    {% endif %}
+  </div>
+  {% if url != blank %}
+    </a>
+  {% endif %}
+
+  <div class='flex flex-col flex-1 p-4 space-y-2'>
+    {% if title != blank %}
+      <h3 class='text-sm font-medium'>
+        {% if url != blank %}
+          <a href='{{ url }}'>
+        {% endif %}
+        {{ title }}
+        {% if url != blank %}
+          </a>
+        {% endif %}
+      </h3>
+    {% endif %}
+
+    {% if text != blank %}
+      <div class='text-sm'>
+        {{ text }}
+      </div>
+    {% endif %}
+  </div>
+</div>

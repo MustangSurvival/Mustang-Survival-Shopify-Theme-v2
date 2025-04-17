@@ -1,0 +1,86 @@
+{% comment %}
+  Renders a modal dialog with the given content.
+  ... (accepts parameters comments) ...
+{% endcomment %}
+
+{%- liquid
+  assign id = id
+  assign title = title
+  assign anchor = anchor | default: 'left'
+  assign type = type | default: 'drawer'
+  assign size = size
+  assign close_on_backdrop_click = close_on_backdrop_click | default: true, allow_false: true
+  assign header_classes = header_classes
+  assign close_icon_size = close_icon_size
+  assign without_title = without_title | default: false, allow_false: true
+  assign content = content
+  assign with_footer = with_footer | default: false, allow_false: true
+  assign url = url | default: blank
+  assign show_logo = show_logo | default: false, allow_false: true
+  assign extra_controls = extra_controls
+-%}
+{%- if id != blank -%}
+  <modal-dialog
+    cloak
+    type='{{ type }}'
+    id='{{ id }}'
+    {% if url %}
+      url='{{ url }}'
+    {% endif %}
+    {% if size != blank %}
+      size='{{ size }}'
+    {% endif %}
+    {% if type == 'drawer' %}
+      anchor='{{ anchor }}'
+    {% endif %}
+    {% if close_on_backdrop_click %}
+      close-on-backdrop-click='true'
+    {% endif %}
+    {% if without_title != blank %}
+      without-title='true'
+    {% endif %}
+    {% if header_classes != blank %}
+      header-classes='{{ header_classes }}'
+    {% endif %}
+    {% if close_icon_size != blank %}
+      close-icon-size='{{ close_icon_size }}'
+    {% endif %}
+    {% if with_footer %}
+      with-footer='true'
+    {% endif %}
+  >
+    {%- capture header_slot_content -%}
+      <div class="flex items-center justify-between w-full gap-sm">
+        <div class="flex items-center gap-2 shrink-0">
+          {%- if show_logo and settings.logo != blank -%}
+            <img
+              src='{{ settings.logo | image_url: width: 64 }}' {%- comment %} Request a small size {% endcomment -%}
+              alt='{{ shop.name }} logo' {%- comment %} Use shop name for alt if title isn't appropriate {% endcomment -%}
+              width='32' {%- comment %} Display size {% endcomment -%}
+              height='32' {%- comment %} Display size {% endcomment -%}
+              loading='lazy'
+              class='h-8 w-8 object-contain' {%- comment %} Adjust class if needed {% endcomment -%}
+            >
+          {%- endif -%}
+          {%- if title != blank and without_title == false -%}
+            <h5 class='h5'>{{ title }}</h5>
+          {%- endif -%}
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0">
+          {%- if extra_controls != blank -%}
+            {{ extra_controls }}
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endcapture -%}
+
+    {%- if header_slot_content != blank -%}
+      <div slot='header'>
+        {{ header_slot_content }}
+      </div>
+    {%- endif -%}
+
+    {{ content }}
+  </modal-dialog>
+{%- endif -%}

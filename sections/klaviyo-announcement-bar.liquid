@@ -1,0 +1,311 @@
+{% liquid
+  assign delay = section.settings.autoplay_delay | times: 1
+  assign is_slider = false
+  if section.blocks.size > 1
+    assign is_slider = true
+  endif
+  assign cart_attributes = cart.attributes
+  assign utm_pers = cart_attributes[settings.klaviyo_utm_personalisation]
+%}
+
+{% capture swiper_button_styles %}rounded-full absolute top-1/2 -translate-y-1/2 bg-no-repeat bg-center z-10 flex justify-center items-center w-5 h-5 bg-transparent border-none bg-none {{ section.settings.background_color }} {{ section.settings.text_color }}{% endcapture %}
+{% if section.blocks.size > 0 %}
+  {% if is_slider %}
+    <swiper-container
+      slides-per-view='1'
+      navigation-next-el='.swiper-button-next--announcement'
+      navigation-prev-el='.swiper-button-prev--announcement'
+      auto-height='true'
+      loop='true'
+      role='region'
+      aria-label='{{ 'sections.header.announcement' | t }}'
+      {% if delay > 1 %}
+        autoplay-delay='{{ delay }}'
+      {% endif %}
+      class='announcement-bar flex whitespace-nowrap overflow-clip {{ section.settings.background_color }} {{ section.settings.text_color }}'
+    >
+  {% else %}
+    <div class='announcement-bar {{ section.settings.background_color }} {{ section.settings.text_color }}'>
+  {% endif %}
+  {%- for block in section.blocks -%}
+    {%- if block.settings.text == blank -%}
+      {% continue %}
+    {%- endif -%}
+    {% liquid
+      if block.type == 'announcement_pers'
+        assign klaviyo_pesonalization_group_id = block.settings.klaviyo_pesonalization_group_id
+        assign klaviyo_pesonalization_enable_group = block.settings.klaviyo_pesonalization_enable_group
+        assign show_bar = false
+        assign allowed_groups = ''
+        if klaviyo_pesonalization_enable_group and cart_attributes.size > 0
+          if utm_pers != blank
+            assign allowed_groups = utm_pers
+            assign end_index = cart_attributes.size | minus: 2
+            for i in (0..end_index)
+              assign group_key = 'segment_' | append: i
+              if cart_attributes[group_key] != blank
+                assign allowed_groups = allowed_groups | append: ',' | append: cart_attributes[group_key]
+              endif
+            endfor
+          else
+            assign end_index = cart_attributes.size | minus: 1
+            for i in (0..end_index)
+              assign group_key = 'segment_' | append: i
+              if cart_attributes[group_key] != blank
+                if forloop.first
+                  assign allowed_groups = allowed_groups | append: cart_attributes[group_key]
+                else
+                  assign allowed_groups = allowed_groups | append: ',' | append: cart_attributes[group_key]
+                endif
+              endif
+            endfor
+          endif
+        endif
+        if klaviyo_pesonalization_group_id != blank and klaviyo_pesonalization_enable_group
+          if allowed_groups contains klaviyo_pesonalization_group_id
+            assign show_bar = true
+          endif
+        endif
+        unless show_bar
+          continue
+        endunless
+      endif
+    %}
+    {%- assign wrapper_tag = 'div' -%}
+    {%- if is_slider -%}
+      {%- assign wrapper_tag = 'swiper-slide' -%}
+    {%- endif -%}
+    <{{ wrapper_tag }}
+      class='flex flex-grow flex-shrink-0 flex-wrap w-full gap-x-4 items-center justify-center h-auto text-center py-1 {% if is_slider %}px-12{% else %}px-2 md:px-12{% endif %}'
+      {{ block.shopify_attributes }}
+    >
+      <p>
+        {{ block.settings.text }}
+      </p>
+    </{{ wrapper_tag }}>
+  {%- endfor -%}
+  {% if is_slider %}
+    </swiper-container>
+    <button
+      class='swiper-button-prev swiper-button-prev--announcement left-0 rotate-90 {{ swiper_button_styles }}'
+      aria-label='{{ 'general.slider.next_slide' | t }}'
+    >
+      <svg-icon src='icon-caret'></svg-icon>
+    </button>
+    <button
+      class='swiper-button-next swiper-button-next--announcement right-0 -rotate-90 {{ swiper_button_styles }}'
+      aria-label='{{ 'general.slider.previous_slide' | t }}'
+    >
+      <svg-icon src='icon-caret'></svg-icon>
+    </button>
+  {% else %}
+    </div>
+  {% endif %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "t:sections.klaviyo-personalization_announcement-bar.name",
+  "class": "relative announcement-bar-wrapper",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "number",
+      "label": "t:sections.announcement-bar.settings.autoplay_delay.label",
+      "info": "t:sections.announcement-bar.settings.autoplay_delay.info",
+      "id": "autoplay_delay",
+      "default": 3000
+    },
+    {
+      "type": "select",
+      "id": "background_color",
+      "label": "t:sections.announcement-bar.settings.background.label",
+      "options": [
+        {
+          "group": "Primitives",
+          "value": "bg-p-darkest",
+          "label": "Darkest"
+        },
+        {
+          "group": "Primitives",
+          "value": "bg-p-dark",
+          "label": "Dark"
+        },
+        {
+          "group": "Primitives",
+          "value": "bg-p-neutral",
+          "label": "Neutral"
+        },
+        {
+          "group": "Primitives",
+          "value": "bg-p-light",
+          "label": "Light"
+        },
+        {
+          "group": "Primitives",
+          "value": "bg-p-lightest",
+          "label": "Lightest"
+        },
+        {
+          "group": "Tokens",
+          "value": "bg-t-foreground",
+          "label": "Foreground"
+        },
+        {
+          "group": "Tokens",
+          "value": "bg-t-foreground-secondary",
+          "label": "Foreground Secondary"
+        },
+        {
+          "group": "Tokens",
+          "value": "bg-t-background",
+          "label": "Background"
+        },
+        {
+          "group": "Tokens",
+          "value": "bg-t-background-secondary",
+          "label": "Background Secondary"
+        },
+        {
+          "group": "Tokens",
+          "value": "bg-t-brand-primary",
+          "label": "Brand Primary"
+        },
+        {
+          "group": "Tokens",
+          "value": "bg-t-brand-secondary",
+          "label": "Brand Secondary"
+        },
+        {
+          "group": "Tokens",
+          "value": "bg-t-brand-primary-contrast",
+          "label": "Brand Primary Contrast"
+        },
+        {
+          "group": "Tokens",
+          "value": "bg-t-brand-secondary-contrast",
+          "label": "Brand Secondary Contrast"
+        }
+      ],
+      "default": "bg-t-background-secondary"
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "label": "t:sections.announcement-bar.settings.color.label",
+      "options": [
+        {
+          "group": "Primitives",
+          "value": "text-p-darkest",
+          "label": "Darkest"
+        },
+        {
+          "group": "Primitives",
+          "value": "text-p-dark",
+          "label": "Dark"
+        },
+        {
+          "group": "Primitives",
+          "value": "text-p-neutral",
+          "label": "Neutral"
+        },
+        {
+          "group": "Primitives",
+          "value": "text-p-light",
+          "label": "Light"
+        },
+        {
+          "group": "Primitives",
+          "value": "text-p-lightest",
+          "label": "Lightest"
+        },
+        {
+          "group": "Tokens",
+          "value": "text-t-foreground",
+          "label": "Foreground"
+        },
+        {
+          "group": "Tokens",
+          "value": "text-t-foreground-secondary",
+          "label": "Foreground Secondary"
+        },
+        {
+          "group": "Tokens",
+          "value": "text-t-background",
+          "label": "Background"
+        },
+        {
+          "group": "Tokens",
+          "value": "text-t-background-secondary",
+          "label": "Background Secondary"
+        },
+        {
+          "group": "Tokens",
+          "value": "text-t-brand-primary",
+          "label": "Brand Primary"
+        },
+        {
+          "group": "Tokens",
+          "value": "text-t-brand-secondary",
+          "label": "Brand Secondary"
+        },
+        {
+          "group": "Tokens",
+          "value": "text-t-brand-primary-contrast",
+          "label": "Brand Primary Contrast"
+        },
+        {
+          "group": "Tokens",
+          "value": "text-t-brand-secondary-contrast",
+          "label": "Brand Secondary Contrast"
+        }
+      ],
+      "default": "text-p-darkest"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "t:sections.announcement-bar.blocks.announcement.name",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "default": "Welcome to our store",
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.text.label"
+        }
+      ]
+    },
+    {
+      "type": "announcement_pers",
+      "name": "t:sections.announcement-bar.blocks.klaviyo-personalized_announcement.name",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "klaviyo_pesonalization_enable_group",
+          "label": "t:sections.klaviyo-personalization_announcement-bar.settings.klaviyo_pesonalization_enable_group.label",
+          "info": "t:sections.klaviyo-personalization_announcement-bar.settings.klaviyo_pesonalization_enable_group.info",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "klaviyo_pesonalization_group_id",
+          "label": "t:sections.klaviyo-personalization_announcement-bar.settings.klaviyo_pesonalization_group_id.label",
+          "info": "t:sections.klaviyo-personalization_announcement-bar.settings.klaviyo_pesonalization_group_id.info"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "default": "Welcome to our store",
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.text.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.klaviyo-personalization_announcement-bar.name"
+    }
+  ]
+}
+{% endschema %}

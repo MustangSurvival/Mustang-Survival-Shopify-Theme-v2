@@ -1,0 +1,79 @@
+{% liquid
+  unless settings.klaviyo_bis_enable and settings.klaviyo_company_id != blank
+    break
+  endunless
+
+  assign klaviyo_list_id = klaviyo_list_id | default: settings.klaviyo_list_id
+
+  assign check_against_inventory = true
+  if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
+    assign check_against_inventory = false
+  endif
+  if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
+    assign quantity_rule_soldout = true
+  endif
+
+  render '@needs-script', entries: 'back-in-stock'
+%}
+
+{% if product.selected_or_first_available_variant.available == false or quantity_rule_soldout %}
+  <p class='utility mb-xs'>{{ 'products.product.back_in_stock.label' | t }}</p>
+
+  <back-in-stock
+    company-id='{{- settings.klaviyo_company_id -}}'
+    list-id='{{- klaviyo_list_id -}}'
+    variant-id='{{ product.selected_or_first_available_variant.id }}'
+    cloak
+  >
+    <form id='{{-section.id-}}-KlaviyoBIS' action='POST'>
+      <div class='flex flex-col gap-xs'>
+        {%- render 'form-field',
+          kind: 'input',
+          type: 'email',
+          name: 'email',
+          id: 'KlaviyoBIS-email',
+          label: 'Email',
+          value: customer.email,
+          autocomplete: 'email',
+          required: true
+        -%}
+
+        {% if klaviyo_list_id != blank %}
+          {% assign label = 'products.product.back_in_stock.mailing_list_label' | t %}
+
+          {%- render 'form-field',
+            kind: 'checkbox',
+            checked: true,
+            id: 'KlaviyoBIS-consent',
+            name: 'consent',
+            label: label,
+            value: 'on'
+          -%}
+        {% endif %}
+
+        <p class='text-body'>
+          {{ 'products.product.back_in_stock.info' | t }}
+        </p>
+
+        <button class='btn w-full' variant='primary' type='submit'>
+          {{ 'products.product.back_in_stock.label' | t }}
+        </button>
+      </div>
+    </form>
+
+    <div class='js-success-message hidden'>
+      <p class='flex items-center mt-xs text-body' tabindex='-1' autofocus>
+        {%- render 'icon', icon: 'icon-success', class: 'min-w-5 mr-2', size: 20 -%}
+        {{ 'products.product.back_in_stock.success_message' | t }}
+      </p>
+    </div>
+
+    <div class='js-error-message hidden'>
+      <p class='flex items-center mt-xs text-body' tabindex='-1' autofocus>
+        <span class='sr-only'>{{ 'accessibility.error' | t }} </span>
+        {%- render 'icon', icon: 'icon-error', class: 'min-w-5 mr-2', size: 20 -%}
+        {{ 'products.product.back_in_stock.error' | t }}
+      </p>
+    </div>
+  </back-in-stock>
+{% endif %}

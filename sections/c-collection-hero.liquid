@@ -1,0 +1,186 @@
+{%- liquid
+  assign fetch_priority = 'auto'
+  if section.index == 1
+    assign fetch_priority = 'high'
+  endif
+-%}
+
+{% capture content %}
+  {%- for block in section.blocks -%}
+    {% case block.type %}
+      {%- when 'heading' -%}
+        <h2 class='text-balance {{ block.settings.heading_size }}' {{ block.shopify_attributes }}>
+          {{ block.settings.heading }}
+        </h2>
+      {%- when 'text' -%}
+        <div class='rte max-w-[549px] {{ block.settings.text_size }}' {{ block.shopify_attributes }}>
+          {{ block.settings.text }}
+        </div>
+    {%- endcase -%}
+  {%- endfor -%}
+  <div class="flex gap-x-[9.5px] gap-y-[4.75px] flex-wrap mt-[15px] lg:mt-0">
+    {% assign buttons = 0 %}
+    {%- for block in section.blocks -%}
+      {% case block.type %}
+        {%- when 'button' -%}
+          {%- if block.settings.button_label != blank -%}
+            <a
+              {% if block.settings.button_link == blank %}
+                role='link' aria-disabled='true'
+              {% else %}
+                href='{{ block.settings.button_link }}'
+              {% endif %}
+              class='btn {% if buttons > 0 %}hidden md:block{% endif %} text-center'
+              variant='{% if block.settings.button_style_secondary %}secondary{% else %}primary{% endif %}'
+              {{ block.shopify_attributes }}
+              data-btn="{{ buttons }}"
+            >
+              {{ block.settings.button_label | escape }}
+            </a>
+          {%- endif -%}
+          {% assign buttons = buttons | plus: 1 %}
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+{% endcapture %}
+
+<div class='max-w-2xl mx-auto md:max-w-none md:mx-0 2xl:mx-unset'>
+  <div class='grid-cols-4 md:grid'>
+    {% if section.settings.image != blank %}
+      <div class='relative hidden h-full md:block'>
+        {% capture sizes %}(min-width: 1100px) 100vw, (min-width: 750px) 50vw{% endcapture %}
+        {% assign preload = true %}
+        {% if section.index > 2 %}
+          {% assign preload = false %}
+        {% endif %}
+        {% render 'image',
+          image: section.settings.image,
+          sizes: sizes,
+          widths: '600, 900, 1100, 1440, 2180',
+          preload: preload,
+          class: 'absolute inset-0 h-full',
+          fetchpriority: fetch_priority
+        %}
+      </div>
+
+      <div class='bg-[#f3f3f3] col-span-3 grid grid-cols-1 gap-[10px] px-[15px] md:px-[49px] py-[64px] md:py-[42.5px] md:gap-[20px]'>
+        {{ content }}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Hero — Collection",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Add a heading",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "h2",
+              "label": "Medium"
+            },
+            {
+              "value": "h1",
+              "label": "Large"
+            }
+          ],
+          "default": "h2",
+          "label": "Heading size"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Use this section to welcome customers or highlight your store’s main features.</p>",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text size",
+          "options": [
+            {
+              "value": "text-body",
+              "label": "Body"
+            },
+            {
+              "value": "text-body-large",
+              "label": "Large body"
+            }
+          ],
+          "default": "text-body"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Shop now",
+          "label": "Button label",
+          "info": "Leave the label blank to hide the button."
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_style_secondary",
+          "default": false,
+          "label": "Use outline style"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero — Collection",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,274 @@
+{%- liquid
+  assign menu_modal_id = section.id | append: '-menu-modal'
+  assign menu_blocks = section.blocks | where: 'type', 'menu_item'
+  assign mobile_menu_handle = section.settings.mobile_menu
+  assign mobile_menu = linklists[mobile_menu_handle]
+
+  assign show_desktop_menu = false
+  if menu_blocks.size > 0
+    assign show_desktop_menu = true
+  endif
+
+  assign show_mobile_toggle = false
+  if mobile_menu != blank and mobile_menu.links.size > 0
+    assign show_mobile_toggle = true
+  endif
+-%}
+
+<header class='grid items-center grid-cols-[auto_1fr_auto] px-sm pt-xs gap-x-sm bg-p-lightest'>
+  {% comment %} -- Column 1: Logo -- {% endcomment %}
+  <div class='flex items-center justify-start'>
+    <a href='{{ routes.root_url }}' class='inline-flex'>
+      {%- if settings.logo != blank -%}
+        <div
+          class='inline-flex w-auto h-10 md:h-[var(--header-logo-height,40px)] md:w-auto'
+          style='--header-logo-height: {{ settings.logo_width | divided_by: settings.logo.aspect_ratio }}px; max-width: {{ settings.logo_width }}px;'
+        >
+          {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+          {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+          {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
+          {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 | round }}{% endcapture %}
+          {%- render 'image',
+            image: settings.logo,
+            height: logo_height,
+            width: settings.logo_width,
+            alt: logo_alt,
+            sizes: sizes,
+            widths: widths,
+            preload: true,
+            class: 'w-full h-full object-contain'
+          -%}
+        </div>
+      {%- else -%}
+        <span class='h2'>{{ shop.name }}</span>
+      {%- endif -%}
+    </a>
+  </div>
+
+  {% comment %} -- Column 2: Desktop Menu (Hidden on Mobile) -- {% endcomment %}
+  {%- if show_desktop_menu -%}
+    <div class='hidden lg:flex items-center justify-center h-full'>
+      {% render 'header-mega-menu', blocks: section.blocks %}
+    </div>
+  {%- else -%}
+    <div class='hidden lg:flex'></div>
+    {%- comment %} Empty div to maintain grid structure {%- endcomment %}
+  {%- endif -%}
+
+  {% comment %} -- Column 3: Icons & Mobile Toggle -- {% endcomment %}
+  <div class='flex items-center justify-end gap-xs md:gap-sm'>
+    <div class='hidden lg:block'>
+      {%- render 'header-search' -%}
+    </div>
+
+    {%- if shop.customer_accounts_enabled -%}
+      <a
+        href='{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}'
+        class='hidden md:inline-flex'
+      >
+        {% render 'icon' with 'icon-account', size: 18 %}
+        <span class='sr-only'>
+          {%- liquid
+            if customer
+              echo 'customer.account_fallback' | t
+            else
+              echo 'customer.log_in' | t
+            endif
+          -%}
+        </span>
+      </a>
+    {%- endif -%}
+
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when '@app' -%}
+          {% render block %}
+      {%- endcase -%}
+    {%- endfor -%}
+
+    {%- capture cart_toggle_button -%}
+      {%- render 'header-cart-icon' -%}
+    {%- endcapture -%}
+
+    {%- if template.name == 'cart' -%}
+      {{- cart_toggle_button -}}
+    {%- else -%}
+      {%- render 'modal-dialog-toggle',
+        modal_id: 'cart-drawer-dialog',
+        label: 'Toggle Cart Modal',
+        toggle_element: cart_toggle_button
+      -%}
+    {%- endif -%}
+
+    {% comment %} Mobile Menu Toggle (Hamburger - Hidden on Desktop) {% endcomment %}
+    {%- if show_mobile_toggle -%}
+      {%- capture menu_toggle_button -%}
+        <button
+          aria-haspopup='dialog'
+          aria-controls='{{ menu_modal_id }}'
+          class="group/menutoggle inline-flex lg:hidden" {%- comment %} Hidden on large screens and up {% endcomment -%}
+        >
+          {%- render 'icon' with 'icon-hamburger', class: 'group-[[open]]/menutoggle:hidden text-[28px] md:text-[32px]' -%}
+          {%- render 'icon' with 'icon-close', class: 'group-[[open]]/menutoggle:inline-flex hidden text-[28px] md:text-[32px]' -%}
+          <span class="sr-only">{{ 'sections.header.menu' | t }}</span>
+        </button>
+      {%- endcapture -%}
+
+      {%- render 'modal-dialog-toggle',
+        modal_id: menu_modal_id,
+        label: 'Toggle Menu Modal',
+        toggle_element: menu_toggle_button
+      -%}
+    {%- endif -%}
+  </div>
+</header>
+
+{%- comment %} Mobile Menu Modal (Drawer) - Render only if mobile menu is set {%- endcomment %}
+{%- if show_mobile_toggle -%}
+  {%- liquid
+    capture menu_modal_content
+      render 'header-drawer', menu: mobile_menu, section: section
+    endcapture
+
+    capture extra_controls
+      render 'header-cart-icon'
+    endcapture
+    render 'modal-dialog', id: menu_modal_id, content: menu_modal_content, type: 'drawer', close_on_backdrop_click: true, show_logo: true, extra_controls: extra_controls
+  -%}
+{%- endif -%}
+
+{%- comment %} Schema below uses placeholder text for translations as requested {%- endcomment %}
+{% schema %}
+{
+  "name": "Header",
+  "limit": 1,
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "presets": [
+    {
+      "name": "Header"
+    }
+  ],
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "mobile_menu",
+      "label": "Mobile navigation menu",
+      "info": "Used for the drawer menu on small screens."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "default": true,
+      "label": "Enable country/region selector (in drawer)"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_language_selector",
+      "default": true,
+      "label": "Enable language selector (in drawer)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu_item",
+      "name": "Desktop Menu Item",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "text",
+          "id": "top_label",
+          "label": "Top Level Label",
+          "default": "Menu Item"
+        },
+        {
+          "type": "url",
+          "id": "top_link",
+          "label": "Top Level Link (optional)"
+        },
+        {
+          "type": "header",
+          "content": "Mega Menu Columns (Max 3)"
+        },
+        {
+          "type": "link_list",
+          "id": "menu_1",
+          "label": "Column 1 Menu"
+        },
+        {
+          "type": "link_list",
+          "id": "menu_2",
+          "label": "Column 2 Menu"
+        },
+        {
+          "type": "link_list",
+          "id": "menu_3",
+          "label": "Column 3 Menu"
+        },
+        {
+          "type": "header",
+          "content": "Mega Menu Promotion"
+        },
+        {
+          "type": "image_picker",
+          "id": "promo_image",
+          "label": "Promo Image"
+        },
+        {
+          "type": "text",
+          "id": "promo_heading",
+          "label": "Promo Heading",
+          "default": "Promotion"
+        },
+        {
+          "type": "richtext",
+          "id": "promo_text",
+          "label": "Promo Text"
+        },
+        {
+          "type": "text",
+          "id": "promo_link_label",
+          "label": "Promo Link Label"
+        },
+        {
+          "type": "url",
+          "id": "promo_link_url",
+          "label": "Promo Link URL"
+        }
+      ]
+    },
+    {
+      "type": "separator",
+      "name": "Separator",
+      "limit": 1
+    },
+    {
+      "type": "mobile_link",
+      "name": "Mobile Drawer Link",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon Name",
+          "info": "Optional. Enter the name of the icon (e.g., 'icon-info'). Requires 'icon.liquid' snippet support."
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Link Text",
+          "default": "Custom Link",
+          "info": "Required for the link to show."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link URL",
+          "info": "Required for the link to show."
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,118 @@
+{% comment %}
+  Snippet: header-drawer.liquid
+  Renders a header drawer menu for mobile using a standard Shopify menu,
+  accordion for items with child links, and custom mobile link blocks.
+
+  Accepts:
+  - menu: {Object} A linklist object (e.g., linklists[settings.main_menu]). REQUIRED.
+  - section: {Object} The header section object (provides blocks and settings). REQUIRED.
+{% endcomment %}
+
+<div id='menu-drawer' class='grid grid-cols-1 min-h-full grid-rows-[auto_auto_1fr_auto] pb-sm gap-y-sm'>
+  {% comment %} 1. Main Navigation {% endcomment %}
+  <nav>
+    <ul class='list-none px-sm grid grid-cols-1 gap-y-sm' role='list'>
+      {%- for link in menu.links -%}
+        <li class='list-none border-b border-p-border last:border-b-0'>
+          {%- if link.links.size > 0 -%}
+            {% comment %} Item with Submenu - Use accordion-item snippet {% endcomment %}
+            {%- assign accordion_id = 'menu-drawer-item-' | append: link.handle | default: forloop.index -%}
+            {%- assign accordion_title = link.title | escape -%}
+
+            {%- capture accordion_content -%}
+          <ul class='list-none p-0 pt-0 pb-sm grid grid-cols-1 gap-y-xs' role='list'>
+            {%- for childlink in link.links -%}
+              <li class="list-none">
+                {%- if childlink.links.size > 0 -%}
+                  {% comment %} Nested item with grandchild links - Render another accordion {% endcomment %}
+                  {%- assign child_accordion_id = accordion_id | append: '-' | append: childlink.handle | default: forloop.index -%}
+                  {%- assign child_accordion_title = childlink.title | escape -%}
+                  {%- capture grandchild_content -%}
+                    <ul class='list-none p-0 pt-0 pb-sm pl-sm grid grid-cols-1 gap-y-xs' role='list'>
+                      {%- for grandchildlink in childlink.links -%}
+                        <li class="list-none">
+                          <a
+                            id='HeaderDrawer-Grandchild-{{ grandchildlink.handle | default: forloop.index }}'
+                            href='{{ grandchildlink.url }}'
+                            class="text-sm hover:underline {% if grandchildlink.current %}underline underline-offset-4{% endif %}"
+                            {% if grandchildlink.current %}aria-current='page'{% endif %}
+                          >
+                            {{ grandchildlink.title | escape }}
+                          </a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endcapture -%}
+                  {%- render 'accordion-item',
+                    id: child_accordion_id,
+                    title: child_accordion_title,
+                    content: grandchild_content
+                  -%}
+                {%- else -%}
+                  {% comment %} Child link with no further nesting {% endcomment %}
+                   <a
+                      id='HeaderDrawer-Child-{{ childlink.handle | default: forloop.index }}'
+                      href='{{ childlink.url }}'
+                      class="block text-base hover:underline {% if childlink.current %}underline underline-offset-4{% endif %}"
+                      {% if childlink.current %}aria-current='page'{% endif %}
+                   >
+                     {{ childlink.title | escape }}
+                   </a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endcapture -%}
+            {%- render 'accordion-item', id: accordion_id, title: accordion_title, content: accordion_content -%}
+          {%- else -%}
+            {% comment %} Top-level link with no children {% endcomment %}
+            <a
+              id='HeaderDrawer-{{ link.handle | default: forloop.index }}'
+              href='{{ link.url }}'
+              class='h6 block py-sm {% if link.current or link.child_current %}underline underline-offset-4{% endif %}'
+              {% if link.current or link.child_current %}
+                aria-current='page'
+              {% endif %}
+            >
+              {{ link.title | escape }}
+            </a>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </nav>
+
+  {% comment %} 2. Additional Mobile Links (from Blocks) {% endcomment %}
+  {%- assign mobile_link_blocks = section.blocks | where: 'type', 'mobile_link' -%}
+  {%- if mobile_link_blocks.size > 0 -%}
+    <div class='px-sm mt-sm border-t border-p-border pt-sm'>
+      <ul class='list-none grid grid-cols-1 gap-y-sm' role='list'>
+        {%- for block in mobile_link_blocks -%}
+          {%- if block.settings.link != blank and block.settings.text != blank -%}
+            <li class='list-none'>
+              <a href='{{ block.settings.link }}' class='flex items-center gap-xs text-base hover:underline'>
+                {%- if block.settings.icon != blank -%}
+                  {% render 'icon' with block.settings.icon, size: 20 %}
+                {%- else -%}
+                  {% comment %} Placeholder for spacing if no icon {% endcomment %}
+                  <span class='w-[20px] h-[20px] inline-block'></span>
+                {%- endif -%}
+                <span>{{ block.settings.text | escape }}</span>
+              </a>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+
+  {%- liquid
+    if section.settings.enable_country_selector and localization.available_countries.size > 1
+      render 'i18n-select', type: 'country'
+    endif
+
+    if section.settings.enable_language_selector and localization.available_languages.size > 1
+      render 'i18n-select', type: 'language'
+    endif
+  -%}
+</div>

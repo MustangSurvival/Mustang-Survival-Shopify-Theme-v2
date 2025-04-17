@@ -1,0 +1,237 @@
+{% capture newsletter %}
+  <div class="lg:order-none -order-1">
+    {%- form 'customer', novalidate: 'novalidate' -%}
+      <div class='w-full mb-1 pb-10 lg:max-w-[335px] ml-auto'>
+        {%- if section.settings.newsletter_heading != blank -%}
+          <h3 class='h5 mb-2.5'>{{ section.settings.newsletter_heading }}</h3>
+        {%- endif -%}
+
+        {%- if section.settings.newsletter_caption != blank -%}
+          <p class='text-sm mb-2.5'>{{ section.settings.newsletter_caption }}</p>
+        {%- endif -%}
+
+        {%- if form.posted_successfully? -%}
+          <p class='h5 pt-4'>{{ 'newsletter.success' | t }}</p>
+        {%- else -%}
+          {%- render '@needs-script', entries: 'component-newsletter-form' -%}
+          <newsletter-form>
+            <div class='relative w-full flex flex-col mb-2.5'>
+              <input
+                type='email'
+                required
+                placeholder='{{ section.settings.newsletter_placeholder }}'
+                name='contact[email]'
+                class='w-full py-3.5 text-sm border-b rounded-none bg-[transparent] focus-visible:ring-u-focus focus-visible:ring-2 placeholder:text-p-darkest {% if form.errors %} border-b-t-brand-secondary-contrast{% endif %}'
+                data-email
+              >
+              <button
+                disabled
+                type='submit'
+                class='absolute top-0 right-0 flex items-center justify-end w-12 h-full bg-[transparent]'
+                data-submit
+              >
+                <svg-icon src='icon-arrow' class='w-4 h-4'></svg-icon>
+              </button>
+            </div>
+
+            {%- render 'form-field',
+              kind: 'checkbox',
+              checked: false,
+              name: 'footer_newsletter_agreement',
+              label: section.settings.newsletter_agreement,
+              value: 'false',
+              attributes: 'data-checkbox',
+              wrapper_class: 'inline-flex items-center justify-start gap-x-2xs [&_input]:border-p-darkest [&_input]:mt-px'
+            -%}
+
+            <p
+              data-error-email
+              class='{% if form.errors %}flex{% else %}hidden{% endif %} items-center justify-start gap-x-2xs pt-4 text-caption text-t-brand-secondary-contrast'
+            >
+              {%- render 'icon' with 'icon-error', class: 'block min-w-3 min-h-3 text-[inherit]' -%}
+              {{ 'footer.newsletter.email_error' | t }}
+            </p>
+
+            <p
+              data-error-agreement
+              class='hidden items-center justify-start gap-x-2xs pt-4 text-caption text-t-brand-secondary-contrast'
+            >
+              {%- render 'icon' with 'icon-error', class: 'block min-w-3 min-h-3 text-[inherit]' -%}
+              {{ 'footer.newsletter.agree_terms' | t }}
+            </p>
+          </newsletter-form>
+        {%- endif -%}
+      </div>
+    {%- endform -%}
+
+    {%- if section.settings.show_social -%}
+      {%- assign platforms = 'twitter, pinterest, youtube, facebook, instagram' | split: ', ' -%}
+      {%- capture social_links -%}
+        {%- for platform in platforms -%}
+          {%- assign setting = 'social_' | append: platform | append: '_link' -%}
+          {%- assign locale = 'general.social.links.' | append: platform -%}
+          {%- if settings[setting] != blank -%}
+            <li class='w-5'>
+              <a href='{{ settings[setting] }}' class='' aria-describedby='a11y-external-message'>
+                <svg-icon src="icon-{{ platform }}" class='{% if platform == 'youtube' %}w-6{% else %}w-5{% endif %} h-5 text-[inherit] hover:text-p-dark'></svg-icon>
+                <span class='sr-only'>{{ locale | t }}</span>
+              </a>
+            </li> 
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endcapture -%}
+
+      {%- if social_links != blank -%}
+        <ul
+          class='flex items-center justify-start gap-sm flex-wrap'
+          role='list'
+        >
+          {{- social_links -}}
+        </ul>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+{% endcapture %}
+
+<div class='pt-lg lg:py-lg lg:mt-md'>
+  <div class='px-pagemargin 2xl:container'>
+    {%- if section.blocks.size > 0 -%}
+      <div class='justify-start grid lg:pl-2 lg:gap-sm lg:grid-cols-4'>
+        {%- assign first_link_list = true -%}
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'link_list' -%}
+              {%- capture accordion_id -%}{{ block.id }}-{{ section.id }}{%- endcapture -%}
+              <div class='flex flex-col border-b lg:border-none{% if first_link_list %} border-t{% endif %}'>
+                {%- capture group_name -%}
+                  accordion-input-{{ accordion_id | handleize }}
+                {%- endcapture -%}
+                <div id='Details-{{ accordion_id }}' class='group'>
+                  <label for='accordion-checkbox-{{ accordion_id }}'>
+                    <input
+                      aria-controls='accordion-content-{{ accordion_id }}'
+                      aria-labelledby='Toggle {{ block.settings.heading | escape }} accordion'
+                      class='sr-only peer'
+                      type='checkbox'
+                      id='accordion-checkbox-{{ accordion_id }}'
+                      name='{{ group_name | default: 'accordion' }}'
+                    >
+                    <div class='flex items-center justify-between w-full py-2.5 lg:py-0 peer-focus-visible:ring-1 ring-u-focus'>
+                      <h2 class='text-utility lg:mb-2.5 lg:pb-5'>{{ block.settings.heading }}</h2>
+                      {%- render 'icon' with 'icon-caret',
+                        class: 'transition-transform group-has-[:checked]:rotate-180 lg:hidden',
+                        size: 24
+                      -%}
+                    </div>
+                  </label>
+                  <div
+                    class='grid invisible group-has-[:checked]:grid-rows-[1fr] group-has-[:checked]:visible grid-rows-[0fr] transition-[visibility,grid-template-rows] lg:visible lg:grid-rows-[1fr]'
+                    id='accordion-content-{{ accordion_id }}'
+                    role='region'
+                    aria-labelledby='accordion-title-{{ accordion_id }}'
+                  >
+                    <div class='overflow-hidden'>
+                      <ul class='grid grid-cols-1 gap-2.5 pb-5'>
+                        {%- for link in block.settings.menu.links -%}
+                          <li>
+                            <a
+                              class='text-body text-[inherit] underline-offset-4 hover:underline hover:text-[inherit]'
+                              href='{{ link.url }}'
+                            >
+                              {{- link.title -}}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {%- assign first_link_list = false -%}
+            {%- else -%}
+          {%- endcase -%}
+        {%- endfor -%}
+        {{ newsletter }}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Footer",
+  "limit": 1,
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "presets": [
+    {
+      "name": "Footer"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Link List",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Quick links",
+          "label": "Heading",
+          "info": "Enter a heading for this list of links."
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "default": "footer",
+          "label": "Menu",
+          "info": "Choose the menu to display."
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo Image"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "default": "Stay Connected",
+      "label": "Newsletter Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_caption",
+      "default": "Be the first to hear about product launches, exclusive sales, and more news.",
+      "label": "Newsletter Caption"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "default": "Email address",
+      "label": "Newsletter Email Placeholder"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_agreement",
+      "default": "I agree to the terms of service.",
+      "label": "Newsletter Terms Agreement"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_segment_id",
+      "label": "Newsletter Segment ID"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "default": false,
+      "label": "Show social icons"
+    }
+  ]
+}
+{% endschema %}

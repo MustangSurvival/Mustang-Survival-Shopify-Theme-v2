@@ -1,0 +1,151 @@
+{%- liquid
+  # Writing out 1/2 to 1/6 so Tailwind can compile the classes
+  # lg:w-1/2
+  # lg:w-1/3
+  # lg:w-1/4
+  # lg:w-1/5
+  # lg:w-1/6
+
+  assign desktop_width_class = 'w-full'
+  assign mobile_width_class = 'w-full'
+
+  if section.settings.columns_mobile == 2
+    assign mobile_width_class = 'w-1/2'
+  endif
+
+  if section.settings.columns_desktop != 1
+    assign desktop_width_class = 'lg:w-1/' | append: section.settings.columns_desktop
+  endif
+-%}
+
+{% if section.blocks.size > 0 %}
+  <div class='py-lg px-pagemargin 2xl:container'>
+    <div class='mx-auto lg:mx-0'>
+      <swiper-container
+        slides-per-view='auto'
+        navigation='true'
+        class='flex overflow-hidden w-full -mr-2'
+      >
+        {% for block in section.blocks %}
+          <swiper-slide
+            class='h-auto flex-none justify-center px-2 {{ mobile_width_class }} {{  }} {{ desktop_width_class }}'
+          >
+            {% render 'content-card',
+              image: block.settings.image,
+              title: block.settings.title,
+              text: block.settings.text,
+              url: block.settings.url,
+              media_aspect_ratio: section.settings.image_ratio,
+              lazy_load: true
+            %}
+          </swiper-slide>
+        {% endfor %}
+      </swiper-container>
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "t:sections.featured-content-cards.name",
+  "class": "section",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.main-list-collections.settings.image_ratio.options__1.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.main-list-collections.settings.image_ratio.options__2.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.main-list-collections.settings.image_ratio.options__3.label"
+        }
+      ],
+      "default": "portrait",
+      "label": "t:sections.main-list-collections.settings.image_ratio.label"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "label": "t:sections.featured-content-cards.settings.columns_desktop.label"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.featured-content-cards.settings.columns_mobile.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.featured-content-cards.settings.columns_mobile.options__2.label"
+        }
+      ],
+      "default": "1",
+      "label": "t:sections.featured-content-cards.settings.columns_mobile.label"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "t:sections.featured-content-cards.blocks.card.name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.featured-content-cards.blocks.card.settings.image.label"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "default": "t:sections.featured-content-cards.blocks.card.settings.title.default",
+          "label": "t:sections.featured-content-cards.blocks.card.settings.title.label"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:sections.featured-content-cards.blocks.card.settings.text.label",
+          "default": "t:sections.featured-content-cards.blocks.card.settings.text.default"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "t:sections.featured-content-cards.blocks.card.settings.link.label"
+        }
+      ]
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "t:sections.featured-content-cards.presets.name",
+      "blocks": [
+        {
+          "type": "card"
+        },
+        {
+          "type": "card"
+        },
+        {
+          "type": "card"
+        },
+        {
+          "type": "card"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

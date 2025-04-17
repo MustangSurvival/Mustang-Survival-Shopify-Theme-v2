@@ -1,0 +1,36 @@
+{
+  "type": "header",
+  "name": "Header Group",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement_crLzVf": {
+          "type": "announcement",
+          "settings": {
+            "text": "Welcome to our store"
+          }
+        },
+        "announcement_7zyDDT": {
+          "type": "announcement",
+          "settings": {
+            "text": "This multi-berry blend won't disappoint"
+          }
+        }
+      },
+      "block_order": ["announcement_crLzVf", "announcement_7zyDDT"],
+      "settings": {
+        "autoplay_delay": 3000,
+        "backround_color": "#000000",
+        "text_color": "#ffffff"
+      }
+    },
+    "main": {
+      "type": "main-header"
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "main"
+  ]
+}

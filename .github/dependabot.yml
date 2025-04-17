@@ -1,0 +1,15 @@
+version: 2
+
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    timeout-minutes: 10
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "npm"
+    timeout-minutes: 10
+    directories:
+      - '/'
+    schedule:
+      interval: "daily"

@@ -1,0 +1,50 @@
+{% comment %}
+  Render an picutre tag.
+
+  Accepts:
+  - mobile_image: {Object} Image object
+  - image: {Object} Image object
+  - width: {String} The width of the image
+  - height: {String} The height of the image
+  - alt: {String} The alt text of the image
+  - class: {String} The class of the image
+  - id: {String} The id of the image
+  - sizes: {String} The sizes attribute of the image
+  - object_fit: {String} The object-fit of the image
+  - preload: {Boolean} The preload of the image
+  - loading: {String} The loading of the image
+  - widths: {String} The widths of the image eg. '200, 300, 400, 500, 600, 700, 800, 900, 1000' will the srcset attribute (optional)
+
+  Usage:
+  render 'image', image: image, class: 'image-class', widths: '200, 300, 400, 500, 600', id: 'image-id', sizes: '100vw', object_fit: 'cover', preload: true, loading: 'lazy', container: true, container_class: 'container-class'
+{% endcomment %}
+{%- assign mobile_image = mobile_image | default: image -%}
+<picture>
+  <source
+    media='(max-width: 768px)'
+    srcset='
+      {{ mobile_image | image_url: width: 300 }} 300w,
+      {{ mobile_image | image_url: width: 450 }} 450w,
+      {{ mobile_image | image_url: width: 600 }} 600w,
+      {{ mobile_image | image_url: width: 750 }} 750w,
+      {{ mobile_image | image_url: width: 900 }} 900w,
+      {{ mobile_image | image_url: width: 1050 }} 1050w,
+    '
+  >
+  {%- assign sizes = sizes | default: '(min-width: 769px) 50vw, 100vw' -%}
+  {%- render 'image',
+    image: image,
+    width: width,
+    height: height,
+    widths: widths,
+    sizes: sizes,
+    object_fit: object_fit,
+    loading: loading,
+    preload: preload,
+    alt: alt,
+    class: class,
+    id: id,
+    fetchpriority: fetchpriority,
+    container: false
+  -%}
+</picture>

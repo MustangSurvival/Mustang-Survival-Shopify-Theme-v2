@@ -1,0 +1,28 @@
+{% comment %}
+  Renders a carousel of product cards.
+
+  Accepts:
+    - products: An array of products to render in the carousel {product[]}.
+    - limit: A limit of how many products to render {number}.
+
+  Usage:
+    {%- render 'product-cards-carousel', products: recommendations.products -%}
+{% endcomment %}
+
+{% liquid
+  assign limit = limit | default: products.size
+%}
+
+{%- if products != blank -%}
+  <swiper-container
+    slides-per-view='auto'
+    navigation='true'
+    class='flex overflow-hidden w-full -mr-2'
+  >
+    {% for product in products limit: limit %}
+      <swiper-slide class='flex-none h-auto justify-center w-7/12 md:w-4/12 lg:w-3/12 px-2'>
+        {% render 'product-card', product: product, media_aspect_ratio: 'portrait', lazy_load: true, class: 'h-full' %}
+      </swiper-slide>
+    {% endfor %}
+  </swiper-container>
+{%- endif -%}

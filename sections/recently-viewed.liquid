@@ -1,0 +1,56 @@
+{%- render '@needs-script', entries: 'core-recently-viewed' -%}
+<recently-viewed exclude-product-handle='{{ product.handle }}' class='hidden'>
+  <div class='2xl:container px-pagemargin py-sm'>
+    <div class='md:flex md:items-center md:justify-between'>
+      {%- if section.settings.title != blank -%}
+        <h2 class='text-gray-900 {{ section.settings.heading_size }}'>
+          {{ section.settings.title }}
+        </h2>
+      {%- endif -%}
+    </div>
+
+    <div data-recently-viewed class='py-md'></div>
+  </div>
+</recently-viewed>
+
+{% schema %}
+{
+  "name": "t:sections.recently_viewed.title",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.recently_viewed.title",
+      "default": "Recently Viewed"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        }
+      ],
+      "default": "h2",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "number",
+      "id": "limit",
+      "label": "t:sections.recently_viewed.limit",
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.recently_viewed.title"
+    }
+  ]
+}
+{% endschema %}

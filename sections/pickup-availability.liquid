@@ -1,0 +1,132 @@
+{%- assign pick_up_availabilities = product_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+{%- if pick_up_availabilities.size > 0 -%}
+  <div section-id='pickup-availability'>
+    <div class='flex flex-col mt-sm border border-p-lighter rounded-sm'>
+      {% assign closest_location = pick_up_availabilities.first %}
+      <div class='p-sm flex gap-xs'>
+        {%- if closest_location.available -%}
+          <div class='flex gap-xs'>
+            <span class='svg-wrapper'>
+              {% render 'icon',
+                icon: 'icon-checkmark',
+                class: 'text-u-success top-px relative fluid-w-[14|14] fluid-h-[14|14]'
+              %}
+            </span>
+            <div>
+              <p class='cursor-pointer'>
+                {{
+                  'products.product.pickup_availability.pick_up_available_at_html'
+                  | t: location_name: closest_location.location.name
+                }}
+              </p>
+              <div class='flex items-center gap-xs'>
+                <span class='caption text-t-foreground-secondary'>{{ closest_location.pick_up_time }}</span>
+                <div class='flex gap-xs items-center'>
+                  {% capture toggle_element %}
+                    <span class='caption underline cursor-pointer text-t-foreground-secondary hover:text-t-foreground'>
+                      {{ 'products.product.pickup_availability.view_store_info' | t }}
+                    </span>
+                  {% endcapture %}
+                  {% render 'modal-dialog-toggle', toggle_element: toggle_element, modal_id: 'pickup-availability' %}
+                  {% if pick_up_availabilities.size > 1 %}
+                    <span class='caption text-t-border-secondary'>|</span>
+                    <a
+                      href='#modal-dialog://pickup-availability'
+                      class='caption underline text-t-foreground-secondary hover:text-t-foreground'
+                    >
+                      {{- 'products.product.pickup_availability.check_other_stores' | t -}}
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- else -%}
+          <div class='flex gap-xs'>
+            <span class='svg-wrapper'>
+              {% render 'icon',
+                icon: 'icon-close',
+                class: 'text-u-error top-px relative fluid-w-[14|14] fluid-h-[14|14]'
+              %}
+            </span>
+            <div class='flex flex-col gap-xs'>
+              <p>
+                {{
+                  'products.product.pickup_availability.pick_up_unavailable_at_html'
+                  | t: location_name: closest_location.location.name
+                }}
+              </p>
+
+              {% if pick_up_availabilities.size > 1 %}
+                {% capture check_other_stores %}
+                  <span class='caption underline cursor-pointer text-t-brand-secondary-contrast'>
+                    {{ 'products.product.pickup_availability.check_other_stores' | t }}
+                  </span>
+                {% endcapture %}
+                {% render 'modal-dialog-toggle', toggle_element: check_other_stores, modal_id: 'pickup-availability' %}
+              {% endif %}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+    {% capture modal_content %}
+      {%- unless product_variant.product.has_only_default_variant -%}
+        <div class='caption grid grid-cols-1 p-sm gap-2xs'>
+          <p class="h6">{{  product_variant.product.title | append: ' | ' | append:  product_variant.title}}</p>
+          {%- for product_option in product_variant.product.options_with_values -%}
+            <div>
+              {{ product_option.name | escape }}:&nbsp;
+              {%- for value in product_option.values -%}
+                {%- if product_option.selected_value == value -%}
+                  <span>{{ value | escape }}</span>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endunless -%}
+
+      <ul class='pickup-availability-list divide-y divide-t-border-secondary px-sm' role='list'>
+        {%- for availability in pick_up_availabilities -%}
+          <li class="py-xs flex flex-col">
+            <h3 class='h6'>{{ availability.location.name | escape }}</h3>
+            <div class='caption self-start gap-1 inline-flex items-center bg-t-border-secondary text-t-brand-secondary-contrast rounded-full py-1 pr-xs mb-sm'>
+              {%- if availability.available -%}
+                <span class='svg-wrapper'>
+                  {%  render 'icon', icon: 'icon-checkmark', size: 10, class: 'text-u-success top-px relative' %}
+                </span>
+                {{ 'products.product.pickup_availability.pick_up_available' | t }},
+                {{ availability.pick_up_time | downcase }}
+                {% else %}
+                <span class='svg-wrapper'>
+                  {%  render 'icon', icon: 'icon-close', size: 10, class: 'text-u-error top-px relative' %}
+                </span>
+                {{ 'products.product.pickup_availability.pick_up_unavailable' | t }}
+              {%- endif -%}
+            </div>
+
+            {%- assign address = availability.location.address -%}
+            <address class='pickup-availability-address'>
+              {{ address | format_address }}
+
+              {%- if address.phone.size > 0 -%}
+                <p>{{ address.phone }}</p>
+              {%- endif -%}
+            </address>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {% endcapture %}
+    {%- assign modal_title = 'products.product.pickup_availability.pick_up_available' | t -%}
+    {%- render 'modal-dialog',
+      type: 'drawer',
+      title: modal_title,
+      content: modal_content,
+      id: 'pickup-availability',
+      anchor: 'right',
+      header_classes: 'bg-t-brand-primary-contrast border-b border-b-border-secondary',
+      without_close: false
+    -%}
+  </div>
+{%- endif -%}

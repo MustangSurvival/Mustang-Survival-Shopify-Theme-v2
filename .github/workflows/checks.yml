@@ -1,0 +1,49 @@
+name: Run Checks and Tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, reopened, synchronize, edited]
+    branches:
+      - main
+
+jobs:
+  checksAndTests:
+    name: Run Checks and Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Test Build
+        run: npm run build
+
+      - name: Run typechecks
+        run: |
+          npm run typecheck
+
+      - name: Run unit tests
+        run: |
+          npm run test
+
+      - name: Lint JS
+        run: |
+          npm run lint:js
+
+      - name: Theme Check
+        run: npx shopify theme check --fail-level=error
+
+      - name: Run JSON Lint
+        run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/json-lint/master/pipeline.sh)
+        env:
+          INCLUDE_FILES: 'locales/*.json'

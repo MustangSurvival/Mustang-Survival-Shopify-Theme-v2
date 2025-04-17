@@ -1,0 +1,36 @@
+{
+  "type": "header",
+  "name": "Header Group Klaviyo",
+  "sections": {
+    "klaviyo-announcement-bar": {
+      "type": "klaviyo-announcement-bar",
+      "blocks": {
+        "announcement_crLzVr": {
+          "type": "announcement",
+          "settings": {
+            "text": "Welcome to our store123123"
+          }
+        },
+        "announcement_7zyDDe": {
+          "type": "announcement",
+          "settings": {
+            "text": "This multi-berry blend won't disappoint123123"
+          }
+        }
+      },
+      "block_order": ["announcement_crLzVr", "announcement_7zyDDe"],
+      "settings": {
+        "autoplay_delay": 3000,
+        "backround_color": "#000000",
+        "text_color": "#ffffff"
+      }
+    },
+    "main": {
+      "type": "main-header"
+    }
+  },
+  "order": [
+    "klaviyo-announcement-bar",
+    "main"
+  ]
+}

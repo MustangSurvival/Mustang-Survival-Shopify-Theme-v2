@@ -1,0 +1,41 @@
+{%- if settings.nosto_enable and section.settings.placement_id != blank -%}
+  <script src='{{ '-nosto-products-carousel.js' | asset_url }}' type='module'></script>
+
+  <div
+    class='nosto_element'
+    id='{{ section.settings.placement_id }}'
+    data-template-type='nosto-products-carousel'
+    style='display: none;'
+  ></div>
+{%- elsif request.design_mode -%}
+  <div class='container py-md'>
+    <div class='md:flex md:items-center md:justify-between'>
+      <h2 class='text-gray-900 h2'>
+        Please enable the Nosto integration from theme settings and/or add a Placement ID!
+      </h2>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.nosto-products-carousel.name",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "placement_id",
+      "label": "t:sections.nosto-products-carousel.settings.placement_id.label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.nosto-products-carousel.presets.name"
+    }
+  ]
+}
+{% endschema %}

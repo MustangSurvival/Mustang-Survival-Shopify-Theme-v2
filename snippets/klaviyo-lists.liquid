@@ -1,0 +1,140 @@
+{%- assign klaviyo_lists = shop.metaobjects.klaviyo_lists.values -%}
+
+<script>
+  {% if settings.klaviyo_utm_personalisation != blank %}
+    const utm_prs = {{- settings.klaviyo_utm_personalisation | json -}}
+  {% else %}
+    const utm_prs = false;
+  {% endif %}
+  !(function () {
+    if (!window.klaviyo) {
+      window._klOnsite = window._klOnsite || [];
+      try {
+        window.klaviyo = new Proxy(
+          {},
+          {
+            get: function (n, i) {
+              return "push" === i
+                ? function () {
+                    var n;
+                    (n = window._klOnsite).push.apply(n, arguments);
+                  }
+                : function () {
+                    for (
+                      var n = arguments.length, o = new Array(n), w = 0;
+                      w < n;
+                      w++
+                    )
+                      o[w] = arguments[w];
+                    var t =
+                        "function" == typeof o[o.length - 1] ? o.pop() : void 0,
+                      e = new Promise(function (n) {
+                        window._klOnsite.push(
+                          [i].concat(o, [
+                            function (i) {
+                              t && t(i), n(i);
+                            },
+                          ]),
+                        );
+                      });
+                    return e;
+                  };
+            },
+          },
+        );
+      } catch (n) {
+        (window.klaviyo = window.klaviyo || []),
+          (window.klaviyo.push = function () {
+            var n;
+            (n = window._klOnsite).push.apply(n, arguments);
+          });
+      }
+    }
+  })();
+  
+  
+  try {
+    // Create a JavaScript array from the metaobject values
+    const initPrs = function (utm_prs) {
+      if (!utm_prs) initKlaviyo()
+      sessionStorage.setItem("utm_present", "true");
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const utm_prs_value = urlParams.get(utm_prs)
+      if (utm_prs_value) {
+        const cartAttributesPayload = {
+          attributes: {}  
+        }
+        cartAttributesPayload.attributes[utm_prs] = utm_prs_value
+        var headers = new Headers({ 'Content-Type': 'application/json' });
+      
+        var request = {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify(cartAttributesPayload)
+        };
+      
+        fetch('/cart/update.js', request)
+        .then((response) => {
+          if (!response.ok) {
+            var error = new Error(response.status)
+            this.close()
+            throw error
+          }
+          return response.json()
+        })
+        .then((json) => {
+          console.log(json)
+        });
+      }
+    }
+    // Now use these list IDs in your Klaviyo API calls
+    const initKlaviyo = async function() {
+      const klaviyoListIDs = 
+      {%- for klaviyo in klaviyo_lists -%}
+        {{ klaviyo.items | split: ' ' | json }}
+        {% unless forloop.last %},{% endunless %}
+      {% endfor %};
+      const customerSegments = await klaviyo.getGroupMembership(klaviyoListIDs)
+      if (customerSegments.length > 0){
+        var headers = new Headers({ 'Content-Type': 'application/json' });
+
+        const cartAttributesPayload = {
+          attributes: {}  
+        }
+
+        customerSegments.map((segment, index) => {
+          const segmentKey = `segment_${index}`;
+          cartAttributesPayload.attributes[segmentKey] = segment
+        })
+      
+        var request = {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify(cartAttributesPayload)
+        };
+      
+        fetch('/cart/update.js', request)
+        .then((response) => {
+          if (!response.ok) {
+            var error = new Error(response.status)
+            this.close()
+            throw error
+          }
+          return response.json()
+        })
+        .then((json) => {
+          console.log(json)
+        });
+      }
+      
+    }
+    // Call start
+    let utm_tracked = !!sessionStorage.getItem("utm_present");
+    if (utm_prs && !utm_tracked){
+      initPrs(utm_prs);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+</script>

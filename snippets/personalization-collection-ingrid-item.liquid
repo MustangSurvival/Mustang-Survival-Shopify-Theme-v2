@@ -1,0 +1,116 @@
+{%- render '@needs-script', entries: 'core-deferred-media' -%}
+{% comment %}
+  This snippet is used to render the collection ingrid item. It is used in the collection grid to render the collection ingrid item.
+
+  Accepts:
+   - item: Metaobject of type in_grid_item_with_position or in_grid_content_item
+   - is_mobile: Boolean to check if the item is being rendered in mobile
+   - index: Index of the item in the collection grid
+{% endcomment %}
+{%- liquid
+  if item.in_grid_content_item
+    assign item = item.in_grid_content_item.value
+  endif
+-%}
+
+{% liquid
+  assign show_ingrid_tile = false
+  assign klaviyo_group_id = item.klaviyo_group_id
+  assign split_klaviyo_group_id = klaviyo_group_id | split: ','
+  if split_klaviyo_group_id contains allowed_groups
+    assign show_ingrid_tile = true
+  elsif split_klaviyo_group_id == blank
+    assign show_ingrid_tile = true
+  endif
+%}
+
+{%- if item != blank and show_ingrid_tile -%}
+  {%- liquid
+    assign text_color = item.text_color
+    capture text_color_class
+      render '@text-color-class', color: text_color
+    endcapture
+
+    assign title = item.title
+    assign content = item.content
+    assign cta_label = item.cta_label
+    assign cta_style = item.cta_style.value | default: 'primary' | handle
+    assign link = item.link
+    assign loading = 'lazy'
+    assign text_position = item.text_position.value | default: 'start' | handle
+    assign text_alignment = item.text_alignment.value | default: 'left' | handle
+
+    if index < 3
+      assign loading = 'eager'
+      assign preload = true
+    endif
+
+    assign desktop_media = item.desktop_media
+    assign mobile_media = item.mobile_media | default: item.desktop_media
+    assign media = desktop_media.value
+
+    if is_mobile
+      assign media = mobile_media.value
+    endif
+
+    capture wrapper_class
+      if is_mobile
+        echo 'grid lg:hidden'
+      else
+        echo 'hidden lg:grid'
+      endif
+
+      if text_position == 'start'
+        echo ' items-start'
+      elsif text_position == 'center'
+        echo ' items-center'
+      else
+        echo ' items-end'
+      endif
+
+      if text_alignment == 'left'
+        echo ' justify-start text-start'
+      elsif text_alignment == 'center'
+        echo ' justify-center text-center'
+      else
+        echo ' justify-end text-end'
+      endif
+    endcapture
+
+    capture textbox_class
+      if text_position == 'start'
+        echo 'place-items-start text-start'
+      elsif text_position == 'center'
+        echo 'place-items-center text-center'
+      else
+        echo 'place-items-end text-end'
+      endif
+    endcapture
+  -%}
+
+  <li class='relative overflow-clip aspect-square sm:aspect-auto rounded-lg col-span-1 {{ text_color_class }} {{ wrapper_class }}'>
+    {%- liquid
+      assign media_type = media.media_type
+      assign current_media = media
+      if preview
+        assign media_type = 'image'
+        assign current_media = media.preview_image
+      endif
+
+      case media_type
+        when 'image'
+          render 'image', image: media, sizes: '20vw, (min-width: 1100px) 45vw', preload: preload, loading: loading, class: 'absolute inset-0 size-full', format: 'pjpg'
+        when 'video'
+          render 'deferred-media', video: media, video_alt: media.alt, class: 'm-auto absolute inset-0 size-full', cover_image: current_media, autoplay: true, loop: true, controls: false, muted: true, object_fit: 'object-cover'
+      endcase
+    -%}
+
+    <div class='relative z-10 p-md grid grid-cols-1 gap-xs {{ textbox_class }}'>
+      <h4 class='h6'>{{ title }}</h4>
+      {%- if content != blank -%}
+        <p>{{ content }}</p>
+      {%- endif -%}
+      <a href='{{ link }}' class='btn w-fit' variant='{{ cta_style }}'>{{ cta_label }}</a>
+    </div>
+  </li>
+{%- endif -%}
