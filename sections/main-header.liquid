@@ -15,9 +15,9 @@
   endif
 -%}
 
-<header class='grid items-center grid-cols-[auto_1fr_auto] px-sm pt-xs gap-x-sm bg-p-lightest'>
+<header class='grid items-center grid-cols-[auto_1fr_auto] px-[11px] gap-x-sm bg-p-lightest'>
   {% comment %} -- Column 1: Logo -- {% endcomment %}
-  <div class='flex items-center justify-start'>
+  <div class='flex items-center justify-start py-[11px]'>
     <a href='{{ routes.root_url }}' class='inline-flex'>
       {%- if settings.logo != blank -%}
         <div
@@ -56,17 +56,15 @@
   {%- endif -%}
 
   {% comment %} -- Column 3: Icons & Mobile Toggle -- {% endcomment %}
-  <div class='flex items-center justify-end gap-xs md:gap-sm'>
-    <div class='hidden lg:block'>
-      {%- render 'header-search' -%}
-    </div>
+  <div class='flex items-center justify-end gap-xs gap-[22px] md:gap-[30px]'>
+    {%- render 'header-search' -%}
 
     {%- if shop.customer_accounts_enabled -%}
       <a
         href='{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}'
         class='hidden md:inline-flex'
       >
-        {% render 'icon' with 'icon-account', size: 18 %}
+        {% render 'icon' with 'c-icon-account', size: 20 %}
         <span class='sr-only'>
           {%- liquid
             if customer

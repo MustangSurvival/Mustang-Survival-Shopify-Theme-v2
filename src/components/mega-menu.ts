@@ -50,6 +50,8 @@ export class MegaMenu extends BaseElementWithoutShadowDOM {
         this._handleMenuFocusOut
       )
     })
+
+    console.log('test', this.querySelectorAll('data-promo-image'))
   }
 
   _handleActivateButton(button: HTMLElement): void {

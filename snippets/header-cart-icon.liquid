@@ -6,16 +6,11 @@
   id='cart-icon-bubble'
 >
   {%- liquid
-    if cart == empty
-      render 'icon' with 'icon-cart-empty', size: 38
-    else
-      render 'icon' with 'icon-cart', size: 38
-    endif
+    render 'icon' with 'c-icon-cart', size: 20
   -%}
   <span class='sr-only'>{{ 'templates.cart.cart' | t }}</span>
-  <div class='empty:hidden absolute bg-p-brand-01 text-t-brand-primary-contrast rounded-full inline-flex items-center justify-center -top-1 -right-1 w-4 h-4 text-center text-xs leading-none'>
+  <div class='empty:hidden absolute inline-flex items-center justify-center text-center text-xs leading-none left-full w-[18px] h-[18px] bg-p-primary text-white rounded-full'>
     {%- render '@needs-script', entries: 'component-cart-total' -%}
-    {%- comment %} Restored original translation key format {%- endcomment %}
     <cart-total
       translation='{ "cart_count": {{ 'sections.header.cart_count' | t: count: '###count###' | json }} }'
     >

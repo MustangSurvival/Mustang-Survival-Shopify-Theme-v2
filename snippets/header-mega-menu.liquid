@@ -7,7 +7,7 @@
 {% endcomment %}
 
 <nav class='flex items-center justify-center gap-md h-full' role='navigation' aria-label='Main navigation'>
-  <ul class='list-none p-0 m-0 flex gap-md items-center h-full'>
+  <ul class='list-none p-0 m-0 flex gap-[20px] items-center h-full'>
     {%- comment %} Added items-center for separator alignment {%- endcomment %}
     {%- for block in blocks -%}
       {%- case block.type -%}
@@ -21,76 +21,86 @@
           -%}
           <li class='list-none group h-full'>
             {%- comment %} Added relative positioning back {%- endcomment %}
-            <a href='{{ top_link_url }}' class='inline-flex items-center gap-2xs group-hover:underline h-full'>
+            <a
+              href='{{ top_link_url }}'
+              class='inline-flex items-center gap-2xs group-hover:underline h-full py-[11px] text-heading-6 text-[23px]'
+            >
               {{ block.settings.top_label | escape }}
-              {%- if has_submenu -%}
-                {% render 'icon' with 'icon-arrow', size: 12 %}
-              {%- endif -%}
+              {%- comment -%}
+                {%- if has_submenu -%}
+                  {% render 'icon' with 'icon-arrow', size: 12 %}
+                {%- endif -%}
+              {%- endcomment -%}
             </a>
             {%- if has_submenu -%}
-              <div class='absolute top-full left-0 w-auto min-w-[600px] bg-p-lightest text-p-text shadow-lg p-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-150 z-50 grid grid-cols-4 gap-md'>
-                {%- comment %} Changed background back to bg-p-lightest match header {%- endcomment %}
-                {%- comment %} Column 1: Submenu 1 {%- endcomment %}
-                {%- if block.settings.menu_1 != blank and linklists[block.settings.menu_1].links.size > 0 -%}
-                  <div class='flex flex-col gap-xs'>
-                    <ul class='list-none p-0 m-0 flex flex-col gap-xs'>
-                      {%- for link in linklists[block.settings.menu_1].links -%}
-                        <li class='list-none'>
-                          <a href='{{ link.url }}' class='text-sm hover:underline'>{{ link.title }}</a>
-                        </li>
-                      {%- endfor -%}
-                    </ul>
-                  </div>
-                {%- endif -%}
-                {%- comment %} Column 2: Submenu 2 {%- endcomment %}
-                {%- if block.settings.menu_2 != blank and linklists[block.settings.menu_2].links.size > 0 -%}
-                  <div class='flex flex-col gap-xs'>
-                    <ul class='list-none p-0 m-0 flex flex-col gap-xs'>
-                      {%- for link in linklists[block.settings.menu_2].links -%}
-                        <li class='list-none'>
-                          <a href='{{ link.url }}' class='text-sm hover:underline'>{{ link.title }}</a>
-                        </li>
-                      {%- endfor -%}
-                    </ul>
-                  </div>
-                {%- endif -%}
-                {%- comment %} Column 3: Submenu 3 {%- endcomment %}
-                {%- if block.settings.menu_3 != blank and linklists[block.settings.menu_3].links.size > 0 -%}
-                  <div class='flex flex-col gap-xs'>
-                    <ul class='list-none p-0 m-0 flex flex-col gap-xs'>
-                      {%- for link in linklists[block.settings.menu_3].links -%}
-                        <li class='list-none'>
-                          <a href='{{ link.url }}' class='text-sm hover:underline'>{{ link.title }}</a>
-                        </li>
-                      {%- endfor -%}
-                    </ul>
-                  </div>
-                {%- endif -%}
-                {%- comment %} Column 4: Promotional Content {%- endcomment %}
-                {%- if block.settings.promo_image != blank or block.settings.promo_heading != blank -%}
-                  <div class='flex flex-col gap-sm'>
-                    {%- if block.settings.promo_image != blank -%}
-                      {%- render 'image',
-                        image: block.settings.promo_image,
-                        width: 300,
-                        class: 'w-full h-auto aspect-video object-cover'
-                      -%}
-                    {%- endif -%}
+              <div class='absolute top-full left-0 bg-p-lightest text-p-text shadow-lg w-full opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-150 z-50'>
+                <div class='container min-w-[600px] p-md grid grid-cols-4 gap-md'>
+                  {%- comment %} Changed background back to bg-p-lightest match header {%- endcomment %}
+                  {%- comment %} Column 1: Submenu 1 {%- endcomment %}
+                  {%- if block.settings.menu_1 != blank and linklists[block.settings.menu_1].links.size > 0 -%}
                     <div class='flex flex-col gap-xs'>
-                      {%- if block.settings.promo_heading != blank -%}
-                        <h4 class='h5'>{{ block.settings.promo_heading | escape }}</h4>
-                      {%- endif -%}
-                      {%- if block.settings.promo_text != blank -%}
-                        <div class='text-sm rte'>{{ block.settings.promo_text }}</div>
-                      {%- endif -%}
-                      {%- if block.settings.promo_link_label != blank and block.settings.promo_link_url != blank -%}
-                        <a href='{{ block.settings.promo_link_url }}' class='text-sm font-bold hover:underline'>
-                          {{- block.settings.promo_link_label | escape -}}
-                        </a>
-                      {%- endif -%}
+                      <p class="h6 text-[24px]">{{ block.settings.menu_1.title }}</p>
+                      <ul class='list-none p-0 m-0 flex flex-col gap-xs'>
+                        {%- for link in linklists[block.settings.menu_1].links -%}
+                        <li class='list-none' {% if link.type == 'collection_link' %}data-promo-image="{{ link.object.image |  img_url: '300x'  }}" data-promo-heading="{{ link.object.title | escape }}"{% endif %}>
+                            <a href='{{ link.url }}' class='text-sm hover:underline'>{{ link.title }}</a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
                     </div>
-                  </div>
-                {%- endif -%}
+                  {%- endif -%}
+                  {%- comment %} Column 2: Submenu 2 {%- endcomment %}
+                  {%- if block.settings.menu_2 != blank and linklists[block.settings.menu_2].links.size > 0 -%}
+                    <div class='flex flex-col gap-xs'>
+                      <ul class='list-none p-0 m-0 flex flex-col gap-xs'>
+                        {%- for link in linklists[block.settings.menu_2].links -%}
+                          <li class='list-none'>
+                            <a href='{{ link.url }}' class='text-sm hover:underline'>{{ link.title }}</a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                  {%- endif -%}
+                  {%- comment %} Column 3: Submenu 3 {%- endcomment %}
+                  {%- if block.settings.menu_3 != blank and linklists[block.settings.menu_3].links.size > 0 -%}
+                    <div class='flex flex-col gap-xs'>
+                      <ul class='list-none p-0 m-0 flex flex-col gap-xs'>
+                        {%- for link in linklists[block.settings.menu_3].links -%}
+                          <li class='list-none'>
+                            <a href='{{ link.url }}' class='text-sm hover:underline'>{{ link.title }}</a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                  {%- endif -%}
+                  {%- comment %} Column 4: Promotional Content {%- endcomment %}
+                  {%- if block.settings.promo_image != blank or block.settings.promo_heading != blank -%}
+                    <div class='flex flex-col gap-sm'>
+                      {%- if block.settings.promo_image != blank -%}
+                        {%- render 'image',
+                          image: block.settings.promo_image,
+                          width: 300,
+                          class: 'w-full h-auto aspect-video object-cover promo-image'
+                        -%}
+                      {%- endif -%}
+                      <div class='flex flex-col gap-xs'>
+                        {%- if block.settings.promo_heading != blank -%}
+                          <h4 class='h5' data-promo-default-heading="{{ block.settings.promo_heading | escape }}">{{ block.settings.promo_heading | escape }}</h4>
+                        {%- endif -%}
+                        {%- comment -%}
+                        {%- if block.settings.promo_text != blank -%}
+                          <div class='text-sm rte'>{{ block.settings.promo_text }}</div>
+                        {%- endif -%}
+                        {%- if block.settings.promo_link_label != blank and block.settings.promo_link_url != blank -%}
+                          <a href='{{ block.settings.promo_link_url }}' class='text-sm font-bold hover:underline'>
+                            {{- block.settings.promo_link_label | escape -}}
+                          </a>
+                        {%- endif -%}
+                        {%- endcomment -%}
+                      </div>
+                    </div>
+                  {%- endif -%}
+                </div>
               </div>
             {%- endif -%}
           </li>
@@ -98,7 +108,7 @@
         {%- when 'separator' -%}
           {% comment %} --- Render Separator --- {% endcomment %}
           <li class='list-none flex items-center h-full' role='separator' aria-hidden='true'>
-            <div class='h-6 w-px bg-p-darkest'></div>
+            <div class='h-6 w-px bg-t-line-break'></div>
           </li>
       {%- endcase -%}
     {%- endfor -%}
