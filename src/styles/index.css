@@ -222,16 +222,11 @@
     @apply mb-sm;
   }
 
-  /* Pandectes GDPR Compliance */
-  .cc-window.cc-floating {
-    @apply !bg-p-lightest !rounded-md !bg-opacity-60 !backdrop-blur-md;
+  .blur-bg:before {
+    @apply content-[""] absolute w-full h-full blur-md;
   }
 
-  .cc-btn {
-    @apply !text-body !bg-p-brand-01 !rounded-forms-radius hover:!bg-t-brand-secondary hover:!text-t-foreground;
-  }
-
-  .cc-message {
-    @apply !text-body;
+  .blur-bg {
+    @apply relative overflow-hidden;
   }
 }
