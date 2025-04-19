@@ -58,7 +58,7 @@ export class ModalDialog extends WithApiClientMixin(
   headerClasses = ''
 
   @property({ type: String, attribute: 'close-icon-size' })
-  closeIconSize = '24'
+  closeIconSize = '22'
 
   @property({ type: String, attribute: 'url' })
   url!: string
@@ -224,14 +224,16 @@ export class ModalDialog extends WithApiClientMixin(
         @click=${this._handleBackdropClick}
       >
         <div
-          class="${this.type ||
-          'modal'} grid grid-cols-1 grid-rows-[var(--dmn-dialog-header-height,_60px)_minmax(0,_1fr)_auto]"
+          class="${
+            this.type || 'modal'
+          } grid grid-cols-1 grid-rows-[81px_minmax(0,_1fr)_auto]"
           size=${this.size}
           anchor=${this.anchor}
         >
           <div
-            class="${this
-              .headerClasses} sticky top-0 z-50 flex items-center justify-between bg-p-lightest px-sm py-xs"
+            class="${
+              this.headerClasses
+            } sticky top-0 z-50 flex items-center justify-between bg-p-lightest px-sm py-xs h-max border-b border-b-t-line-break"
           >
             <div
               class="${this.withoutTitle ? 'sr-only' : ''} flex-grow"
@@ -242,7 +244,7 @@ export class ModalDialog extends WithApiClientMixin(
 
             <button
               @click=${this.#handleClose}
-              class="ml-auto inline-flex leading-none focus:outline-none focus-visible:ring-1 focus-visible:ring-u-focus"
+              class="inline-flex leading-none focus:outline-none focus-visible:ring-1 focus-visible:ring-u-focus ml-[25px]"
             >
               <slot name="close-icon">
                 <svg-icon

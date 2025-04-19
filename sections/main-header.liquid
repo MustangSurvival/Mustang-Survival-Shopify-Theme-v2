@@ -21,7 +21,7 @@
     <a href='{{ routes.root_url }}' class='inline-flex'>
       {%- if settings.logo != blank -%}
         <div
-          class='inline-flex w-auto h-10 md:h-[var(--header-logo-height,40px)] md:w-auto'
+          class='inline-flex w-auto h-[60px] md:h-[var(--header-logo-height,40px)] md:w-auto'
           style='--header-logo-height: {{ settings.logo_width | divided_by: settings.logo.aspect_ratio }}px; max-width: {{ settings.logo_width }}px;'
         >
           {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
@@ -56,7 +56,7 @@
   {%- endif -%}
 
   {% comment %} -- Column 3: Icons & Mobile Toggle -- {% endcomment %}
-  <div class='flex items-center justify-end gap-xs gap-[22px] md:gap-[30px]'>
+  <div class='flex items-center justify-end gap-[25px] md:gap-[30px]'>
     {%- render 'header-search' -%}
 
     {%- if shop.customer_accounts_enabled -%}
@@ -106,8 +106,7 @@
           aria-controls='{{ menu_modal_id }}'
           class="group/menutoggle inline-flex lg:hidden" {%- comment %} Hidden on large screens and up {% endcomment -%}
         >
-          {%- render 'icon' with 'icon-hamburger', class: 'group-[[open]]/menutoggle:hidden text-[28px] md:text-[32px]' -%}
-          {%- render 'icon' with 'icon-close', class: 'group-[[open]]/menutoggle:inline-flex hidden text-[28px] md:text-[32px]' -%}
+          {%- render 'icon' with 'c-icon-menu', class: 'text-[22px] md:text-[32px]' -%}
           <span class="sr-only">{{ 'sections.header.menu' | t }}</span>
         </button>
       {%- endcapture -%}
