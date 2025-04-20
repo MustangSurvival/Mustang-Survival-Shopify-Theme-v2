@@ -33,12 +33,12 @@
       id='accordion-checkbox-{{ id }}'
       name='{{ group_name | default: 'accordion' }}'
     >
-    <div class='flex items-center justify-between w-full peer-focus-visible:ring-1 ring-u-focus'>
-      <h2 class='h6' id='accordion-title-{{ id }}'>
+    <div class='flex gap-[10px] items-center w-full peer-focus-visible:ring-1 ring-u-focus'>
+      <h2 class='h6 text-[24px] leading-[40px]' id='accordion-title-{{ id }}'>
         {{ title }}
       </h2>
-      {%- render 'icon' with 'icon-caret',
-        class: 'group-has-[:checked]:rotate-180 duration-300 transition-transform'
+      {%- render 'icon' with 'c-icon-caret', size: 10,
+        class: 'group-has-[:checked]:rotate-180 duration-300 transition-transform relative bottom-px'
       -%}
     </div>
   </label>

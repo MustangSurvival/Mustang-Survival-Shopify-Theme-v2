@@ -1,0 +1,20 @@
+{% comment %}
+  Snippet: menu-block-item.liquid
+  Renders a single menu block item, similar to the desktop mega menu.
+{% endcomment %}
+
+{%- for link in menu.links -%}
+  <li class='list-none'>
+    {% comment %} Top-level link with no children {% endcomment %}
+    <a
+      id='HeaderDrawer-{{ link.handle | default: forloop.index }}'
+      href='{{ link.url }}'
+      class='block text-[16px] leading-[26px] {% if link.current or link.child_current %}underline underline-offset-4{% endif %}'
+      {% if link.current or link.child_current %}
+        aria-current='page'
+      {% endif %}
+    >
+      {{ link.title | escape }}
+    </a>
+  </li>
+{%- endfor -%}

@@ -1,4 +1,5 @@
-<details class='group/search hidden lg:inline-flex' data-search>
+{%- comment -%}
+<details class='group/search {% unless mobile %}hidden lg:inline-flex{% endunless %}' data-search>
   <summary class='flex items-center gap-1'>
     <span class='group-open/search:hidden pointer-events-none inline-flex'>
       {%- render 'icon' with 'c-icon-search', size: 20 -%}
@@ -15,3 +16,9 @@
     {% render 'search-form', input_id: 'header-search' %}
   </dialog>
 </details>
+{%- endcomment -%}
+
+<a href="/search" class="inline-flex items-center gap-1">
+  {%- render 'icon' with 'c-icon-search', size: 20 -%}
+  <span class="sr-only">{{ 'general.search.search' | t }}</span>
+</a>
