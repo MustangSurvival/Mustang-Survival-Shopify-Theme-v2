@@ -1,8 +1,189 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
-      "type": "liquid"
+      "type": "liquid",
+      "disabled": true,
+      "settings": {
+        "liquid": ""
+      }
+    },
+    "c_hero_static_k3CLbX": {
+      "type": "c-hero-static",
+      "blocks": {
+        "heading_4rhCXe": {
+          "type": "heading",
+          "settings": {
+            "heading": "From sea to shore",
+            "heading_size": "h2"
+          }
+        },
+        "text_FqjUiB": {
+          "type": "text",
+          "name": "Text",
+          "settings": {
+            "text": "<p>Let us help you find the right gear to keep you comfortable, dry and safe, because life on the water is better than a life on land.Let us help you find the right gear to keep you comfortable, dry and safe, because life on the water is better than a life on land.</p>",
+            "text_size": "text-body"
+          }
+        },
+        "button_zCMKqB": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop now",
+            "button_link": "",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": ["heading_4rhCXe", "text_FqjUiB", "button_zCMKqB"],
+      "settings": {
+        "image_overlay": true,
+        "layout": "text_last"
+      }
+    },
+    "c_hero_video_NtaD4Y": {
+      "type": "c-hero-video",
+      "blocks": {
+        "heading_9FbLzU": {
+          "type": "heading",
+          "settings": {
+            "heading": "From sea to shore",
+            "heading_size": "h2"
+          }
+        },
+        "text_6qKVRH": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Let us help you find the right gear to keep you comfortable, dry and safe, because life on the water is better than a life on land.</p>"
+          }
+        },
+        "button_jfcQf3": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop now",
+            "button_link": "",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": ["heading_9FbLzU", "text_6qKVRH", "button_jfcQf3"],
+      "settings": {
+        "video_alt": "Promotional video",
+        "video_autoplay": true,
+        "loop_video": true,
+        "controls": false,
+        "image_overlay": false
+      }
+    },
+    "c_page_hero_mhW9wj": {
+      "type": "c-page-hero",
+      "blocks": {
+        "caption_NmPVpN": {
+          "type": "caption",
+          "settings": {
+            "caption": "Optional Subtitle",
+            "text_size": "text-base"
+          }
+        },
+        "heading_Te6Qix": {
+          "type": "heading",
+          "settings": {
+            "heading": "about mustang survival",
+            "heading_size": "h2"
+          }
+        },
+        "text_Ti3iq4": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Let us help you find the right gear to keep you comfortable, dry and safe, because life on the water is better than a life on land.</p>"
+          }
+        },
+        "button_PhaRhN": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop now",
+            "button_link": "",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "caption_NmPVpN",
+        "heading_Te6Qix",
+        "text_Ti3iq4",
+        "button_PhaRhN"
+      ],
+      "settings": {}
+    },
+    "c_collection_hero_AENcNx": {
+      "type": "c-collection-hero",
+      "blocks": {
+        "heading_zfznjw": {
+          "type": "heading",
+          "settings": {
+            "heading": "PFDs",
+            "heading_size": "h2"
+          }
+        },
+        "text_HcywmX": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Be safe in every kind of marine environment. Move freely and comfortably with Inflatable PFDs that inflate manually, automatically, or hydrostatically.</p>"
+          }
+        },
+        "button_ry6G7B": {
+          "type": "button",
+          "settings": {
+            "button_label": "Re-Arm Finder",
+            "button_link": "shopify://collections",
+            "button_style_secondary": false
+          }
+        },
+        "button_xiJXeH": {
+          "type": "button",
+          "settings": {
+            "button_label": "How to Choose the Right PFD",
+            "button_link": "shopify://collections/frontpage",
+            "button_style_secondary": false
+          }
+        },
+        "button_jE9bnE": {
+          "type": "button",
+          "settings": {
+            "button_label": "PFD Fit Guide",
+            "button_link": "shopify://collections",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_zfznjw",
+        "text_HcywmX",
+        "button_ry6G7B",
+        "button_xiJXeH",
+        "button_jE9bnE"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/Main.jpg",
+        "desktop_content_position": "lg:items-start",
+        "desktop_content_alignment": "lg:text-left",
+        "mobile_content_alignment": "text-left"
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main",
+    "c_hero_static_k3CLbX",
+    "c_hero_video_NtaD4Y",
+    "c_page_hero_mhW9wj",
+    "c_collection_hero_AENcNx"
+  ]
 }

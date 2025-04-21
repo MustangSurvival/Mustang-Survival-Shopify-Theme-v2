@@ -1,5 +1,4 @@
 import twExtend from './tailwind-manifest'
-import fs from 'fs'
 import path from 'node:path'
 import type { Config } from 'tailwindcss'
 
@@ -16,6 +15,14 @@ export default {
       fontMapping: {
         'Gotham Narrow': 'Primary',
         Tungsten: 'Heading',
+      },
+      fontWeightMapping: {
+        Primary: {
+          Regular: 400,
+        },
+        Heading: {
+          Regular: 500,
+        },
       },
       fluidTypography: false,
       /*
