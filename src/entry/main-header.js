@@ -1,5 +1,6 @@
-import { BaseElementWithoutShadowDOM } from '@/base/BaseElement'
-import '@/components/mega-menu'
+import { BaseElementWithoutShadowDOM } from '@/base/BaseElement';
+import '@/components/mega-menu';
+
 
 export class MainHeader extends BaseElementWithoutShadowDOM {
   #resizeObserver = new ResizeObserver(() => this.#setHeightCSSProperty())
@@ -34,17 +35,13 @@ export class MainHeader extends BaseElementWithoutShadowDOM {
     this.defaultPromoText = this.querySelector('[data-promo-default-heading]')
     this.promoImage = this.querySelector('.promo-image')
 
-    console.log('promoTakeoverElements', this.promoTakeoverElements)
-
     this.originalImageSrc = this.promoImage?.getAttribute('src')
     this.originalHeadingText = this.defaultPromoText?.textContent
 
     this.promoTakeoverElements.forEach((el) => {
-      console.log('promoTakeoverElement', el)
       el.addEventListener('mouseenter', () => {
         const newImage = el.getAttribute('data-promo-image')
         const newHeading = el.getAttribute('data-promo-heading')
-        console.log('mouseenter', el, newImage, newHeading)
 
         if (newImage && this.promoImage) {
           this.promoImage.setAttribute('src', newImage)

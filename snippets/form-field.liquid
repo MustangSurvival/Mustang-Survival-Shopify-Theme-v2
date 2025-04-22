@@ -318,92 +318,103 @@
       </div>
     {%- when 'select' -%}
       {%- liquid
+      if inline
+        assign wrapper_class = wrapper_class | append: 'inline-flex items-center'
+      else
         assign wrapper_class = wrapper_class | default: 'flex flex-col gap-2xs w-full'
-        assign select_wrapper_tag = 'div'
+      endif
 
-        if custom_select
-          assign select_wrapper_tag = 'custom-select'
-        endif
-      -%}
+      assign select_wrapper_tag = 'div'
+    
+      if custom_select
+        assign select_wrapper_tag = 'custom-select'
+      endif
+    -%}
 
-      {% capture element_attributes %}
-        id="{{ id }}"
-        value="{{ value }}"
-        name="{{ name }}"
+    {% capture element_attributes %}
+      id="{{ id }}"
+      value="{{ value }}"
+      name="{{ name }}"
 
-        {% if multiple %}
-          multiple
+      {% if multiple %}
+        multiple
+      {% endif %}
+
+      {% if disabled %}
+        disabled
+      {% endif %}
+      {% if required %}
+        required
+      {% endif %}
+
+      {% if placeholder %}
+        placeholder="{{ placeholder }}"
+      {% endif %}
+
+      {% if form_id != blank %}
+        form="{{ form_id }}"
+      {% endif %}
+
+      {{ attributes }}
+    {% endcapture %}
+    {%- render '@needs-script', entries: 'core-custom-select' -%}
+    <{{select_wrapper_tag}}
+      class='{{ wrapper_class }} group'
+      {{ wrapper_attributes }}
+    
+      {% if custom_select %}
+        {{ element_attributes }}
+        label="{{ label }}"
+    
+        {% if always_show_placeholder %}
+          always-show-placeholder="true"
         {% endif %}
-
-        {% if disabled %}
-          disabled
+    
+        {% if inline %}
+          inline="true"
         {% endif %}
-        {% if required %}
-          required
-        {% endif %}
-
-        {% if placeholder %}
-          placeholder="{{ placeholder }}"
-        {% endif %}
-
-        {% if form_id != blank %}
-          form="{{ form_id }}"
-        {% endif %}
-
-        {{ attributes }}
-      {% endcapture %}
-      {%- render '@needs-script', entries: 'core-custom-select' -%}
-      <{{select_wrapper_tag}}
-        class='{{ wrapper_class }} group'
-        {{ wrapper_attributes }}
-
-        {% if custom_select %}
-          {{ element_attributes }}
-          label="{{ label }}"
-
-          {% if always_show_placeholder %}
-            always-show-placeholder="true"
-          {% endif %}
+      {% endif %}
+    >
+      <div
+        class="relative w-full group peer"
+        {% if has_errors %}
+          error
         {% endif %}
       >
-        <div
-          class="relative w-full group peer"
-          {% if has_errors %}
-            error
+        <select
+          {% if help_text != blank %}
+            aria-describedby="{{ id }}_text"
           {% endif %}
+          class="text-left block appearance-none text-t-foreground disabled:text-t-border px-sm-forms-padding lg:px-lg-forms-padding h-sm-forms-inputheight lg:h-lg-forms-inputheight text-body focus:outline-none focus:ring-0 peer group-[[error]]:ring-u-error group-[[error]]:ring-2 focus-visible:ring-2 focus-visible:ring-u-focus"
+          {{ element_attributes }}
         >
-          <select
-            {% if help_text != blank %}
-              aria-describedby="{{ id }}_text"
-            {% endif %}
-            class="block w-full border appearance-none text-t-foreground disabled:text-t-border rounded-forms-radius px-sm-forms-padding lg:px-lg-forms-padding pt-sm-forms-padding lg:pt-lg-forms-padding h-sm-forms-inputheight lg:h-lg-forms-inputheight text-body bg-gray-50 bg-t-background border-t-foreground-secondary disabled:border-t-border focus:outline-none focus:ring-0 focus:border-t-foreground peer group-[[error]]:ring-u-error group-[[error]]:border-[transparent] group-[[error]]:ring-2"
-            {{ element_attributes }}
-          >
-            {{ options }}
-          </select>
+          {{ options }}
+        </select>
 
-          <div
-            class="absolute inset-y-0 flex items-center size-3 pointer-events-none end-sm-forms-padding lg:end-sm-forms-padding text-t-foreground group-[[error]]:text-u-error h-sm-forms-inputheight lg:h-lg-forms-inputheigh"
-          >
-            {%- render 'icon' with 'icon-select-arrow', size: 12, class: 'block' -%}
-          </div>
-          <label
-            for="{{ id }}"
-            class="absolute caption text-t-foreground-secondary duration-300 transform -translate-y-2.5 scale-75 top-3.5 start-sm-forms-padding lg:start-sm-forms-padding z-10 origin-[0] peer-focus:text-t-foreground peer-disabled:text-t-border peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
-          >
-            {{ label }}
-          </label>
-        </div>
+        <div
+        class="absolute inset-y-0 flex items-center size-3 pointer-events-none end-sm-forms-padding lg:end-sm-forms-padding text-t-foreground group-[[error]]:text-u-error h-sm-forms-inputheight lg:h-lg-forms-inputheigh"
+      >
+        {%- render 'icon' with 'icon-select-arrow', size: 12, class: 'block' -%}
+      </div>
+      {% unless inline %}
+      <label
+        for="{{ id }}"
+        class="absolute caption text-t-foreground-secondary duration-300 transform -translate-y-2.5 scale-75 top-3.5 start-sm-forms-padding lg:start-sm-forms-padding z-10 origin-[0] peer-focus:text-t-foreground peer-disabled:text-t-border peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+      >
+        {{ label }}
+      </label>
+      {% endunless %}
+    </div>
 
-        {%- if help_text != blank -%}
-          <p id="{{ id }}_text" class="caption text-t-foreground-secondary gap-x-2xs group-has-[[error]]:text-u-error flex items-center justify-start">
-            {%- if has_errors -%}
-              {%- render 'icon' with 'icon-error', class: 'block' -%}
-            {%- endif -%}
-            <span>{{ help_text }}</span>
-          </p>
+    {%- if help_text != blank -%}
+      <p id="{{ id }}_text" class="caption text-t-foreground-secondary gap-x-2xs group-has-[[error]]:text-u-error flex items-center justify-start">
+        {%- if has_errors -%}
+          {%- render 'icon' with 'icon-error', class: 'block' -%}
         {%- endif -%}
-      </{{ select_wrapper_tag }}>
+        <span>{{ help_text }}</span>
+      </p>
+    {%- endif -%}
+  </{{ select_wrapper_tag }}>
 
 
     {%- when 'switch' -%}

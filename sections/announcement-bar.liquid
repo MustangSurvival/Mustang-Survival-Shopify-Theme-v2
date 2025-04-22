@@ -1,245 +1,65 @@
-{% liquid
-  assign delay = section.settings.autoplay_delay | times: 1
-  assign is_slider = false
-  if section.blocks.size > 1
-    assign is_slider = true
-  endif
-%}
+<div class='flex items-center bg-t-grey-bg'>
+  <div class='relative flex-grow'>
+      <div
+        class='flex flex-grow flex-shrink-0 flex-wrap w-full gap-x-4 items-center justify-center h-auto text-center py-1 px-2 md:px-12'
+      >
+        {% if section.settings.link %}
+          <a href="{{ section.settings.link }}">
+            {{ section.settings.text }}
+          </a>
+        {% else %}
+          <p>
+            {{ section.settings.text }}
+          </p>
+        {% endif %}
+      </div>
+  </div>
 
-{% capture swiper_button_styles %}rounded-full absolute top-1/2 -translate-y-1/2 bg-no-repeat bg-center z-10 flex justify-center items-center w-5 h-5 bg-transparent border-none bg-none {{ section.settings.background_color }} {{ section.settings.text_color }}{% endcapture %}
-
-{% if section.blocks.size > 0 %}
-  {% if is_slider %}
-    <swiper-container
-      slides-per-view='1'
-      navigation-next-el='.swiper-button-next--announcement'
-      navigation-prev-el='.swiper-button-prev--announcement'
-      auto-height='true'
-      loop='true'
-      role='region'
-      aria-label='{{ 'sections.header.announcement' | t }}'
-      {% if delay > 1 %}
-        autoplay-delay='{{ delay }}'
-      {% endif %}
-      class='announcement-bar flex whitespace-nowrap overflow-clip {{ section.settings.background_color }} {{ section.settings.text_color }}'
-    >
-  {% else %}
-    <div class='announcement-bar {{ section.settings.background_color }} {{ section.settings.text_color }}'>
-  {% endif %}
-  {%- for block in section.blocks -%}
-    {%- if block.settings.text == blank -%}
-      {% continue %}
-    {%- endif -%}
-
-    {%- assign wrapper_tag = 'div' -%}
-    {%- if is_slider -%}
-      {%- assign wrapper_tag = 'swiper-slide' -%}
-    {%- endif -%}
-    <{{ wrapper_tag }}
-      class='flex flex-grow flex-shrink-0 flex-wrap w-full gap-x-4 items-center justify-center h-auto text-center py-1 {% if is_slider %}px-12{% else %}px-2 md:px-12{% endif %}'
-      {{ block.shopify_attributes }}
-    >
-      <p>
-        {{ block.settings.text }}
-      </p>
-    </{{ wrapper_tag }}>
-  {%- endfor -%}
-  {% if is_slider %}
-    </swiper-container>
-    <button
-      class='swiper-button-prev swiper-button-prev--announcement left-0 rotate-90 {{ swiper_button_styles }}'
-      aria-label='{{ 'general.slider.next_slide' | t }}'
-    >
-      <svg-icon src='icon-caret'></svg-icon>
-    </button>
-    <button
-      class='swiper-button-next swiper-button-next--announcement right-0 -rotate-90 {{ swiper_button_styles }}'
-      aria-label='{{ 'general.slider.previous_slide' | t }}'
-    >
-      <svg-icon src='icon-caret'></svg-icon>
-    </button>
-  {% else %}
-    </div>
-  {% endif %}
-{% endif %}
+  {% assign menu = linklists[section.settings.menu] %}
+  <div class='hidden lg:flex items-center gap-[25px] pr-4 z-10'>
+    {% if menu.links.size > 0 %}
+      {% for link in menu.links %}
+        <a href='{{ link.url }}' class='text-sm hover:underline'>
+          {{ link.title }}
+        </a>
+      {% endfor %}
+    {% endif %}
+    {% render 'i18n-select', type: 'currency' %}
+  </div>
+</div>
 
 {% schema %}
 {
-  "name": "t:sections.announcement-bar.name",
+  "name": "Announcement Bar",
   "class": "relative announcement-bar-wrapper",
-  "max_blocks": 12,
   "settings": [
     {
       "type": "number",
-      "label": "t:sections.announcement-bar.settings.autoplay_delay.label",
-      "info": "t:sections.announcement-bar.settings.autoplay_delay.info",
+      "label": "Autoplay Delay (ms)",
+      "info": "Autoplay delay in milliseconds. Set to 0 to disable autoplay.",
       "id": "autoplay_delay",
       "default": 3000
     },
     {
-      "type": "select",
-      "id": "background_color",
-      "label": "t:sections.announcement-bar.settings.background.label",
-      "options": [
-        {
-          "group": "Primitives",
-          "value": "bg-p-darkest",
-          "label": "Darkest"
-        },
-        {
-          "group": "Primitives",
-          "value": "bg-p-dark",
-          "label": "Dark"
-        },
-        {
-          "group": "Primitives",
-          "value": "bg-p-neutral",
-          "label": "Neutral"
-        },
-        {
-          "group": "Primitives",
-          "value": "bg-p-light",
-          "label": "Light"
-        },
-        {
-          "group": "Primitives",
-          "value": "bg-p-lightest",
-          "label": "Lightest"
-        },
-        {
-          "group": "Tokens",
-          "value": "bg-t-foreground",
-          "label": "Foreground"
-        },
-        {
-          "group": "Tokens",
-          "value": "bg-t-foreground-secondary",
-          "label": "Foreground Secondary"
-        },
-        {
-          "group": "Tokens",
-          "value": "bg-t-background",
-          "label": "Background"
-        },
-        {
-          "group": "Tokens",
-          "value": "bg-t-background-secondary",
-          "label": "Background Secondary"
-        },
-        {
-          "group": "Tokens",
-          "value": "bg-t-brand-primary",
-          "label": "Brand Primary"
-        },
-        {
-          "group": "Tokens",
-          "value": "bg-t-brand-secondary",
-          "label": "Brand Secondary"
-        },
-        {
-          "group": "Tokens",
-          "value": "bg-t-brand-primary-contrast",
-          "label": "Brand Primary Contrast"
-        },
-        {
-          "group": "Tokens",
-          "value": "bg-t-brand-secondary-contrast",
-          "label": "Brand Secondary Contrast"
-        }
-      ],
-      "default": "bg-t-background-secondary"
+      "type": "inline_richtext",
+      "id": "text",
+      "default": "Welcome to our store",
+      "label": "Announcement Text"
     },
     {
-      "type": "select",
-      "id": "text_color",
-      "label": "t:sections.announcement-bar.settings.color.label",
-      "options": [
-        {
-          "group": "Primitives",
-          "value": "text-p-darkest",
-          "label": "Darkest"
-        },
-        {
-          "group": "Primitives",
-          "value": "text-p-dark",
-          "label": "Dark"
-        },
-        {
-          "group": "Primitives",
-          "value": "text-p-neutral",
-          "label": "Neutral"
-        },
-        {
-          "group": "Primitives",
-          "value": "text-p-light",
-          "label": "Light"
-        },
-        {
-          "group": "Primitives",
-          "value": "text-p-lightest",
-          "label": "Lightest"
-        },
-        {
-          "group": "Tokens",
-          "value": "text-t-foreground",
-          "label": "Foreground"
-        },
-        {
-          "group": "Tokens",
-          "value": "text-t-foreground-secondary",
-          "label": "Foreground Secondary"
-        },
-        {
-          "group": "Tokens",
-          "value": "text-t-background",
-          "label": "Background"
-        },
-        {
-          "group": "Tokens",
-          "value": "text-t-background-secondary",
-          "label": "Background Secondary"
-        },
-        {
-          "group": "Tokens",
-          "value": "text-t-brand-primary",
-          "label": "Brand Primary"
-        },
-        {
-          "group": "Tokens",
-          "value": "text-t-brand-secondary",
-          "label": "Brand Secondary"
-        },
-        {
-          "group": "Tokens",
-          "value": "text-t-brand-primary-contrast",
-          "label": "Brand Primary Contrast"
-        },
-        {
-          "group": "Tokens",
-          "value": "text-t-brand-secondary-contrast",
-          "label": "Brand Secondary Contrast"
-        }
-      ],
-      "default": "text-p-darkest"
-    }
-  ],
-  "blocks": [
+      "type": "url",
+      "id": "link",
+      "label": "Link URL"
+    },
     {
-      "type": "announcement",
-      "name": "t:sections.announcement-bar.blocks.announcement.name",
-      "settings": [
-        {
-          "type": "inline_richtext",
-          "id": "text",
-          "default": "Welcome to our store",
-          "label": "t:sections.announcement-bar.blocks.announcement.settings.text.label"
-        }
-      ]
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu"
     }
   ],
   "presets": [
     {
-      "name": "t:sections.announcement-bar.name"
+      "name": "Announcement Bar"
     }
   ]
 }

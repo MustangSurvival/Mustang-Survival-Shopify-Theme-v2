@@ -1,5 +1,5 @@
 {%- assign form_id = 'Footer' | append: type | append: 'Form' -%}
-{%- form 'localization', id: form_id, class: 'min-w-40' -%}
+{%- form 'localization', id: form_id, class: 'flex' -%}
   {%- if type == 'currency' -%}
     {%- assign label = 'localization.country_label' | t -%}
 
@@ -9,14 +9,21 @@
 
     {%- capture options -%}
       {%- for country in localization.available_countries -%}
+        {%- assign country_image = shop.metaobjects.country_image.values | where: "country", country.name | first -%}
+        {%- assign icon_url = country_image.icon | image_url: width: 25 -%}
+
         <option
           value='{{ country.iso_code }}'
           {% if country.iso_code == localization.country.iso_code %}
             selected
           {% endif %}
+          {% if icon_url %}
+            data-icon='{{ icon_url }}'
+          {% endif %}
         >
-          {{ country.name }} ({{ country.currency.iso_code }}
-          {{ country.currency.symbol }})
+          {%- if icon_url -%}
+            <img src='{{ icon_url }}' alt='{{ country.name }}' class='size-[25px] mr-xs' loading='lazy' width="25" height="25">
+          {%- endif -%}
         </option>
       {%- endfor -%}
     {%- endcapture -%}
@@ -30,6 +37,8 @@
       options: options,
       custom_select: true,
       attributes: 'onchange="this.form?.submit()"'
+      hide_label: true,
+      inline: true
     -%}
   {%- endif -%}
 

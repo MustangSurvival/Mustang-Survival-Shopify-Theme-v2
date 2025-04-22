@@ -8,10 +8,6 @@
     @apply text-t-foreground;
   }
 
-  .announcement-bar-wrapper {
-    @apply -mr-[--scrollbar-width] transition-[margin];
-  }
-
   .clip-auto {
     clip: auto;
   }

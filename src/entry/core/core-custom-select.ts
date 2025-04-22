@@ -1,17 +1,19 @@
-import { FormElement } from '@/base/FormElement'
-import firstFocusableElement from '@/lib/firstFocusableElement'
-import { MediaQueryUtility } from '@/mixins/MediaQueryUtility'
-import { autoUpdate, computePosition, flip, offset } from '@floating-ui/dom'
-import { PropertyValueMap, css, html, nothing } from 'lit'
-import { property, state } from 'lit/decorators.js'
-import { map } from 'lit/directives/map.js'
-import { type Ref, createRef, ref } from 'lit/directives/ref.js'
+import { FormElement } from '@/base/FormElement';
+import firstFocusableElement from '@/lib/firstFocusableElement';
+import { MediaQueryUtility } from '@/mixins/MediaQueryUtility';
+import { autoUpdate, computePosition, flip, offset } from '@floating-ui/dom';
+import { PropertyValueMap, css, html, nothing } from 'lit';
+import { property, state } from 'lit/decorators.js';
+import { map } from 'lit/directives/map.js';
+import { type Ref, createRef, ref } from 'lit/directives/ref.js';
+
 
 export type CustomSelectOptionType = {
   label: string
   value: string
   disabled?: boolean
   selected?: boolean
+  icon?: string
   el: HTMLOptionElement
 }
 
@@ -32,7 +34,6 @@ export class CustomSelect extends FormElement {
     `,
   ]
 
-  // The breakpoint at which the custom select will be rendered
   static CUSTOM_SELECT_BREAKPOINT: string = '(min-width: 1024px)'
   mediaQueryUtility: MediaQueryUtility = new MediaQueryUtility(
     this,
@@ -41,6 +42,12 @@ export class CustomSelect extends FormElement {
 
   @property({ type: String })
   label: string = ''
+
+  @property({ type: Boolean })
+  inline: boolean = false
+
+  @property({ type: String })
+  icon: string = ''
 
   @property({ type: String })
   placeholder = 'Select an option'
@@ -85,6 +92,7 @@ export class CustomSelect extends FormElement {
     this._options = $options.map((option) => ({
       label: option.textContent || '',
       value: option.value || '',
+      icon: option.dataset.icon || '',
       el: option,
     }))
   }
@@ -317,6 +325,7 @@ export class CustomSelect extends FormElement {
   }
 
   getDropdownItemHTML(option: CustomSelectOptionType) {
+    console.log({ option })
     return html`
       <button
         type="button"
@@ -327,7 +336,12 @@ export class CustomSelect extends FormElement {
         ?selected=${option.selected}
         ?disabled=${option.disabled}
       >
-        <span class="block group-focus:ring-u-focus group-focus-visible:ring-2">
+        <span class="group-focus:ring-u-focus group-focus-visible:ring-2 flex items-center gap-2">
+          ${
+            option.icon
+              ? html`<img src="${option.icon}" class="size-[25px]"></img>`
+              : nothing
+          }
           ${this.renderOptionLabel(option.label, option)}
         </span>
       </button>
@@ -358,6 +372,7 @@ export class CustomSelect extends FormElement {
 
     const processedOptions = this._processedOptions
 
+    console.log({ processedOptions })
     if (this.multiple) {
       const selectedOptions = processedOptions.filter(
         (option) => option.selected
@@ -366,14 +381,16 @@ export class CustomSelect extends FormElement {
     }
 
     const selectedOption = processedOptions.find((option) => option.selected)
-
     return selectedOption ? selectedOption.label : this.placeholder
   }
 
   get getCustomSelectHTML() {
+    const selectedOption = this._processedOptions.find(
+      (option) => option.selected
+    )
     return html`
       <div
-        class="group peer relative w-full"
+        class="group peer relative ${this.inline ? 'border-none' : 'w-full'}"
         ?error=${this.error}
         ?open=${this._expanded}
         @click=${this._handleClick}
@@ -393,9 +410,15 @@ export class CustomSelect extends FormElement {
           aria-label="${this.label}"
           ?disabled=${this.disabled}
           ${this.helpText ? `aria-describedby="${this.id}_text"` : ''}
-          class=${CLASSES_MAPPING.TOGGLE}
+          class=${this.inline ? CLASSES_MAPPING.TOGGLE_INLINE : CLASSES_MAPPING.TOGGLE}
         >
-          <span class="block truncate pr-sm">${this._currentToggleLabel}</span>
+          <span class="block truncate pr-sm">
+            ${
+              selectedOption?.icon
+                ? html`<img src="${selectedOption.icon}" class="size-[25px]"></img>`
+                : nothing
+            }
+          </span>
           <div class=${CLASSES_MAPPING.TOGGLE_ICON}>
             <svg-icon
               src="icon-select-arrow"
@@ -404,7 +427,7 @@ export class CustomSelect extends FormElement {
             ></svg-icon>
           </div>
         </button>
-
+        
         <div
           ${ref(this.listboxElement)}
           id="dropdown"
@@ -418,7 +441,7 @@ export class CustomSelect extends FormElement {
             this.getDropdownItemHTML(option)
           )}
         </div>
-        ${this.labelHTML}
+        ${this.inline ? nothing : this.labelHTML}
       </div>
       ${this.helpTextHTML}
     `
@@ -451,6 +474,8 @@ if (!customElements.get('custom-select')) {
 const CLASSES_MAPPING = {
   TOGGLE:
     'text-left block bg-c-form-bg w-full border appearance-none text-t-foreground disabled:text-t-border rounded-forms-radius px-sm-forms-padding lg:px-lg-forms-padding pt-sm-forms-padding lg:pt-lg-forms-padding h-sm-forms-inputheight lg:h-lg-forms-inputheight text-body bg-gray-50 bg-t-background border-t-foreground-secondary disabled:border-t-border focus:outline-none focus:ring-0 focus:border-t-foreground peer group-[[error]]:ring-u-error group-[[error]]:border-[transparent] group-[[error]]:ring-2 focus-visible:ring-2 focus-visible:ring-u-focus',
+  TOGGLE_INLINE:
+    'text-left block appearance-none text-t-foreground disabled:text-t-border px-sm-forms-padding lg:px-lg-forms-padding h-sm-forms-inputheight lg:h-lg-forms-inputheight text-body focus:outline-none focus:ring-0 peer group-[[error]]:ring-u-error group-[[error]]:ring-2 focus-visible:ring-2 focus-visible:ring-u-focus',
   TOGGLE_ICON:
     'absolute inset-y-0 flex items-center size-3 pointer-events-none end-sm-forms-padding lg:end-sm-forms-padding text-t-foreground group-[[error]]:text-u-error h-sm-forms-inputheight lg:h-lg-forms-inputheigh',
   LABEL:

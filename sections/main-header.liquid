@@ -1,21 +1,16 @@
 {%- liquid
   assign menu_modal_id = section.id | append: '-menu-modal'
   assign menu_blocks = section.blocks | where: 'type', 'menu_item'
-  assign mobile_menu_handle = section.settings.mobile_menu
-  assign mobile_menu = linklists[mobile_menu_handle]
 
   assign show_desktop_menu = false
   if menu_blocks.size > 0
     assign show_desktop_menu = true
   endif
 
-  assign show_mobile_toggle = false
-  if mobile_menu != blank and mobile_menu.links.size > 0
-    assign show_mobile_toggle = true
-  endif
+  assign show_mobile_toggle = true
 -%}
 
-<header class='grid items-center grid-cols-[auto_1fr_auto] px-[11px] gap-x-sm bg-p-lightest'>
+<header class='grid items-center grid-cols-[auto_1fr_auto] px-[11px] lg:px-[50px] gap-x-sm bg-p-lightest'>
   {% comment %} -- Column 1: Logo -- {% endcomment %}
   <div class='flex items-center justify-start py-[11px]'>
     <a href='{{ routes.root_url }}' class='inline-flex'>
@@ -124,7 +119,7 @@
 {%- if show_mobile_toggle -%}
   {%- liquid
     capture menu_modal_content
-      render 'header-drawer', menu: mobile_menu, section: section
+      render 'header-drawer', section: section
     endcapture
 
     capture extra_controls
@@ -148,12 +143,6 @@
     }
   ],
   "settings": [
-    {
-      "type": "link_list",
-      "id": "mobile_menu",
-      "label": "Mobile navigation menu",
-      "info": "Used for the drawer menu on small screens."
-    },
     {
       "type": "checkbox",
       "id": "enable_country_selector",
