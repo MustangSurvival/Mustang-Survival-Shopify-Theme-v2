@@ -1,15 +1,9 @@
 {%- capture payment_icons -%}
-  {%- if show_payment_icons -%}
-    <div>
-      <div class="d-flex flex-wrap align-items-center justify-content-center pt-3">
-        {%- for type in shop.enabled_payment_types -%}
-          <div class="mx-3 mb-3">
-            {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
-          </div>
-        {%- endfor -%}
-      </div>
-    </div>
-  {%- endif -%}
+  <div class="flex flex-wrap items-center pt-3 gap-y-[13px] gap-x-[10px] mb-[30px] px-pagemargin 2xl:container">
+    {%- for type in shop.enabled_payment_types -%}
+      {{ type | payment_type_svg_tag: class: 'icon grayscale' }}
+    {%- endfor -%}
+  </div>
 {%- endcapture -%}
 
 {{ payment_icons }}
@@ -48,6 +42,7 @@
     </div>
   </div>
 </div>
+
 {% schema %}
 {
   "name": "Footer Legal",

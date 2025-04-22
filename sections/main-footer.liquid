@@ -1,17 +1,17 @@
 {% capture newsletter %}
-  <div class="lg:order-none -order-1 lg:col-start-4">
+  <div class="lg:order-none -order-1 lg:col-start-last">
     {%- form 'customer', novalidate: 'novalidate' -%}
       <div class='w-full mb-1 pb-10 lg:max-w-[335px] ml-auto'>
         {%- if section.settings.newsletter_heading != blank -%}
-          <h3 class='h5 mb-2.5'>{{ section.settings.newsletter_heading }}</h3>
+          <h3 class='h5 mb-[23px]'>{{ section.settings.newsletter_heading }}</h3>
         {%- endif -%}
 
         {%- if section.settings.newsletter_caption != blank -%}
-          <p class='text-sm mb-2.5'>{{ section.settings.newsletter_caption }}</p>
+          <p class='text-sm mb-[10px] lg:mb-[20px]'>{{ section.settings.newsletter_caption }}</p>
         {%- endif -%}
 
         {%- if form.posted_successfully? -%}
-          <p class='h5 pt-4'>{{ 'newsletter.success' | t }}</p>
+          <p>{{ 'newsletter.success' | t }}</p>
         {%- else -%}
           {%- render '@needs-script', entries: 'component-newsletter-form' -%}
           <newsletter-form>
@@ -21,28 +21,17 @@
                 required
                 placeholder='{{ section.settings.newsletter_placeholder }}'
                 name='contact[email]'
-                class='w-full py-3.5 text-sm border-b rounded-none bg-[transparent] focus-visible:ring-u-focus focus-visible:ring-2 placeholder:text-p-darkest {% if form.errors %} border-b-t-brand-secondary-contrast{% endif %}'
+                class='w-full py-[10px] text-sm border-b rounded-none bg-[transparent] focus-visible:ring-u-focus focus-visible:ring-2 placeholder:text-t-brand-secondary-contrast'
                 data-email
               >
               <button
-                disabled
                 type='submit'
                 class='absolute top-0 right-0 flex items-center justify-end w-12 h-full bg-[transparent]'
                 data-submit
               >
-                <svg-icon src='icon-arrow' class='w-4 h-4'></svg-icon>
+                <svg-icon src='c-icon-caret' class='rotate-90 w-[12px]'></svg-icon>
               </button>
             </div>
-
-            {%- render 'form-field',
-              kind: 'checkbox',
-              checked: false,
-              name: 'footer_newsletter_agreement',
-              label: section.settings.newsletter_agreement,
-              value: 'false',
-              attributes: 'data-checkbox',
-              wrapper_class: 'inline-flex items-center justify-start gap-x-2xs [&_input]:border-p-darkest [&_input]:mt-px'
-            -%}
 
             <p
               data-error-email
@@ -73,7 +62,7 @@
           {%- if settings[setting] != blank -%}
             <li class='w-5'>
               <a href='{{ settings[setting] }}' class='' aria-describedby='a11y-external-message'>
-                <svg-icon src="icon-{{ platform }}" class='{% if platform == 'youtube' %}w-6{% else %}w-5{% endif %} h-5 text-[inherit] hover:text-p-dark'></svg-icon>
+                <svg-icon src="icon-{{ platform }}" class='{% if platform == 'youtube' %}w-[25px]{% else %}w-[20px]{% endif %} h-[20px] text-[inherit] hover:text-p-dark'></svg-icon>
                 <span class='sr-only'>{{ locale | t }}</span>
               </a>
             </li> 
@@ -83,7 +72,7 @@
 
       {%- if social_links != blank -%}
         <ul
-          class='flex items-center justify-start gap-sm flex-wrap'
+          class='flex items-center justify-start gap-[10px] flex-wrap mb-[40px]'
           role='list'
         >
           {{- social_links -}}
@@ -93,16 +82,28 @@
   </div>
 {% endcapture %}
 
-<div class='pt-lg lg:py-lg lg:mt-md'>
+<div class='pb-[50px] lg:py-[80px] lg:mt-md'>
   <div class='px-pagemargin 2xl:container'>
     {%- if section.blocks.size > 0 -%}
-      <div class='justify-start grid lg:pl-2 lg:gap-sm lg:grid-cols-4'>
+      {% liquid
+      if section.blocks.size == 1
+        assign grid_class = 'lg:grid-cols-2'
+      elsif section.blocks.size == 2
+        assign grid_class = 'lg:grid-cols-3'
+      elsif section.blocks.size == 3
+        assign grid_class = 'lg:grid-cols-4'
+      elsif section.blocks.size == 4
+        assign grid_class = 'lg:grid-cols-5'
+      else
+        assign grid_class = 'lg:grid-cols-6'
+      endif %}
+      <div class='justify-start grid lg:pl-2 gap-[25px] lg:gap-[20px] {{ grid_class }}'>
         {%- assign first_link_list = true -%}
         {%- for block in section.blocks -%}
           {%- case block.type -%}
             {%- when 'link_list' -%}
               {%- capture accordion_id -%}{{ block.id }}-{{ section.id }}{%- endcapture -%}
-              <div class='flex flex-col border-b lg:border-none{% if first_link_list %} border-t{% endif %}'>
+              <div class='flex flex-col'>
                 {%- capture group_name -%}
                   accordion-input-{{ accordion_id | handleize }}
                 {%- endcapture -%}
@@ -116,11 +117,11 @@
                       id='accordion-checkbox-{{ accordion_id }}'
                       name='{{ group_name | default: 'accordion' }}'
                     >
-                    <div class='flex items-center justify-between w-full py-2.5 lg:py-0 peer-focus-visible:ring-1 ring-u-focus'>
-                      <h2 class='text-utility lg:mb-2.5 lg:pb-5'>{{ block.settings.heading }}</h2>
-                      {%- render 'icon' with 'icon-caret',
-                        class: 'transition-transform group-has-[:checked]:rotate-180 lg:hidden',
-                        size: 24
+                    <div class='flex items-center justify-between w-full lg:py-0 peer-focus-visible:ring-1 ring-u-focus lg:mb-0'>
+                      <h2 class='h6 text-[28px] lg:mb-[30px]'>{{ block.settings.heading }}</h2>
+                      {%- render 'icon' with 'c-icon-caret',
+                        class: 'transition-transform rotate-180 group-has-[:checked]:rotate-0 lg:hidden',
+                        size: 8
                       -%}
                     </div>
                   </label>
@@ -131,11 +132,11 @@
                     aria-labelledby='accordion-title-{{ accordion_id }}'
                   >
                     <div class='overflow-hidden'>
-                      <ul class='grid grid-cols-1 gap-2.5 pb-5'>
+                      <ul class='grid grid-cols-1 gap-[15px] mt-[15px] lg:mt-0'>
                         {%- for link in block.settings.menu.links -%}
                           <li>
                             <a
-                              class='text-body text-[inherit] underline-offset-4 hover:underline hover:text-[inherit]'
+                              class='text-body text-[14px] underline-offset-4 hover:underline hover:text-[inherit]'
                               href='{{ link.url }}'
                             >
                               {{- link.title -}}
@@ -172,7 +173,7 @@
     {
       "type": "link_list",
       "name": "Link List",
-      "limit": 3,
+      "limit": 5,
       "settings": [
         {
           "type": "text",
@@ -212,14 +213,8 @@
     {
       "type": "text",
       "id": "newsletter_placeholder",
-      "default": "Email address",
+      "default": "Enter your email",
       "label": "Newsletter Email Placeholder"
-    },
-    {
-      "type": "text",
-      "id": "newsletter_agreement",
-      "default": "I agree to the terms of service.",
-      "label": "Newsletter Terms Agreement"
     },
     {
       "type": "text",
