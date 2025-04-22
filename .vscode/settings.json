@@ -1,9 +1,7 @@
 {
   "editor.formatOnSave": true,
   "editor.formatOnType": true,
-  "css.customData": [
-    ".vscode/tailwind.json"
-  ],
+  "css.customData": [".vscode/tailwind.json"],
   "[liquid]": {
     "editor.defaultFormatter": "Shopify.theme-check-vscode",
     "editor.formatOnSave": true

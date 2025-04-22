@@ -385,16 +385,16 @@
           {% if help_text != blank %}
             aria-describedby="{{ id }}_text"
           {% endif %}
-          class="text-left block appearance-none text-t-foreground disabled:text-t-border px-sm-forms-padding lg:px-lg-forms-padding h-sm-forms-inputheight lg:h-lg-forms-inputheight text-body focus:outline-none focus:ring-0 peer group-[[error]]:ring-u-error group-[[error]]:ring-2 focus-visible:ring-2 focus-visible:ring-u-focus"
+          class="text-left block appearance-none text-[inherit] disabled:text-t-border px-sm-forms-padding lg:px-lg-forms-padding h-sm-forms-inputheight lg:h-lg-forms-inputheight text-body focus:outline-none focus:ring-0 peer group-[[error]]:ring-u-error group-[[error]]:ring-2 focus-visible:ring-2 focus-visible:ring-u-focus"
           {{ element_attributes }}
         >
           {{ options }}
         </select>
 
         <div
-        class="absolute inset-y-0 flex items-center size-3 pointer-events-none end-sm-forms-padding lg:end-sm-forms-padding text-t-foreground group-[[error]]:text-u-error h-sm-forms-inputheight lg:h-lg-forms-inputheigh"
+        class="absolute inset-y-0 flex items-center size-3 pointer-events-none end-sm-forms-padding lg:end-sm-forms-padding text-[inherit] group-[[error]]:text-u-error h-sm-forms-inputheight lg:h-lg-forms-inputheigh"
       >
-        {%- render 'icon' with 'c-icon-caret', size: 12, class: 'block rotate-180' -%}
+        {%- render 'icon' with 'c-icon-caret', size: 12, class: 'block rotate-180 text-[inherit]' -%}
       </div>
       {% unless inline %}
       <label
@@ -464,7 +464,7 @@
 
         <label for="{{ id }}" class="mt-px cursor-pointer select-none">
           <div>
-            <p id="{{ id }}_label" class="block text-body text-t-foreground group-has-[:disabled]/switch:text-t-disabled {{ label_class }}">
+            <p id="{{ id }}_label" class="block text-body text- group-has-[:disabled]/switch:text-t-disabled {{ label_class }}">
               {{ label }}
             </p>
             {%- if help_text != blank -%}

@@ -88,6 +88,9 @@ export class SvgIcon extends BaseElement {
   @property({ type: String })
   src: string | undefined | null
 
+  @property({ type: String })
+  inlineStyles: string | undefined
+
   // Private variables
   private metaEl: HTMLElement | undefined | null
 
@@ -113,10 +116,12 @@ export class SvgIcon extends BaseElement {
     return `${this.svgSpritePath}#${this.src}`
   }
 
-  generateSVGMarkup(icon: string) {
+  generateSVGMarkup(icon: string, additionalStyles: string) {
+    console.log(this.style)
     return html`
       <svg
         class="block h-full w-full"
+        style=${additionalStyles}
         aria-label=${this.ariaLabel || `Icon for ${this.src}`}
       >
         <use crossorigin="anonymous" href=${icon}></use>
@@ -142,13 +147,16 @@ export class SvgIcon extends BaseElement {
 
             return html`
               ${unsafeHTML(SvgIcon.svgSpriteCache)}
-              ${this.src && this.generateSVGMarkup(`#${this.src}`)}
+              ${
+                this.src &&
+                this.generateSVGMarkup(`#${this.src}`, this.inlineStyles || '')
+              }
             `
           },
         })}
       `
     }
 
-    return this.generateSVGMarkup(this.useHref)
+    return this.generateSVGMarkup(this.useHref, this.inlineStyles || '')
   }
 }

@@ -10,7 +10,7 @@
 
 {% capture menu_i18n %}
   {% assign menu = linklists[section.settings.menu] %}
-  <div class='hidden lg:flex items-center gap-[25px] z-10'>
+  <div class='hidden lg:flex items-center gap-[25px] z-10' style="color: {{ section.settings.text_color | default: '#000000' }};">
     {% if menu.links.size > 0 %}
       {% for link in menu.links %}
         <a href='{{ link.url }}' class='text-sm hover:underline'>
@@ -22,7 +22,10 @@
   </div>
 {% endcapture %}
 
-<div class="flex items-center justify-center gap-[40px] bg-t-grey-bg">
+<div
+  class="flex items-center justify-center gap-[40px]"
+  style="background-color: {{ section.settings.background_color | default: '#f7f7f7' }}; color: {{ section.settings.text_color | default: '#000000' }};"
+>
   {% if section.blocks.size > 0 %}
     {% if is_slider %}
         <div class="relative flex-shrink-0 lg:max-w-[50%] w-full">
@@ -55,7 +58,7 @@
         class='flex flex-grow flex-shrink-0 flex-wrap w-full gap-x-4 items-center justify-center h-auto text-center py-1 {% if is_slider %}px-12{% else %}px-2 md:px-12{% endif %}'
         {{ block.shopify_attributes }}
       >
-        <p>
+        <p style="color: {{ section.settings.text_color | default: '#000000' }};">
           {{ block.settings.text }}
         </p>
       </{{ wrapper_tag }}>
@@ -66,13 +69,13 @@
         class='swiper-button-prev swiper-button-prev--announcement left-0 -rotate-90 {{ swiper_button_styles }}'
         aria-label='{{ 'general.slider.next_slide' | t }}'
       >
-        <svg-icon src='c-icon-caret'></svg-icon>
+        <svg-icon src='c-icon-caret' inlineStyles='color: {{ section.settings.text_color | default: '#000000' }};'></svg-icon>
       </button>
       <button
         class='swiper-button-next swiper-button-next--announcement right-0 rotate-90 {{ swiper_button_styles }}'
         aria-label='{{ 'general.slider.previous_slide' | t }}'
       >
-        <svg-icon src='c-icon-caret'></svg-icon>
+        <svg-icon src='c-icon-caret' inlineStyles='color: {{ section.settings.text_color | default: '#000000' }};'></svg-icon>
       </button>
       </div>
     {% else %}
@@ -95,20 +98,21 @@
       "default": 3000
     },
     {
-      "type": "inline_richtext",
-      "id": "text",
-      "default": "Welcome to our store",
-      "label": "Announcement Text"
-    },
-    {
-      "type": "url",
-      "id": "link",
-      "label": "Link URL"
-    },
-    {
       "type": "link_list",
       "id": "menu",
       "label": "Menu"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f7f7f7"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
     }
   ],
   "blocks": [
