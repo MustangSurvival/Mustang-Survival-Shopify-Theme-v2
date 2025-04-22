@@ -421,8 +421,8 @@ export class CustomSelect extends FormElement {
           </span>
           <div class=${CLASSES_MAPPING.TOGGLE_ICON}>
             <svg-icon
-              src="icon-select-arrow"
-              class="block"
+              src="c-icon-caret"
+              class="block rotate-180"
               style="font-size: 12px;"
             ></svg-icon>
           </div>
