@@ -1,12 +1,13 @@
-import BaseElement from '@/base/BaseElement'
+import BaseElement from '@/base/BaseElement';
 // @ts-ignore
-import styles from '@/styles/component-icon.css?inline'
-import { Task } from '@lit/task'
+import styles from '@/styles/component-icon.css?inline';
+import { Task } from '@lit/task';
 // @ts-ignore
-import defer from 'defer-promise'
-import { html, nothing, unsafeCSS } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
-import { unsafeHTML } from 'lit/directives/unsafe-html.js'
+import defer from 'defer-promise';
+import { html, nothing, unsafeCSS } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
+
 
 const CACHE_BUSTER = Date.now()
 // Usage
@@ -117,7 +118,6 @@ export class SvgIcon extends BaseElement {
   }
 
   generateSVGMarkup(icon: string, additionalStyles: string) {
-    console.log(this.style)
     return html`
       <svg
         class="block h-full w-full"

@@ -43,12 +43,39 @@
   endif
 %}
 
+{%- capture sort_dropdown -%}
+  <facet-filters-form
+    section-id='facet-sort'
+  >
+    <form>
+      {% assign label = 'sections.collection_template.facets.sort_by_label' | t %}
+      <div class="flex items-center">
+        <span class="whitespace-pre text-body">{{ label }}</span>
+        {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+        {% capture options %}
+          {%- for option in collection.sort_options -%}
+            <option
+              value="{{ option.value | escape }}"
+              {% if option.value == sort_by %}
+                selected="selected"
+              {% endif %}
+            >
+              {{ option.name | escape }}
+            </option>
+          {%- endfor -%}
+        {% endcapture %}
+        {%- render 'form-field', kind: 'select', name: 'sort_by', id: 'SortBy', options: options, label: label, inline: true, attributes: 'onchange="this.form?.submit()"' -%}
+      </div>
+    </form>
+  </facet-filters-form>
+{%- endcapture %}
+
 <div id='collection' data-section-id='{{- section.id -}}'>
   <div section-id='{{- section.id -}}'>
     {%- paginate collection.products by section.settings.products_per_page -%}
       <div class='container mt-[40px]'>
         <aside
-          class="block lg:hidden"
+          class='block'
           id='main-collection-filters'
           data-id='{{ section.id }}'
           {% comment %}
@@ -61,13 +88,19 @@
           sub-section-id='main-collection-filters'
         >
           {% capture drawer_filters %}
-            {% render 'facets', results: collection, prefix: "mobile" %}
+            <p>hello</p>
+            {% comment %} {% render 'facets', results: collection, prefix: "mobile" %} {% endcomment %}
           {% endcapture %}
 
-          {% capture filters_button %}Filters ({{ active_filters_size }}){% endcapture %}
+          {% capture filters_button %}Filter By ({{ active_filters_size }}){% endcapture %}
 
-          <div class="block lg:hidden">
-            {% render 'modal-dialog-toggle', modal_id: 'filter-drawer-dialog', label: filters_button %}
+          <div>
+            {% render 'modal-dialog-toggle',
+              modal_id: 'filter-drawer-dialog',
+              label: filters_button,
+              class: 'w-full',
+              toggle_class: 'w-full'
+            %}
           </div>
 
           {% liquid
@@ -81,6 +114,13 @@
             {% render 'facets', results: collection, prefix: 'desktop' %}
           </div>
           <div class='lg:col-span-3' sub-section-id='product-grid-container' id='product-grid-container'>
+            <div class='flex items-center justify-between mb-[15px] lg:mb-[20px] lg:border-b lg:border-b-t-line-break'>
+              {{ sort_dropdown }}
+              <p>
+                {{ collection.products_count }}
+                {{ collection.products_count | pluralize: 'Product', 'Products' }}
+              </p>
+            </div>
             {%- if collection.products.size == 0 -%}
               <div id='product-grid' data-id='{{ section.id }}'>
                 <div class='flex items-center'>
@@ -147,9 +187,7 @@
                 </ul>
 
                 {%- if paginate.pages > 1 -%}
-                  <div class='flex justify-center py-6 [&_span.current]:font-bold [&_span]:px-2'>
-                    {{- paginate | default_pagination -}}
-                  </div>
+                  {% render 'pagination', paginate: paginate, anchor: '#yourID' %}
                 {%- endif -%}
               </div>
             {%- endif -%}

@@ -11,7 +11,7 @@
 <!-- Drawer Filters -->
 <facet-filters-form
   section-id='facet-filters'
-  class='flex h-full [&[loading]]:opacity-50 [&[loading]]:pointer-events-none'
+  class='flex h-full [&[loading]]:opacity-50 [&[loading]]:pointer-events-none {% if prefix == 'desktop' %}hidden lg:block{% endif %}'
 >
 <form class='flex flex-col w-full'>
     <h3 class='h6 mb-[20px]'>Filter By</h3>
@@ -146,6 +146,7 @@
         {% endcomment %}
     </div>
 
+    {% comment %}
     <div class='{% if prefix == 'desktop' %}hidden{% endif %} sticky bottom-0 bg-p-light w-full p-4 justify-center'>
       <button
         class='btn'
@@ -160,5 +161,6 @@
         {{ collection.products_count | pluralize: 'result', 'results' }})
       </button>
     </div>
+    {% endcomment %}
   </form>
 </facet-filters-form>

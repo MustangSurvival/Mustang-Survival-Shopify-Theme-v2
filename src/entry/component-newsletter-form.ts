@@ -28,7 +28,9 @@ export class NewsletterForm extends BaseElementWithoutShadowDOM {
       `[data-error-agreement]`
     ) as HTMLInputElement
 
-    this.toggleCheckbox.addEventListener('change', this.onChange.bind(this))
+    if (this.toggleCheckbox) {
+      this.toggleCheckbox.addEventListener('change', this.onChange.bind(this))
+    }
     this.emailInput.addEventListener('change', this.onChange.bind(this))
   }
 
@@ -36,7 +38,7 @@ export class NewsletterForm extends BaseElementWithoutShadowDOM {
     const email = this.emailInput.value
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     const isEmailValid = emailPattern.test(email)
-    const isAgreementChecked = this.toggleCheckbox.checked
+    const isAgreementChecked = this.toggleCheckbox?.checked
 
     this.toggleError(this.emailError, isEmailValid)
     this.toggleError(this.agreementError, isAgreementChecked)
