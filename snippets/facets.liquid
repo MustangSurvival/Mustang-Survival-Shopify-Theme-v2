@@ -26,7 +26,7 @@
               open
             >
               <summary class='focus-inset -mx-2 -my-3 flow-root group/filter-dropdown'>
-                <div class='flex w-full items-center gap-[10px] bg-white'>
+                <div class='flex w-full items-center gap-[10px] bg-white cursor-pointer'>
                   <span class='flex items-center'>
                     <span>
                       {%- render 'icon' with 'c-icon-caret',
@@ -119,7 +119,7 @@
               open
             >
               <summary class='focus-inset -mx-2 -my-3 flow-root group/filter-dropdown'>
-                <div class='flex w-full items-center gap-[10px] bg-white'>
+                <div class='flex w-full items-center gap-[10px] bg-white cursor-pointer'>
                   <span class='flex items-center'>
                     <span>
                       {%- render 'icon' with 'c-icon-caret',
@@ -149,10 +149,10 @@
       {%- endfor -%}
     </div>
 
-    <div class='sticky bottom-0 bg-p-light w-full p-4 flex justify-center'>
+    <div class='sticky bottom-0 bg-t-background-secondary w-full p-4 flex justify-center'>
       <button
         class='btn'
-        variant='primary'
+        variant='secondary'
         type='submit'
         {% unless collection.products %}
           disabled

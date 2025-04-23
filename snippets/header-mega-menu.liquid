@@ -42,10 +42,10 @@
                       {% assign menu = block.settings.menu_1 %}
                       <div class='flex flex-col gap-[14px]'>
                         <p class='h6 text-[24px]'>{{ menu.title }}</p>
-                        <ul class='list-none p-0 m-0 flex flex-col gap-[14px]'>
+                        <ul class='list-none p-0 m-0 flex flex-col'>
                           {%- for link in linklists[menu].links -%}
                             <li
-                              class='list-none'
+                              class='list-none py-[7px]'
                               {% if link.type == 'collection_link' %}
                                 data-promo-image='{{ link.object.image | image_url: width: 300  }}'
                                 data-promo-heading='{{ link.object.title | escape }}'
@@ -62,10 +62,10 @@
                       {% assign menu = block.settings.menu_2 %}
                       <div class='flex flex-col gap-[14px]'>
                         <p class='h6 text-[24px]'>{{ menu.title }}</p>
-                        <ul class='list-none p-0 m-0 flex flex-col gap-[14px]'>
+                        <ul class='list-none p-0 m-0 flex flex-col'>
                           {%- for link in linklists[menu].links -%}
                             <li
-                              class='list-none'
+                              class='list-none py-[7px]'
                               {% if link.type == 'collection_link' %}
                                 data-promo-image='{{ link.object.image | image_url: width: 300  }}'
                                 data-promo-heading='{{ link.object.title | escape }}'
@@ -82,10 +82,10 @@
                       {% assign menu = block.settings.menu_3 %}
                       <div class='flex flex-col gap-[14px]'>
                         <p class='h6 text-[24px]'>{{ menu.title }}</p>
-                        <ul class='list-none p-0 m-0 flex flex-col gap-[14px]'>
+                        <ul class='list-none p-0 m-0 flex flex-col'>
                           {%- for link in linklists[menu].links -%}
                             <li
-                              class='list-none'
+                              class='list-none py-[7px]'
                               {% if link.type == 'collection_link' %}
                                 data-promo-image='{{ link.object.image | image_url: width: 300  }}'
                                 data-promo-heading='{{ link.object.title | escape }}'

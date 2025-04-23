@@ -30,6 +30,12 @@
     --font-family-secondary: 'Gotham Narrow';
     --font-family-tertiary: 'Tungsten';
     --font-family-quaternary: 'Tungsten';
+    --t-brand-primary: theme('colors.t-brand-primary');
+    --t-brand-secondary: theme('colors.t-brand-secondary');
+    --t-foreground: theme('colors.t-foreground');
+    --t-background: theme('colors.t-background');
+    --t-foreground-secondary: theme('colors.t-foreground-secondary');
+    --t-background-secondary: theme('colors.t-background-secondary');
   }
 
   .remove-arrow::-webkit-inner-spin-button,
@@ -225,4 +231,29 @@
   .blur-bg {
     @apply relative overflow-hidden;
   }
+
+  .btn {
+    @apply !text-[15px] uppercase;
+  }
+
+  .btn[variant="primary"],
+  .btn[variant="secondary"] {
+    border: 1px solid var(--t-foreground);
+    background-color: var(--t-background);
+  }
+
+  .btn[variant="primary"]:hover,
+  .btn[variant="primary"]:focus,
+  .btn[variant="primary"]:active {
+    background-color: var(--t-foreground);
+    color: var(--t-background);
+  }
+
+  .btn[variant="secondary"]:hover,
+  .btn[variant="secondary"]:focus,
+  .btn[variant="secondary"]:active {
+    border: 1px solid var(--t-brand-primary);
+    background-color: var(--t-brand-primary);
+  }
+  
 }

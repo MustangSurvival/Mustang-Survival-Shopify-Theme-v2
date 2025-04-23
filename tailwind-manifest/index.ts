@@ -1,26 +1,26 @@
-import plugin from "tailwindcss/plugin";
-import type { PluginAPI } from "tailwindcss/types/config";
-import addColors from "./addColors";
-import { existsSync } from "node:fs";
+import addButtons from './addButtons'
+import addColors from './addColors'
+import addFluidHelper from './addFluidHelper'
+import addSizing, { addBorderRadius, addResponsizeSpacing } from './addSizing'
 import addTypography, {
   configOverrides as addTypographyConfigOverrides,
-} from "./addTypography";
-import { ManifestKeys } from "./enums";
-import { consoleError } from "./utils";
+} from './addTypography'
+import { ManifestKeys } from './enums'
 import type {
   ExtendedConfig,
   FontFamilyMapping,
   FontWeightMapping,
-} from "./types";
-import addSizing, { addBorderRadius, addResponsizeSpacing } from "./addSizing";
-import addFluidHelper from "./addFluidHelper";
-import addButtons from "./addButtons";
+} from './types'
+import { consoleError } from './utils'
+import { existsSync } from 'node:fs'
+import plugin from 'tailwindcss/plugin'
+import type { PluginAPI } from 'tailwindcss/types/config'
 
 export type DomainTWOptions = {
-  manifestFilePath: string;
-  typography?: boolean;
-  colors?: boolean;
-  sizing?: boolean;
+  manifestFilePath: string
+  typography?: boolean
+  colors?: boolean
+  sizing?: boolean
   /**
    * Font family mapping for each font family in the manifest, the fontName should match the font family in the manifest and the value one of the keys from FontFamilyKey
    *
@@ -33,7 +33,7 @@ export type DomainTWOptions = {
    *   "NB Akademie Std": "Tertiary",
    * }
    */
-  fontMapping?: FontFamilyMapping;
+  fontMapping?: FontFamilyMapping
   /**
    * Font weight mapping for each font family
    *
@@ -49,20 +49,20 @@ export type DomainTWOptions = {
    *   }
    * }
    */
-  fontWeightMapping?: FontWeightMapping;
-  fluidTypography?: boolean | "LIMITED_DESKTOP";
-  buttons?: boolean;
-  buttonTypename?: "body" | "utility";
-};
+  fontWeightMapping?: FontWeightMapping
+  fluidTypography?: boolean | 'LIMITED_DESKTOP'
+  buttons?: boolean
+  buttonTypename?: 'body' | 'utility'
+}
 
 const checkManifestFileExists = (manifestFilePath: string) => {
   if (!manifestFilePath || !existsSync(manifestFilePath)) {
     consoleError(
       `Manifest file path is missing ${manifestFilePath}`,
-      "Manifest File Error"
-    );
+      'Manifest File Error'
+    )
   }
-};
+}
 
 // Add Typegraphy
 // Add Spacing / Marging / Padding / Gap / Space / Inset
@@ -74,14 +74,14 @@ const handler = function ({
   fontMapping,
   fontWeightMapping,
   buttons = true,
-  buttonTypename = "body",
+  buttonTypename = 'body',
 }: DomainTWOptions) {
-  checkManifestFileExists(manifestFilePath);
+  checkManifestFileExists(manifestFilePath)
   return (pluginAPI: PluginAPI) => {
-    checkManifestFileExists(manifestFilePath);
-    const manifest = require(manifestFilePath);
+    checkManifestFileExists(manifestFilePath)
+    const manifest = require(manifestFilePath)
     // Fluid Helper
-    addFluidHelper(pluginAPI, fluidTypography);
+    addFluidHelper(pluginAPI, fluidTypography)
 
     // Add Typography
     typography &&
@@ -91,7 +91,7 @@ const handler = function ({
         fontMapping,
         fontWeightMapping,
         fluidTypography
-      );
+      )
 
     buttons &&
       addButtons(
@@ -100,12 +100,12 @@ const handler = function ({
         fontMapping,
         buttonTypename,
         fluidTypography
-      );
-    addBorderRadius(pluginAPI, manifest[ManifestKeys.Sizing]);
+      )
+    addBorderRadius(pluginAPI, manifest[ManifestKeys.Sizing])
     !fluidTypography &&
-      addResponsizeSpacing(pluginAPI, manifest[ManifestKeys.Sizing]);
-  };
-};
+      addResponsizeSpacing(pluginAPI, manifest[ManifestKeys.Sizing])
+  }
+}
 
 const domainTWPlugin = plugin.withOptions<DomainTWOptions>(
   handler,
@@ -116,18 +116,18 @@ const domainTWPlugin = plugin.withOptions<DomainTWOptions>(
     sizing = true,
     fluidTypography = true,
   }: DomainTWOptions) {
-    checkManifestFileExists(manifestFilePath);
-    const manifest = require(manifestFilePath);
+    checkManifestFileExists(manifestFilePath)
+    const manifest = require(manifestFilePath)
 
     if (!manifest) {
-      return {};
+      return {}
     }
-    const config: ExtendedConfig = {};
-    colors && addColors(config, manifest[ManifestKeys.Colors]);
-    sizing && addSizing(config, manifest[ManifestKeys.Sizing], fluidTypography);
-    typography && addTypographyConfigOverrides(config);
-    return config satisfies ExtendedConfig;
+    const config: ExtendedConfig = {}
+    colors && addColors(config, manifest[ManifestKeys.Colors])
+    sizing && addSizing(config, manifest[ManifestKeys.Sizing], fluidTypography)
+    typography && addTypographyConfigOverrides(config)
+    return config satisfies ExtendedConfig
   }
-);
+)
 
-export default domainTWPlugin;
+export default domainTWPlugin

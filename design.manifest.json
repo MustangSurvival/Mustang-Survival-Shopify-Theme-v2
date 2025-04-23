@@ -257,7 +257,8 @@
     "Icon/Size S": { "desktop": 10, "mobile": 12 },
     "Icon/Size M": { "desktop": 24, "mobile": 24 },
     "Icon/Size L": { "desktop": 40, "mobile": 40 },
-    "Inputs/Button/Padding Left-Right": { "desktop": 20, "mobile": 15 },
+    "Inputs/Button/Padding Left-Right": { "desktop": 40, "mobile": 40 },
+    "Inputs/Button/Padding Top-Bottom": { "desktop": 15, "mobile": 15 },
     "Inputs/Button/Gap": { "desktop": 10, "mobile": 10 },
     "Border/Radius MD": { "desktop": 10, "mobile": 8 },
     "Inputs/Button/Icon Size": { "desktop": 10, "mobile": 10 },
@@ -274,15 +275,17 @@
     "Viewports/Viewport": { "desktop": 1440, "mobile": 390 },
     "Viewports/Breakpoint": { "desktop": "Desktop", "mobile": "Mobile" },
     "Border/Radius Rounded": { "desktop": 1000, "mobile": 1000 },
-    "Inputs/Button/Radius": { "desktop": 4, "mobile": 4 },
-    "Inputs/Button/Height": { "desktop": 40, "mobile": 40 },
+    "Inputs/Button/Radius": { "desktop": 0, "mobile": 0 },
+    "Inputs/Button/Font Size": { "desktop": 15, "mobile": 15 },
+    "Inputs/Button/Border Width": { "desktop": 1, "mobile": 1 },
+    "Inputs/Button/Height": { "desktop": 52.5, "mobile": 52.5 },
     "Space/Page Margin": { "desktop": 60, "mobile": 15 },
     "Inputs/Forms/Radius": { "desktop": 4, "mobile": 4 },
     "Inputs/Input Radius": { "desktop": 4, "mobile": 4 },
     "Inputs/Input Height": { "desktop": 40, "mobile": 40 },
     "Font Family/Primary": {
-      "desktop": "PP Editorial New",
-      "mobile": "PP Editorial New"
+      "desktop": "Gotham Narrow",
+      "mobile": "Gotham Narrow"
     }
   },
   "Color": {
