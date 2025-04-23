@@ -46,6 +46,8 @@
   if has_errors and error_text != blank
     assign help_text = error_text
   endif
+
+  assign wrapper_class_default = 'flex items-center gap-x-[5px]'
 -%}
 
 {%- capture field_content -%}
@@ -205,7 +207,7 @@
         {%- endif -%}
       </div>
     {%- when 'radio' -%}
-      {%- assign wrapper_class = wrapper_class | default: 'inline-flex items-start justify-start gap-x-xs' -%}
+      {%- assign wrapper_class = wrapper_class | default: wrapper_class_default -%}
       <div class="{{ wrapper_class }} group/radio">
         <div
           class="relative flex items-center rounded-full cursor-pointer peer"
@@ -254,7 +256,7 @@
         </label>
       </div>
     {%- when 'checkbox' -%}
-      {%- assign wrapper_class = wrapper_class | default: 'inline-flex items-start justify-start gap-x-xs' -%}
+      {%- assign wrapper_class = wrapper_class | default: wrapper_class_default -%}
       <div class="{{ wrapper_class }} group/checkbox">
         <label
           class="relative flex items-center cursor-pointer"
@@ -305,7 +307,7 @@
           for="{{ id }}"
         >
           <div>
-            <p id="{{ id }}_label" class="block text-body leading-none text-t-foreground group-has-[:disabled]/checkbox:text-t-disabled {{ label_class }}">
+            <p id="{{ id }}_label" class="capitalize block text-body text-[14px] leading-none text-t-foreground group-has-[:disabled]/checkbox:text-t-disabled {{ label_class }}">
               {{ label }}
             </p>
             {%- if help_text != blank -%}
@@ -418,7 +420,7 @@
 
 
     {%- when 'switch' -%}
-      {%- assign wrapper_class = wrapper_class | default: 'inline-flex items-start justify-start gap-x-xs' -%}
+      {%- assign wrapper_class = wrapper_class | default: wrapper_class_default -%}
       <div
         class='group/switch {{ wrapper_class }}'
         {{ wrapper_attributes }}

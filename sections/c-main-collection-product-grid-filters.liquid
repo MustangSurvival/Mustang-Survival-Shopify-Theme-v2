@@ -1,0 +1,185 @@
+{%- render '@needs-script', entries: 'component-facets' -%}
+{% liquid
+  assign filter_params = ''
+  assign active_filters_size = 0
+  assign show_ingrid_items = section.settings.show_ingrid_items
+
+  for filter in collection.filters
+    if filter.active_values.size > 0
+      assign show_ingrid_items = false
+      assign active_filters_size = active_filters_size | plus: filter.active_values.size
+
+      if filter_params != ''
+        assign filter_params = filter_params | append: '&'
+      endif
+
+      for value in filter.active_values
+        assign filter_params = filter_params | append: filter.param_name | append: '=' | append: value.value
+
+        unless forloop.last
+          assign filter_params = filter_params | append: '&'
+        endunless
+      endfor
+    endif
+  endfor
+
+  if show_ingrid_items
+    assign colleciton_ingrids = collection.metafields.custom.in_grid_content.value
+
+    if colleciton_ingrids == blank
+      assign show_ingrid_items = false
+    else
+      assign collection_ingrids_mobile_positions = colleciton_ingrids | map: 'grid_position_small_screen' | uniq
+      assign collection_ingrids_positions = colleciton_ingrids | map: 'grid_position' | uniq
+
+      assign count_desktop = 0
+      assign adjusted_index_desktop = 0
+      assign occupied_positions_desktop = ''
+
+      assign count_mobile = 0
+      assign adjusted_index_mobile = 0
+      assign occupied_positions_mobile = ''
+    endif
+  endif
+%}
+
+<div id='collection' data-section-id='{{- section.id -}}'>
+  <div section-id='{{- section.id -}}'>
+    {%- paginate collection.products by section.settings.products_per_page -%}
+      <div class='container mt-[40px]'>
+        <aside
+          class="block lg:hidden"
+          id='main-collection-filters'
+          data-id='{{ section.id }}'
+          {% comment %}
+            Remove 'sub-section-id' if you don't need to update the filters
+            with the product grid. Filters are updated onChange already.
+
+            Keep in mind any DOM tree changes here, like `active_filters_size`,
+            wouldn't be updated if you remove the `sub-section-id`.
+          {% endcomment %}
+          sub-section-id='main-collection-filters'
+        >
+          {% capture drawer_filters %}
+            {% render 'facets', results: collection, prefix: "mobile" %}
+          {% endcapture %}
+
+          {% capture filters_button %}Filters ({{ active_filters_size }}){% endcapture %}
+
+          <div class="block lg:hidden">
+            {% render 'modal-dialog-toggle', modal_id: 'filter-drawer-dialog', label: filters_button %}
+          </div>
+
+          {% liquid
+            assign title = 'Filters'
+            render 'modal-dialog', id: 'filter-drawer-dialog', anchor: 'left', content: drawer_filters, type: 'drawer', close_on_backdrop_click: true, title: title
+          %}
+        </aside>
+
+        <div class='grid lg:grid-cols-4'>
+          <div>
+            {% render 'facets', results: collection, prefix: 'desktop' %}
+          </div>
+          <div class='lg:col-span-3' sub-section-id='product-grid-container' id='product-grid-container'>
+            {%- if collection.products.size == 0 -%}
+              <div id='product-grid' data-id='{{ section.id }}'>
+                <div class='flex items-center'>
+                  <h2>
+                    {{ 'sections.collection_template.empty' | t -}}
+                    <br>
+                    {{
+                      'sections.collection_template.use_fewer_filters_html'
+                      | t: link: collection.url, class: 'underlined-link link'
+                    }}
+                  </h2>
+                </div>
+              </div>
+            {%- else -%}
+              <div>
+                <ul
+                  id='product-grid'
+                  data-id='{{ section.id }}'
+                  class='grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4 lg:gap-x-8'
+                >
+                  {%- for product in collection.products -%}
+                    {%- liquid
+                      assign lazy_load = false
+                      assign index_with_offset = forloop.index | plus: paginate.current_offset
+                      if forloop.index > 2
+                        assign lazy_load = true
+                      endif
+
+                      assign adjusted_index_mobile = index_with_offset | plus: count_mobile
+
+                      if collection_ingrids_mobile_positions contains adjusted_index_mobile
+                        unless occupied_positions_mobile contains adjusted_index_mobile
+                          assign in_grid_for_position = colleciton_ingrids | where: 'grid_position_small_screen', adjusted_index_mobile | first
+
+                          render 'collection-ingrid-item', item: in_grid_for_position, is_mobile: true, index: index_with_offset
+
+                          assign count_mobile = count_mobile | plus: 1
+                          assign occupied_positions_mobile = adjusted_index_mobile | append: ',' | append: occupied_positions_mobile
+                        endunless
+                      endif
+
+                      assign adjusted_index_desktop = index_with_offset | plus: count_desktop
+
+                      if collection_ingrids_positions contains adjusted_index_desktop
+                        unless occupied_positions_desktop contains adjusted_index_desktop
+                          assign in_grid_for_position = colleciton_ingrids | where: 'grid_position', adjusted_index_desktop | first
+
+                          render 'collection-ingrid-item', item: in_grid_for_position, is_mobile: false, index: index_with_offset
+
+                          assign count_desktop = count_desktop | plus: 1
+                          assign occupied_positions_desktop = adjusted_index_desktop | append: ',' | append: occupied_positions_desktop
+                        endunless
+                      endif
+                    -%}
+
+                    <li class='w-full flex'>
+                      {% render 'product-card',
+                        product: product,
+                        media_aspect_ratio: 'portrait',
+                        lazy_load: lazy_load
+                      %}
+                    </li>
+                  {%- endfor -%}
+                </ul>
+
+                {%- if paginate.pages > 1 -%}
+                  <div class='flex justify-center py-6 [&_span.current]:font-bold [&_span]:px-2'>
+                    {{- paginate | default_pagination -}}
+                  </div>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Grid + Filters",
+  "class": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 36,
+      "step": 4,
+      "default": 16,
+      "label": "Products per page"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_ingrid_items",
+      "label": "Show ingrid items",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

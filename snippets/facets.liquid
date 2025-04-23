@@ -5,7 +5,7 @@
   - results: {Object} Collection or Search object
 
   Usage:
-  {% render 'facets', results: collection %}
+  {% render 'facets', results: collection, prefix: "string" %}
 {% endcomment %}
 
 <!-- Drawer Filters -->
@@ -13,59 +13,37 @@
   section-id='facet-filters'
   class='flex h-full [&[loading]]:opacity-50 [&[loading]]:pointer-events-none'
 >
-  <form class='flex flex-col w-full mt-4'>
+<form class='flex flex-col w-full'>
+    <h3 class='h6 mb-[20px]'>Filter By</h3>
     <div class='w-full flex-1'>
       {%- for filter in results.filters -%}
-        {% case filter.type %}
-          {% when 'boolean', 'list' %}
-            <details
-              id='Details-Mobile-{{ filter.param_name | escape }}'
-              class='js-filter  border-t border-gray-200 px-sm py-md'
-              data-index='mobile-{{ forloop.index }}'
-              sub-section-id='Details-Mobile-{{ filter.param_name | escape }}'
-              open
-            >
-              <summary class='focus-inset -mx-2 -my-3 flow-root group/filter-dropdown'>
-                <div class='flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400'>
-                  <span class='font-medium text-gray-900'>{{ filter.label | escape }}</span>
+        {% assign facet_count = 0 %}
+        {% capture accordion_id %}Details-{{ prefix }}-{{ filter.param_name | escape }}{% endcapture %}
+        {% capture accordion_title %}{{ filter.label | escape }}{% endcapture %}
+        {% capture accordion_content %}
+          {%- case filter.type -%}
+            {%- when 'boolean', 'list' -%}
+              <ul class='list-unstyled space-y-[10px] pb-[25px] pt-[10px] pl-[10px]' role='list'>
+                {%- liquid
+                  assign sorted_values = filter.values
 
-                  <span class='ml-6 flex items-center'>
-                    <span>
-                      {%- render 'icon' with 'icon-arrow',
-                        attributes: "aria-hidden='true' focusable='false'",
-                        class: 'rotate-0 transform group-[[open]]/filter-dropdown:-rotate-180'
-                      -%}
-                    </span>
-                  </span>
-                </div>
-              </summary>
+                  if filter.operator == 'AND'
+                    assign active_filter_values = filter.values | where: 'active', true
+                    assign inactive_filter_values = filter.values | where: 'active', false
+                    assign sorted_values = active_filter_values | concat: inactive_filter_values
+                  endif
+                -%}
 
-              <div
-                id='FacetMobile-{{ forloop.index }}'
-                class='pt-6'
-              >
-                <ul class='list-unstyled space-y-6' role='list'>
-                  {%- liquid
-                    assign sorted_values = filter.values
-
-                    # Keep the selected values grouped together when operator is AND
-                    if filter.operator == 'AND'
-                      assign active_filter_values = filter.values | where: 'active', true
-                      assign inactive_filter_values = filter.values | where: 'active', false
-                      assign sorted_values = active_filter_values | concat: inactive_filter_values
+                {%- for value in sorted_values -%}
+                  {% liquid
+                    assign input_id = 'Filter-' | append: filter.param_name | escape | append: prefix | append: forloop.index
+                    assign is_disabled = false
+                    if value.count == 0 and value.active == false
+                      assign is_disabled = true
                     endif
-                  -%}
+                  %}
 
-                  {%- for value in sorted_values -%}
-                    {% liquid
-                      assign input_id = 'Filter-' | append: filter.param_name | escape | append: '-mobile-' | append: forloop.index
-                      assign is_disabled = false
-                      if value.count == 0 and value.active == false
-                        assign is_disabled = true
-                      endif
-                    %}
-
-                    {%- capture text_value -%}
+                  {%- capture text_value -%}
                     <span aria-hidden="true">
                       <span>{{- value.label -}}</span> ({{- value.count -}})
                     </span>
@@ -80,7 +58,9 @@
                     </span>
                   {%- endcapture -%}
 
-                    <li>
+                  {% unless is_disabled %}
+                    {% assign facet_count = facet_count | plus: 1 %}
+                    <li class="list-none">
                       {% if presentation == 'swatch' %}
                         <div>
                           {% render 'swatch-input',
@@ -105,59 +85,39 @@
                           disabled: is_disabled
                         -%}
                       {% endif %}
-                    </li>
-                  {%- endfor -%}
-                </ul>
-              </div>
-            </details>
-          {% when 'price_range' %}
-            <details
-              id='Details-Mobile-{{ filter.param_name | escape }}'
-              class='js-filter border-t border-gray-200 px-sm py-md'
-              data-index='mobile-{{ forloop.index }}'
-              sub-section-id='Details-Mobile-{{ filter.param_name | escape }}'
-              open
-            >
-              <summary class='focus-inset -mx-2 -my-3 flow-root group/filter-dropdown'>
-                <div class='flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400'>
-                  <span class='font-medium text-gray-900'>{{ filter.label | escape }}</span>
-
-                  <span class='ml-6 flex items-center'>
-                    <span>
-                      {%- render 'icon' with 'icon-arrow',
-                        attributes: "aria-hidden='true' focusable='false'",
-                        class: 'rotate-0 transform group-[[open]]/filter-dropdown:-rotate-180'
-                      -%}
-                    </span>
-                  </span>
-                </div>
-              </summary>
-
-              <div
-                id='FacetMobile-{{ forloop.index }}'
-                class='pt-6'
-              >
+                      </li>
+                    {% endunless %}
+                {%- endfor -%}
+              </ul>
+            {%- when 'price_range' -%}
+              <div class='pt-6'>
                 {%- assign max_price_amount = filter.range_max | money | strip_html | escape -%}
                 <p class='pb-4'>
                   {{ 'sections.collection_template.facets.max_price' | t: price: max_price_amount }}
                 </p>
-
-                {% render 'price-facet', filter: filter, id_prefix: 'Mobile-Filter-' %}
+                {% assign id_prefix = 'Mobile-Filter-' | append: prefix %}
+                {% render 'price-facet', filter: filter, id_prefix: id_prefix %}
               </div>
-            </details>
-        {% endcase %}
+          {%- endcase -%}
+        {% endcapture %}
+
+        {% if facet_count > 0 %}
+          {% render 'accordion-item',
+            id: accordion_id,
+            title: accordion_title,
+            content: accordion_content,
+            alternate_layout: true,
+            open: true,
+            rte: false
+          %}
+        {% endif %}
       {%- endfor -%}
 
-      <div
-        id='Details-Mobile-SortBy'
-        class='js-filter border-t border-gray-200 px-sm py-md'
-        data-index='mobile-{{ forloop.index }}'
-        sub-section-id='Details-Mobile-SortBy'
-      >
-        <div class='-mx-2 -my-3 flow-root group/filter-dropdown'>
-          <div class='flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400'>
-            {%- assign sort_by = results.sort_by | default: results.default_sort_by -%}
-            {% capture options %}
+      {% comment %}
+      {%- capture sort_content -%}
+        <div class='pt-6'>
+          {%- assign sort_by = results.sort_by | default: results.default_sort_by -%}
+          {% capture options %}
             {%- for option in results.sort_options -%}
               <option
                 value="{{ option.value | escape }}"
@@ -169,15 +129,24 @@
               </option>
             {%- endfor -%}
           {% endcapture %}
-            {% assign label = 'sections.collection_template.facets.sort_by_label' | t %}
-
-            {%- render 'form-field', kind: 'select', name: 'sort_by', id: 'SortBy', label: label, options: options -%}
-          </div>
+          {% assign label = 'sections.collection_template.facets.sort_by_label' | t %}
+          {%- render 'form-field', kind: 'select', name: 'sort_by', id: 'SortBy', label: label, options: options -%}
         </div>
-      </div>
+      {%- endcapture %}
+
+      {% assign accordion_id = 'Details-Mobile-SortBy' | append: prefix %}
+      {% render 'accordion-item',
+        id: prefix,
+        title: 'Sort by',
+        content: sort_content,
+        alternate_layout: true,
+        open: true,
+        rte: false
+      %}
+        {% endcomment %}
     </div>
 
-    <div class='sticky bottom-0 bg-p-light w-full p-4 flex justify-center'>
+    <div class='{% if prefix == 'desktop' %}hidden{% endif %} sticky bottom-0 bg-p-light w-full p-4 justify-center'>
       <button
         class='btn'
         variant='primary'

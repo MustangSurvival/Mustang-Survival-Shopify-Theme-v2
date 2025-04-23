@@ -4,7 +4,7 @@
       "type": "main-collection-banner"
     },
     "main": {
-      "type": "main-collection-product-grid"
+      "type": "c-main-collection-product-grid-filters"
     }
   },
   "order": ["header","main"]

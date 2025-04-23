@@ -8,6 +8,7 @@
     - group_name (string): Name of the group the accordion item belongs to.
     - connected (boolean): Whether the accordion item is connected to other items in the group.
     - rte (boolean): Whether the content is rich text.
+    - open (boolean): Whether the accordion item should be open by default.
 
   Behavior:
     - If no group_name is provided, the group_name will default to 'accordion'.
@@ -17,14 +18,16 @@
 {%- assign group_name = group_name -%}
 {%- assign connected = connected | default: false, allow_false: true -%}
 {%- assign rte = rte | default: true, allow_false: true -%}
+{%- assign open = open | default: false, allow_false: true -%}
 
 {%- if group_name == blank -%}
   {%- capture group_name -%}
     accordion-input--{{ id | handleize }}
   {%- endcapture -%}
 {%- endif -%}
+
 <div id='Details-{{ id }}' class='group'>
-  <label class='list-none' for='accordion-checkbox-{{ id }}'>
+  <label class='list-none cursor-pointer' for='accordion-checkbox-{{ id }}'>
     <input
       aria-controls='accordion-content-{{ id }}'
       aria-label='{{ 'accessibility.accordion_toggle' | t: title: title }}'
@@ -32,14 +35,24 @@
       type='{% if connected %}radio{% else %}checkbox{% endif %}'
       id='accordion-checkbox-{{ id }}'
       name='{{ group_name | default: 'accordion' }}'
+      {% if open %}checked{% endif %}
     >
     <div class='flex gap-[10px] items-center w-full peer-focus-visible:ring-1 ring-u-focus'>
-      <h2 class='h6 text-[24px] leading-[40px]' id='accordion-title-{{ id }}'>
+      {% if alternate_layout %}
+        {%- render 'icon' with 'c-icon-caret',
+          size: 10,
+          class: 'group-has-[:checked]:rotate-180 duration-300 transition-transform relative bottom-px'
+        -%}
+      {% endif %}
+      <h2 class='{% if alternate_layout %}text-body font-[500] text-[16px]{% else %}h6 text-[24px] leading-[40px]{% endif %}' id='accordion-title-{{ id }}'>
         {{ title }}
       </h2>
-      {%- render 'icon' with 'c-icon-caret', size: 10,
-        class: 'group-has-[:checked]:rotate-180 duration-300 transition-transform relative bottom-px'
-      -%}
+      {% unless alternate_layout %}
+        {%- render 'icon' with 'c-icon-caret',
+          size: 10,
+          class: 'group-has-[:checked]:rotate-180 duration-300 transition-transform relative bottom-px'
+        -%}
+      {% endunless %}
     </div>
   </label>
   <div
