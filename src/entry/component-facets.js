@@ -36,12 +36,11 @@ export class FacetFiltersForm extends BaseElementWithoutShadowDOM {
      * If you're moving the filters outside the modal,
      * you might want to submit the form onChange to load the new results.
      */
-    this.facetForm.addEventListener('change', this.onChangeHandler)
 
     this.facetForm.addEventListener('change', this._handleDebounceChange)
 
     // Update the product grid when the form is submitted
-    // this.facetForm.addEventListener('submit', this.onSubmitHandler)
+    this.facetForm.addEventListener('submit', this.onSubmitHandler)
 
     this.$htmlUpdateUtility.addPostProcessCallback(() => {
       this.loading = false

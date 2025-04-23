@@ -1,0 +1,70 @@
+{%- if collection.products.size == 0 -%}
+  <div id='product-grid' data-id='{{ section.id }}'>
+    <div class='flex items-center'>
+      <h2>
+        {{ 'sections.collection_template.empty' | t -}}
+        <br>
+        {{
+          'sections.collection_template.use_fewer_filters_html'
+          | t: link: collection.url, class: 'underlined-link link'
+        }}
+      </h2>
+    </div>
+  </div>
+{%- else -%}
+  <div>
+    <ul
+      id='product-grid'
+      data-id='{{ section.id }}'
+      class='grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4 lg:gap-x-8'
+    >
+      {%- for product in collection.products -%}
+        {%- liquid
+          assign lazy_load = false
+          assign index_with_offset = forloop.index | plus: paginate.current_offset
+          if forloop.index > 2
+            assign lazy_load = true
+          endif
+
+          assign adjusted_index_mobile = index_with_offset | plus: count_mobile
+
+          if collection_ingrids_mobile_positions contains adjusted_index_mobile
+            unless occupied_positions_mobile contains adjusted_index_mobile
+              assign in_grid_for_position = colleciton_ingrids | where: 'grid_position_small_screen', adjusted_index_mobile | first
+
+              render 'collection-ingrid-item', item: in_grid_for_position, is_mobile: true, index: index_with_offset
+
+              assign count_mobile = count_mobile | plus: 1
+              assign occupied_positions_mobile = adjusted_index_mobile | append: ',' | append: occupied_positions_mobile
+            endunless
+          endif
+
+          assign adjusted_index_desktop = index_with_offset | plus: count_desktop
+
+          if collection_ingrids_positions contains adjusted_index_desktop
+            unless occupied_positions_desktop contains adjusted_index_desktop
+              assign in_grid_for_position = colleciton_ingrids | where: 'grid_position', adjusted_index_desktop | first
+
+              render 'collection-ingrid-item', item: in_grid_for_position, is_mobile: false, index: index_with_offset
+
+              assign count_desktop = count_desktop | plus: 1
+              assign occupied_positions_desktop = adjusted_index_desktop | append: ',' | append: occupied_positions_desktop
+            endunless
+          endif
+        -%}
+
+        <li class='w-full flex'>
+          {% render 'product-card',
+            product: product,
+            media_aspect_ratio: 'portrait',
+            lazy_load: lazy_load
+          %}
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- if paginate.pages > 1 -%}
+      {% render 'pagination', paginate: paginate, anchor: '#yourID' %}
+    {%- endif -%}
+  </div>
+{%- endif -%}

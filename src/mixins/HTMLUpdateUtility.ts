@@ -1,7 +1,8 @@
-import { createApiClient, fromURLSearchParams } from './WithApiClient'
-import firstFocusableElement from '@/lib/firstFocusableElement'
-import defer from 'defer-promise'
-import type { ReactiveController, ReactiveControllerHost } from 'lit'
+import { createApiClient, fromURLSearchParams } from './WithApiClient';
+import firstFocusableElement from '@/lib/firstFocusableElement';
+import defer from 'defer-promise';
+import type { ReactiveController, ReactiveControllerHost } from 'lit';
+
 
 type FetchSectionsArguments = {
   /** List of Section Ids to load from Shopify Rendering API */
@@ -70,7 +71,7 @@ class HTMLUpdateUtility implements ReactiveController {
           sections: sectionIds.join(','),
         },
         withCache,
-        forceJSON: true
+        forceJSON: true,
       }
     )
 
