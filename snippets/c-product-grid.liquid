@@ -16,7 +16,7 @@
     <ul
       id='product-grid'
       data-id='{{ section.id }}'
-      class='grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4 lg:gap-x-8'
+      class='grid grid-cols-1 gap-y-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-[10px]'
     >
       {%- for product in collection.products -%}
         {%- liquid
@@ -56,7 +56,7 @@
         <li class='w-full flex'>
           {% render 'product-card',
             product: product,
-            media_aspect_ratio: 'portrait',
+            media_aspect_ratio: 'square',
             lazy_load: lazy_load
           %}
         </li>

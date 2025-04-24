@@ -7,6 +7,9 @@
   - show_badges: {Boolean} Renders 'Sale' and 'Sold Out' tags if the product matches the condition (optional)
   - price_class: {String} Adds a price class to the price element (optional)
   - show_compare_at_price: {Boolean} Renders the compare at price if the product matches the condition (optional)
+  - container_class: {String} Classes to add on the prices container (optional)
+  - price_size_class: {String} Classes to add on the price element (optional)
+  - compare_size_class: {String} Classes to add on the compare at price element (optional)
 
   Usage:
   {% render 'price', product: product %}
@@ -27,6 +30,7 @@
   assign money_price_min = price_min | money
   assign money_price_max = price_max | money
   assign price_size_class = price_size_class | default: 'utility'
+  assign compare_size_class = compare_size_class | default: price_size_class
   if settings.currency_code_enabled
     assign money_price = price | money_with_currency
     assign money_price_min = price_min | money_with_currency
@@ -90,22 +94,24 @@
         {%- endif -%}
       </div>
       <div class='hidden group-[.on-sale]/price:block'>
-        {%- unless product.price_varies == false and product.compare_at_price_varies %}
-          <span class='sr-only'>{{ 'products.product.price.regular_price' | t }}</span>
-          <span>
-            <s class='{{ price_size_class }} line-through text-t-foreground-secondary'>
-              {% if settings.currency_code_enabled %}
-                {{ compare_at_price | money_with_currency }}
-              {% else %}
-                {{ compare_at_price | money }}
-              {% endif %}
-            </s>
+        <div class='{{ container_class }}'>
+          {%- unless product.price_varies == false and product.compare_at_price_varies %}
+            <span class='sr-only'>{{ 'products.product.price.regular_price' | t }}</span>
+            <span>
+              <s class='line-through text-t-foreground-secondary {{ compare_size_class }}'>
+                {% if settings.currency_code_enabled %}
+                  {{ compare_at_price | money_with_currency }}
+                {% else %}
+                  {{ compare_at_price | money }}
+                {% endif %}
+              </s>
+            </span>
+          {%- endunless -%}
+          <span class='sr-only'>{{ 'products.product.price.sale_price' | t }}</span>
+          <span class='{{ price_size_class }}'>
+            {{ money_price }}
           </span>
-        {%- endunless -%}
-        <span class='sr-only'>{{ 'products.product.price.sale_price' | t }}</span>
-        <span class='{{ price_size_class }}'>
-          {{ money_price }}
-        </span>
+        </div>
       </div>
       <small class='caption{% if product.selected_or_first_available_variant.unit_price_measurement == nil %} hidden{% endif %}'>
         <span class='sr-only'>{{ 'products.product.price.unit_price' | t }}</span>

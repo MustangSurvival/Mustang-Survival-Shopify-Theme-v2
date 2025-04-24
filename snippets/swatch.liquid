@@ -23,12 +23,12 @@
 -%}
 
 {% capture swatch_class %}
-block max-w-full overflow-clip relative aspect-square bg-cover bg-origin-border rounded-full border border-solid border-t-border w-[var(--swatch--size,_2rem)] bg-[position:var(--swatch-focal-point,_initial)] bg-[--swatch--background]
+block max-w-full overflow-clip relative aspect-square bg-cover bg-origin-border border border-solid border-t-border w-[var(--swatch--size,_2rem)] bg-[position:var(--swatch-focal-point,_initial)] bg-[--swatch--background]
 {% endcapture %}
 
 <span
   {% if swatch_value %}
-    class='{{ swatch_class }} group-has-[:disabled]/swatch:opacity-30 group-has-[:checked]/swatch:ring-2 ring-[--swatch--background] ring-offset-2 transition duration-300 ease-in-out cursor-pointer group-focus-within/swatch:ring-2 group-focus-within/swatch:ring-[--swatch--background] group-focus-within/swatch:ring-offset-2 group-focus-within/swatch:ring-opacity-50'
+    class='{{ swatch_class }} border group-has-[:disabled]/swatch:opacity-30 group-has-[:checked]/swatch:border-p-foreground ring-offset-2 transition duration-300 ease-in-out cursor-pointer group-focus-within/swatch:border-p-foreground'
     style='--swatch--background: {{ swatch_value }};{% if swatch_focal_point %} --swatch-focal-point: {{ swatch_focal_point }};{% endif %}'
   {% else %}
     class='border-dashed border-t-foreground-secondary'

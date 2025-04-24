@@ -12,7 +12,7 @@
 {%- endcomment -%}
 
 {%- capture badge_classes -%}
-bg-white py-1 px-2.5 rounded-3xl border border-primary flex justify-center items-center lg:px-3 caption uppercase
+!bg-p-background px-sm border-[2px] border-p-foreground flex justify-center items-center caption uppercase w-full text-[10px] lg:text-[12px] font-medium
 {%- endcapture -%}
 
 {% liquid
@@ -57,7 +57,7 @@ bg-white py-1 px-2.5 rounded-3xl border border-primary flex justify-center items
 {% if resource != blank or settings.show_sold_out_badge or settings.show_sale_badge %}
   <div class='flex flex-wrap gap-2 {{ container_class }}'>
     {%- if settings.show_sold_out_badge and product.available == false -%}
-      <span class='{{ badge_classes }} bg-t-brand-secondary text-p-darkest {{ badge_class }}'>
+      <span class='{{ badge_classes }} {{ badge_class }}'>
         {{- 'products.product.sold_out' | t -}}
       </span>
     {%- endif -%}
@@ -99,7 +99,7 @@ bg-white py-1 px-2.5 rounded-3xl border border-primary flex justify-center items
     {% endfor %}
 
     {%- if settings.show_sale_badge and product.compare_at_price > product.price and product.available -%}
-      <span class='{{ badge_classes }} bg-t-brand-primary text-p-lightest {{ badge_class }}'>
+      <span class='{{ badge_classes }} {{ badge_class }}'>
         {{- 'products.product.on_sale' | t -}}
       </span>
     {%- endif -%}

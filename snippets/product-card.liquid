@@ -11,14 +11,82 @@
   {% render 'product-card', product: collection.products[0] %}
 {%- endcomment -%}
 
+{%- capture swatches -%}
+  {% assign form_id = '' | append: section.index | append: product.id | append: '-swatches' %}
+  <form id="{{ form_id }}">
+    {% for option in product.options_with_values %}
+      {% if option.name == 'Color' or option.name == 'Colour' %}
+        <ul class="flex flex-wrap gap-1" role="list">
+          {% for value in option.values %}
+            {% liquid
+              assign input_id = 'Filter-' | append: value.param_name | escape | append: forloop.index
+              assign is_disabled = false
+              if value.count == 0 and value.active == false
+                assign is_disabled = true
+              endif
+            %}
+            {% render 'swatch-input',
+              id: input_id,
+              type: 'checkbox',
+              name: value.param_name,
+              value: value.value,
+              product_form_id: form_id,
+              swatch: value.swatch,
+              checked: value.active,
+              disabled: is_disabled
+            %}
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endfor %}
+  </form>
+{%- endcapture -%}
+
+{%- capture yotpo_script -%}
+  <script type="text/javascript" src="https://staticw2.yotpo.com/N5hWfnv0qgGtKYBAfbi3uGSPybHB6uXDm674ctDi/widget.js" async></script>
+{%- endcapture -%}
+
+{%- if product.metafields.yotpo.reviews_count and product.metafields.yotpo.reviews_count != '0' %}
+  {{ yotpo_script }}
+{% endif %}
+
+{%- capture yotpo -%}
+  {% if product.metafields.yotpo.reviews_count and product.metafields.yotpo.reviews_count != "0" %}
+    <div class="yotpo bottomLine h-[36.39px]"
+      data-appkey="N5hWfnv0qgGtKYBAfbi3uGSPybHB6uXDm674ctDi"
+      data-domain="{{shop.permanent_domain | escape }}"
+      data-product-id="{{ product.id }}"
+      data-product-models="{{ product.id }}"
+      data-name="{{ product.title | escape }}"
+      data-url="{{ shop.url }}{{ product.url }}"
+      data-image-url="{{ product.featured_image | product_img_url: 'large' |replace: '?', '%3F' | replace: '&','%26'}}"
+      data-description="{{ product.description | escape }}"
+      data-bread-crumbs="{% for tag in product.tags %}{{ tag | escape }};{% endfor %}">
+    </div>            
+  {% else %}
+    <div class="yotpo bottomline h-[36.39px]">
+      <div class="yotpo-bottomline pull-left star-clickable">  
+        <span class="yotpo-stars"> 
+          <span class="yotpo-icon yotpo-icon-empty-star pull-left"></span>
+          <span class="yotpo-icon yotpo-icon-empty-star pull-left"></span>
+          <span class="yotpo-icon yotpo-icon-empty-star pull-left"></span>
+          <span class="yotpo-icon yotpo-icon-empty-star pull-left"></span>
+          <span class="yotpo-icon yotpo-icon-empty-star pull-left"></span>
+        </span>      
+        <div class="yotpo-clr"></div>
+      </div>
+    </div>
+    <br>
+  {% endif %}
+{%- endcapture -%}
+
 {%- capture sizes -%}(min-width: 1440px) 300px, (min-width: 1024px) 33vw, 50vw{%- endcapture -%}
 {%- assign image_widths = '300, 500, 750, 800' -%}
 {%- liquid
   assign product = product
-  assign media_aspect_ratio = media_aspect_ratio | default: 'portrait'
+  assign media_aspect_ratio = media_aspect_ratio | default: 'square'
   assign show_secondary_image = show_secondary_image | default: true, allow_false: true
   assign lazy_load = lazy_load | default: true, allow_false: true
-  assign shoppable = shoppable | default: false, allow_false: true
 
   if media_aspect_ratio == 'square'
     assign ratio = 'aspect-square'
@@ -39,28 +107,11 @@
   assign featured_image = product.featured_image
 
   assign wrapper_tag = 'div'
-
-  if shoppable and product.has_only_default_variant == false
-    assign wrapper_tag = 'main-product'
-
-    assign product_card_id = 'product-card-' | append: product.id
-    assign product_form_id = 'product-form-' | prepend: product_card_id
-    assign selected_variant = product.selected_or_first_available_variant | default: product.variants[0]
-
-    assign featured_image = selected_variant.featured_image | default: product.featured_image
-    assign target_url = selected_variant.url | within: collection
-    assign show_secondary_image = false
-  endif
--%}
+%}
 
 {% if product %}
   <{{ wrapper_tag }}
-    {% if shoppable %}
-      section-id='product-card'
-      id='{{ product_card_id }}'
-      product-url='{{ product.url | within: collection }}'
-    {% endif %}
-    class='w-full group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white {{ class }}'
+    class='w-full group relative flex flex-col overflow-hidden bg-white {{ class }}'
   >
     <a class='block' href='{{ target_url }}' sub-section-id='main-image' data-product-url>
       <div class='{% if ratio %}{{ ratio }}{% else %}aspect-auto{% endif %} bg-gray-200 group-hover:opacity-75 relative group'>
@@ -87,66 +138,36 @@
           {%- endif -%}
         {%- endif -%}
 
-        {%- render 'product-badges', product: product, container_class: 'absolute top-2 left-2 right-2 z-1' -%}
+        {%- render 'product-badges', product: product, container_class: 'absolute top-0 left-0 z-1' -%}
       </div>
     </a>
 
-    <div class='flex flex-col flex-1 p-4 space-y-2'>
-      <h3 class='text-sm font-medium text-gray-900'>
+    <div class='flex flex-col flex-1 p-4 space-y-[16px]'>
+      {{ swatches }}
+
+      <h3 class='text-body'>
         <a href='{{ product.url | within: collection }}' data-product-url>
           {{ product.title }}
         </a>
       </h3>
 
-      {%- unless shoppable -%}
-        <p class='text-sm text-gray-500'>
-          {{ product.description | strip_html | truncate: 100 }}
-        </p>
-      {%- endunless -%}
+      <div class='flex flex-1 gap-y-xs justify-between items-end'>
+        {% comment %}
+          {%- if product.variants.size > 1 -%}
+            <p class='text-sm italic text-gray-500'>{{ product.variants | size }} variants</p>
+          {%- endif -%}
+        {% endcomment %}
 
-      {%- unless shoppable -%}
-        {%- render '@needs-script', entries: 'core-quickshop-toggle' -%}
-        <quick-shop-toggle product-url='{{ shop.url }}{{ product.url | within: collection }}' data-product-url>
-          <button class='btn' variant='tertiary'>{{ 'products.product.quickview' | t }}</button>
-        </quick-shop-toggle>
-      {%- endunless -%}
+        {{ yotpo }}
 
-      <div class='flex flex-1 flex-col gap-y-xs {% unless shoppable %} justify-end {% endunless %}'>
-        {%- if product.variants.size > 1 and shoppable == false -%}
-          <p class='text-sm italic text-gray-500'>{{ product.variants | size }} variants</p>
-        {%- endif -%}
-
-        {%- if shoppable -%}
-          {%- render 'price',
-            product: product,
-            show_badges: false,
-            use_variant: selected_variant,
-            price_size_class: 'text-base font-medium text-gray-900',
-            attributes: 'sub-section-id="price"'
-          -%}
-        {%- else -%}
-          {%- render 'price',
-            product: product,
-            show_badges: false,
-            price_size_class: 'text-base font-medium text-gray-900'
-          -%}
-        {%- endif -%}
-
-        {%- if shoppable -%}
-          {%- unless product.has_only_default_variant -%}
-            {%- render 'product--main__variant-picker',
-              product: product,
-              unique_id: product_card_id,
-              product_form_id: product_form_id
-            -%}
-          {%- endunless -%}
-        {%- endif -%}
+        {%- render 'price',
+          product: product,
+          show_badges: false,
+          price_size_class: 'text-[12.8px] lg:text-[16px] leading-[14.4px] font-medium',
+          compare_size_class: 'text-[10.4px] lg:text-[13px] leading-[14.4px] text-t-sale-price',
+          container_class: 'flex flex-col items-end'
+        -%}
       </div>
-      {%- if shoppable -%}
-        <div class='grid items-end grid-cols-1'>
-          {%- render 'product-card__buy-buttons', product: product, product_form_id: product_form_id -%}
-        </div>
-      {%- endif -%}
     </div>
   </{{ wrapper_tag }}>
 {%- endif -%}

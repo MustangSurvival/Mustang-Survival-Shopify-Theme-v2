@@ -255,5 +255,12 @@
     border: 1px solid var(--t-brand-primary);
     background-color: var(--t-brand-primary);
   }
-  
+
+  .yotpo-sr-bottom-line-summary {
+    @apply !flex-col gap-[3.4px];
+  }
+
+  .yotpo-reviews-star-ratings-widget {
+    @apply !mb-0;
+  }
 }
