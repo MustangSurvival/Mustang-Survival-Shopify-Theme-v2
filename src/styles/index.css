@@ -234,7 +234,7 @@
 
   .btn {
     @apply text-[30px] uppercase transition-colors font-medium;
-    padding: 8px 30px !important;
+    padding: 6px 30px !important;
     font-family: var(--font-family-tertiary);
     font-size: 30px !important;
     letter-spacing: 1.5px;
@@ -256,6 +256,15 @@
   .btn[variant="tertiary"] {
     border: 1px solid var(--t-foreground);
     background-color: var(--t-brand-primary);
+    color: var(--t-foreground);
+  }
+
+  .btn[variant="quaternary"] {
+    @apply text-body normal-case;
+    font-size: 15px !important;
+    line-height: 24px !important;
+    border: 1px solid var(--t-foreground);
+    background-color: var(--t-background);
     color: var(--t-foreground);
   }
 
