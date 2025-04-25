@@ -1,3 +1,5 @@
+{%- render '@needs-script', entries: 'component-product-card' -%}
+
 {%- comment -%}
   Renders a product card
 
@@ -16,25 +18,27 @@
   <form id="{{ form_id }}">
     {% for option in product.options_with_values %}
       {% if option.name == 'Color' or option.name == 'Colour' %}
-        <ul class="flex flex-wrap gap-1" role="list">
+        <ul class="flex flex-wrap gap-[9px]" role="list">
           {% for value in option.values %}
-            {% liquid
-              assign input_id = 'Filter-' | append: value.param_name | escape | append: forloop.index
-              assign is_disabled = false
-              if value.count == 0 and value.active == false
-                assign is_disabled = true
-              endif
-            %}
-            {% render 'swatch-input',
-              id: input_id,
-              type: 'checkbox',
-              name: value.param_name,
-              value: value.value,
-              product_form_id: form_id,
-              swatch: value.swatch,
-              checked: value.active,
-              disabled: is_disabled
-            %}
+            <li data-option-value {% if value.variant.image %}data-variant-image="{{ value.variant.image | image_url: width: 300 }}"{% endif %}>
+              {% liquid
+                assign input_id = 'swatch-' | append: value.param_name | escape | append: forloop.index
+                assign is_disabled = false
+                if value.count == 0 and value.active == false
+                  assign is_disabled = true
+                endif
+              %}
+              {% render 'swatch-input',
+                id: input_id,
+                type: 'radio',
+                name: value.param_name,
+                value: value.value,
+                product_form_id: form_id,
+                swatch: value.swatch,
+                checked: value.active,
+                disabled: is_disabled
+              %}
+            </li>
           {% endfor %}
         </ul>
       {% endif %}
@@ -64,7 +68,7 @@
       data-bread-crumbs="{% for tag in product.tags %}{{ tag | escape }};{% endfor %}">
     </div>            
   {% else %}
-    <div class="yotpo bottomline h-[36.39px]">
+    <div class="yotpo bottomline h-[36.39px] flex items-end">
       <div class="yotpo-bottomline pull-left star-clickable">  
         <span class="yotpo-stars"> 
           <span class="yotpo-icon yotpo-icon-empty-star pull-left"></span>
@@ -102,7 +106,7 @@
     assign loading = 'eager'
   endif
 
-  assign show_secondary_image = true
+  assign show_secondary_image = false
   assign target_url = product.url | within: collection
   assign featured_image = product.featured_image
 
@@ -110,64 +114,67 @@
 %}
 
 {% if product %}
-  <{{ wrapper_tag }}
-    class='w-full group relative flex flex-col overflow-hidden bg-white {{ class }}'
-  >
-    <a class='block' href='{{ target_url }}' sub-section-id='main-image' data-product-url>
-      <div class='{% if ratio %}{{ ratio }}{% else %}aspect-auto{% endif %} bg-gray-200 group-hover:opacity-75 relative group'>
-        {%- render 'image',
-          image: featured_image,
-          class: 'h-full w-full object-cover object-center',
-          sizes: sizes,
-          width: 300,
-          widths: image_widths,
-          loading: loading
-        -%}
+  <product-card default-image="{{ product.featured_image | image_url: width: 300 }}">
+    <{{ wrapper_tag }}
+      class='w-full group relative flex flex-col overflow-hidden bg-white {{ class }}'
+    >
+      <a class='block' href='{{ target_url }}' sub-section-id='main-image' data-product-url>
+        <div class='{% if ratio %}{{ ratio }}{% else %}aspect-auto{% endif %} bg-gray-200 relative group'>
+          {%- render 'image',
+            image: featured_image,
+            class: 'h-full w-full object-cover object-center',
+            sizes: sizes,
+            width: 300,
+            widths: image_widths,
+            loading: loading
+            attributes: "data-product-image=''"
+          -%}
 
-        {%- if show_secondary_image -%}
-          {% assign hover_image = product.media | where: 'media_type', 'image' %}
+          {%- if show_secondary_image -%}
+            {% assign hover_image = product.media | where: 'media_type', 'image' %}
 
-          {%- if hover_image[1] -%}
-            {%- render 'image',
-              image: hover_image[1],
-              class: 'h-full w-full object-cover object-center group-hover:opacity-100 group-hover:z-1 transition duration-300 opacity-0 absolute inset-0',
-              sizes: sizes,
-              widths: image_widths,
-              width: 300
-            -%}
+            {%- if hover_image[1] -%}
+              {%- render 'image',
+                image: hover_image[1],
+                class: 'h-full w-full object-cover object-center group-hover:opacity-100 group-hover:z-1 transition duration-300 opacity-0 absolute inset-0',
+                sizes: sizes,
+                widths: image_widths,
+                width: 300
+              -%}
+            {%- endif -%}
           {%- endif -%}
-        {%- endif -%}
 
-        {%- render 'product-badges', product: product, container_class: 'absolute top-0 left-0 z-1' -%}
+          {%- render 'product-badges', product: product, container_class: 'absolute top-0 left-0 z-1' -%}
+        </div>
+      </a>
+
+      <div class='flex flex-col flex-1 p-4 space-y-[16px]'>
+        {{ swatches }}
+
+        <h3 class='text-body'>
+          <a href='{{ product.url | within: collection }}' data-product-url>
+            {{ product.title }}
+          </a>
+        </h3>
+
+        <div class='flex flex-1 gap-y-xs justify-between items-end'>
+          {% comment %}
+            {%- if product.variants.size > 1 -%}
+              <p class='text-sm italic text-gray-500'>{{ product.variants | size }} variants</p>
+            {%- endif -%}
+          {% endcomment %}
+
+          {{ yotpo }}
+
+          {%- render 'price',
+            product: product,
+            show_badges: false,
+            price_size_class: 'text-[12.8px] lg:text-[16px] leading-[14.4px] font-medium',
+            compare_size_class: 'text-[10.4px] lg:text-[13px] leading-[14.4px] text-t-sale-price',
+            container_class: 'flex flex-col items-end'
+          -%}
+        </div>
       </div>
-    </a>
-
-    <div class='flex flex-col flex-1 p-4 space-y-[16px]'>
-      {{ swatches }}
-
-      <h3 class='text-body'>
-        <a href='{{ product.url | within: collection }}' data-product-url>
-          {{ product.title }}
-        </a>
-      </h3>
-
-      <div class='flex flex-1 gap-y-xs justify-between items-end'>
-        {% comment %}
-          {%- if product.variants.size > 1 -%}
-            <p class='text-sm italic text-gray-500'>{{ product.variants | size }} variants</p>
-          {%- endif -%}
-        {% endcomment %}
-
-        {{ yotpo }}
-
-        {%- render 'price',
-          product: product,
-          show_badges: false,
-          price_size_class: 'text-[12.8px] lg:text-[16px] leading-[14.4px] font-medium',
-          compare_size_class: 'text-[10.4px] lg:text-[13px] leading-[14.4px] text-t-sale-price',
-          container_class: 'flex flex-col items-end'
-        -%}
-      </div>
-    </div>
-  </{{ wrapper_tag }}>
+    </{{ wrapper_tag }}>
+  </product-card>
 {%- endif -%}

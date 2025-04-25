@@ -61,8 +61,20 @@
     assign loading = null
   endif
 
-  echo image | image_url: width: width, format: format | image_tag: height: height, loading: loading, id: id, sizes: sizes, class: image_class, widths: widths, fetchpriority: fetchpriority
+  assign image_url = image | image_url: width: width, format: format
 -%}
+<img
+  src='{{ image_url }}'
+  alt='{{ alt | escape }}'
+  width='{{ width }}'
+  height='{{ height }}'
+  class='{{ image_class }}'
+  id='{{ id }}'
+  sizes='{{ sizes }}'
+  fetchpriority='{{ fetchpriority }}'
+  {{ loading_attr }}
+  {{ attributes }}
+>
 {%- if container -%}
   </div>
 {%- endif -%}

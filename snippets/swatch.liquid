@@ -22,25 +22,36 @@
   endif
 -%}
 
-{% capture swatch_class %}
-block max-w-full overflow-clip relative aspect-square bg-cover bg-origin-border border border-solid border-t-border w-[var(--swatch--size,_2rem)] bg-[position:var(--swatch-focal-point,_initial)] bg-[--swatch--background]
-{% endcapture %}
 
-<span
-  {% if swatch_value %}
-    class='{{ swatch_class }} border group-has-[:disabled]/swatch:opacity-30 group-has-[:checked]/swatch:border-p-foreground ring-offset-2 transition duration-300 ease-in-out cursor-pointer group-focus-within/swatch:border-p-foreground'
-    style='--swatch--background: {{ swatch_value }};{% if swatch_focal_point %} --swatch-focal-point: {{ swatch_focal_point }};{% endif %}'
-  {% else %}
-    class='border-dashed border-t-foreground-secondary'
-  {% endif %}
->
-  {%- if swatch.image -%}
-    {%- render 'image',
-      image: swatch.image,
-      width: 40,
-      widths: '30,60,90,120',
-      loading: 'lazy',
-      class: 'absolute inset-0 w-full h-full'
-    -%}
-  {%- endif -%}
-</span>
+{% capture swatch_class %}
+  block max-w-full overflow-clip relative aspect-square bg-cover bg-origin-border
+  border border-p-lightest border-solid
+  w-[16px]
+  bg-[position:var(--swatch-focal-point,_initial)]
+  bg-[--swatch--background]
+  cursor-pointer
+  
+  group-has-[:disabled]/swatch:opacity-30
+  
+  group-has-[:checked]/swatch:shadow-[0_0_0_1px_black]
+  group-focus-within/swatch:shadow-[0_0_0_4px_black]
+  {% endcapture %}
+  
+  <span
+    {% if swatch_value %}
+      class="{{ swatch_class }}"
+      style="--swatch--background: {{ swatch_value }};{% if swatch_focal_point %} --swatch-focal-point: {{ swatch_focal_point }};{% endif %}"
+    {% else %}
+      class="border-dashed border-t-foreground-secondary"
+    {% endif %}
+  >
+    {%- if swatch.image -%}
+      {%- render 'image',
+        image: swatch.image,
+        width: 40,
+        widths: '30,60,90,120',
+        loading: 'lazy',
+        class: 'absolute inset-0 w-full h-full'
+      -%}
+    {%- endif -%}
+  </span>

@@ -227,3 +227,8 @@ export class SampleSwiper extends SwiperElement {
   }
 }
 ```
+
+### Metadata
+
+- Metaobjects are used to define color swatches
+- Product badges are defined on the product level and reference metaobjects

@@ -12,7 +12,7 @@
 {%- endcomment -%}
 
 {%- capture badge_classes -%}
-!bg-p-background px-sm border-[2px] border-p-foreground flex justify-center items-center caption uppercase w-full text-[10px] lg:text-[12px] font-medium
+!bg-p-background px-sm border-[2px] border-p-foreground bg-p-lightest flex justify-center items-center caption uppercase w-full text-[10px] lg:text-[12px] font-medium letter-spacing-[1px]
 {%- endcapture -%}
 
 {% liquid
@@ -23,75 +23,25 @@
   if variant and variant.metafields.custom.badges.value.count > 0
     assign resource = variant
   endif
-
-  if settings.show_personalized_badge
-    assign cart_attributes = cart.attributes
-    assign utm_pers = cart_attributes[settings.klaviyo_utm_personalisation]
-
-    if cart_attributes.size > 0
-      if utm_pers != blank
-        assign allowed_groups = utm_pers
-        assign end_index = cart_attributes.size | minus: 2
-        for i in (0..end_index)
-          assign group_key = 'segment_' | append: i
-          if cart_attributes[group_key] != blank
-            assign allowed_groups = allowed_groups | append: ',' | append: cart_attributes[group_key]
-          endif
-        endfor
-      else
-        assign end_index = cart_attributes.size | minus: 1
-        for i in (0..end_index)
-          assign group_key = 'segment_' | append: i
-          if cart_attributes[group_key] != blank
-            if forloop.first
-              assign allowed_groups = allowed_groups | append: cart_attributes[group_key]
-            else
-              assign allowed_groups = allowed_groups | append: ',' | append: cart_attributes[group_key]
-            endif
-          endif
-        endfor
-      endif
-    endif
-  endif
 %}
 {% if resource != blank or settings.show_sold_out_badge or settings.show_sale_badge %}
-  <div class='flex flex-wrap gap-2 {{ container_class }}'>
-    {%- if settings.show_sold_out_badge and product.available == false -%}
-      <span class='{{ badge_classes }} {{ badge_class }}'>
-        {{- 'products.product.sold_out' | t -}}
-      </span>
-    {%- endif -%}
+  <div class='flex flex-col {{ container_class }}'>
     {% for badge in resource.metafields.custom.badges.value %}
-      {% liquid
-        assign show_badge = true
-        if settings.show_personalized_badge
-          assign show_badge = false
-          assign customer_group_id = badge.customer_group_id
-          assign split_customer_group_id = customer_group_id | split: ','
-          if split_customer_group_id contains allowed_groups
-            assign show_badge = true
-          elsif split_customer_group_id == blank
-            assign show_badge = true
-          endif
-        endif
-      %}
-      {% if show_badge %}
-        <span
-          class='{{ badge_classes }} {{ badge_class }}'
-          style='
-            {% if badge.text_color %}color: {{ badge.text_color | default: '#fff' }};{% endif %}
-            {% if badge.background_color %}background-color: {{ badge.background_color | default: '#000' }};{% endif %}
-          '
-        >
-          {{ badge.text }}
-
-          {% if badge.image %}
-            <span class='w-4 ml-2'>
-              {%- render 'image', image: badge.image, widths: '100' -%}
-            </span>
+      <span
+        class='{{ badge_classes }} {{ badge_class }}'
+        style='
+          {% if badge.text_color %}color: {{ badge.text_color | default: '#fff' }};{% endif %}
+          {% if badge.solid %}
+            background-color: {{ badge.background_color | default: '#000' }} !important;
+            border-color: {{ badge.background_color | default: '#000' }} !important;
+          {% else %}
+            border-color: {{ badge.background_color | default: '#000' }} !important;
+            background-color: white !important;
           {% endif %}
-        </span>
-      {% endif %}
+        '
+      >
+        {{ badge.text }}
+      </span>
 
       {% if settings.show_single_custom_badge %}
         {% break %}
@@ -101,6 +51,12 @@
     {%- if settings.show_sale_badge and product.compare_at_price > product.price and product.available -%}
       <span class='{{ badge_classes }} {{ badge_class }}'>
         {{- 'products.product.on_sale' | t -}}
+      </span>
+    {%- endif -%}
+
+    {%- if settings.show_sold_out_badge and product.available == false -%}
+      <span class='{{ badge_classes }} {{ badge_class }}'>
+        {{- 'products.product.sold_out' | t -}}
       </span>
     {%- endif -%}
   </div>
