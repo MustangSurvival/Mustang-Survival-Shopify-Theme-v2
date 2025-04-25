@@ -76,6 +76,7 @@ const handler = function ({
   buttons = true,
   buttonTypename = 'body',
 }: DomainTWOptions) {
+  buttons = false;
   checkManifestFileExists(manifestFilePath)
   return (pluginAPI: PluginAPI) => {
     checkManifestFileExists(manifestFilePath)

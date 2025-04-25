@@ -233,27 +233,44 @@
   }
 
   .btn {
-    @apply !text-[15px] uppercase;
+    @apply text-[30px] uppercase transition-colors font-medium;
+    padding: 8px 30px !important;
+    font-family: var(--font-family-tertiary);
+    font-size: 30px !important;
+    letter-spacing: 1.5px;
+    line-height: 29px;
   }
 
-  .btn[variant="primary"],
-  .btn[variant="secondary"] {
+  .btn[variant="primary"] {
     border: 1px solid var(--t-foreground);
     background-color: var(--t-background);
+    color: var(--t-foreground);
+  }
+
+  .btn[variant="secondary"] {
+    border: 1px solid var(--t-background);
+    background-color: var(--t-background);
+    color: var(--t-foreground);
+  }
+
+  .btn[variant="tertiary"] {
+    border: 1px solid var(--t-foreground);
+    background-color: var(--t-brand-primary);
+    color: var(--t-foreground);
   }
 
   .btn[variant="primary"]:hover,
   .btn[variant="primary"]:focus,
-  .btn[variant="primary"]:active {
-    background-color: var(--t-foreground);
-    color: var(--t-background);
-  }
-
+  .btn[variant="primary"]:active,
   .btn[variant="secondary"]:hover,
   .btn[variant="secondary"]:focus,
-  .btn[variant="secondary"]:active {
-    border: 1px solid var(--t-brand-primary);
-    background-color: var(--t-brand-primary);
+  .btn[variant="secondary"]:active,
+  .btn[variant="tertiary"]:hover,
+  .btn[variant="tertiary"]:focus,
+  .btn[variant="tertiary"]:active {
+    background-color: var(--t-foreground);
+    border-color: var(--t-foreground);
+    color: var(--t-background);
   }
 
   .yotpo-sr-bottom-line-summary {

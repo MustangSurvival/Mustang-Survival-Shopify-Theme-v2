@@ -38,7 +38,7 @@
                   href='{{ block.settings.button_link }}'
                 {% endif %}
                 class='my-2 btn'
-                variant='{% if block.settings.button_style_secondary %}secondary{% else %}primary{% endif %}'
+                variant='{{ block.settings.button_variant }}'
                 {{ block.shopify_attributes }}
               >
                 {{ block.settings.button_label | escape }}
@@ -172,10 +172,24 @@
           "label": "Button link"
         },
         {
-          "type": "checkbox",
-          "id": "button_style_secondary",
-          "default": false,
-          "label": "Use outline style"
+          "type": "select",
+          "id": "button_variant",
+          "label": "Button variant",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "tertiary",
+              "label": "Tertiary"
+            }
+          ],
+          "default": "primary"
         }
       ]
     }
