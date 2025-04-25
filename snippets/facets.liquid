@@ -13,7 +13,7 @@
   section-id='facet-filters'
   class='flex h-full [&[loading]]:opacity-50 [&[loading]]:pointer-events-none'
 >
-  <form class='flex flex-col w-full mt-4'>
+  <form class='flex flex-col w-full -mt-8 lg:mt-4 p-4 lg:p-0'>
     <div class='w-full flex-1'>
       {%- for filter in results.filters -%}
         {% case filter.type %}
@@ -152,7 +152,7 @@
     <div class='sticky bottom-0 bg-t-background-secondary w-full p-4 flex justify-center'>
       <button
         class='btn'
-        variant='secondary'
+        variant='quaternary'
         type='submit'
         {% unless collection.products %}
           disabled
