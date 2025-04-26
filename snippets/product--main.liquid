@@ -14,7 +14,7 @@
 {%- assign selected_variant = product.selected_or_first_available_variant | default: product.variants[0] -%}
 <section
   id='ProductInfo-{{ section.id }}'
-  class='grid grid-cols-1 gap-y-sm place-content-start {% if is_quick_shop %}px-sm{% endif %}'
+  class='grid grid-cols-1 gap-y-sm place-content-start {% if is_quick_shop %}px-sm{% endif %} mt-[26px] lg:mt-0'
 >
   {%- for block in section.blocks -%}
     {%- case block.type -%}
@@ -39,6 +39,13 @@
             {{- block.settings.text -}}
           </p>
         {%- endif -%}
+      {%- when 'modelsku' -%}
+        <p
+          class='rte text-[14px] text-t-secondary-text leading-[24px]'
+          {{ block.shopify_attributes }}
+        >
+          Model: {{ product.vendor }} / SKU: {{ selected_variant.sku }}
+        </p>
       {%- when 'title' -%}
         <div {{ block.shopify_attributes }}>
           <h1 class='h3'>{{ product.title | escape }}</h1>
@@ -50,7 +57,7 @@
               product: product,
               use_variant: selected_variant,
               show_badges: true,
-              price_size_class: 'h6'
+              price_size_class: 'h6 text-[45px] mb-[5px] lg:mb-[20px]'
             -%}
           {%- endcapture -%}
 
@@ -146,7 +153,7 @@
         </p>
       {%- when 'description' -%}
         {%- if product.description != blank -%}
-          <div class='inline-richtext' {{ block.shopify_attributes }}>
+          <div class='inline-richtext text-[16px] leading-[24px]' {{ block.shopify_attributes }}>
             {{ product.description }}
           </div>
         {%- endif -%}

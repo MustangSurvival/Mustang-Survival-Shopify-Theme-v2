@@ -286,6 +286,10 @@
     @apply !flex-col gap-[3.4px];
   }
 
+  .template-product .yotpo-sr-bottom-line-summary {
+    @apply !flex-row gap-px mb-[8px] lg:mb-[13px];
+  }
+
   .yotpo-reviews-star-ratings-widget {
     @apply !mb-0;
   }

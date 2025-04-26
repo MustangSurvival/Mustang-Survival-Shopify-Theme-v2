@@ -1,11 +1,12 @@
-<nav aria-label='Breadcrumb' class='py-sx px-pagemargin 2xl:container'>
-  <ol class="[&_li_+_li]:before:content-['>']">
-    <li class='inline'>
-      <a href='{{- routes.root_url -}}'>Home</a>
-    </li>
+<nav aria-label='Breadcrumb' class='py-sx px-pagemargin 2xl:container flex items-center justify-center text-[14px]'>
+  <ol class="[&_li_+_li]:before:content-['/'] flex items-center gap-[7px]">
     {%- if collection.url -%}
       <li class='inline'>
         {{ collection.title | link_to: collection.url }}
+      </li>
+    {%- elsif product.type != blank -%}
+      <li class="'inline">
+        {{ product.type }}
       </li>
     {%- endif -%}
     <li class='inline'>
