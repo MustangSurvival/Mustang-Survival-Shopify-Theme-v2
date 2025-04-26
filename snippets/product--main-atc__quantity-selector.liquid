@@ -1,11 +1,10 @@
 {%- assign cart_qty = cart | item_count_for_variant: selected_variant.id -%}
 <div
   id='Quantity-Form-{{ section.id }}'
-  class='grid grid-cols-1 gap-y-xs lg:mt-[18px] mt-[8px]'
   sub-section-id='{{ block.id }}'
   {{ block.shopify_attributes }}
 >
-  <label class='caption' for='Quantity-{{ section.id }}'>
+  <label class='sr-only' for='Quantity-{{ section.id }}'>
     {{ 'products.product.quantity.label' | t }}
     {%- render '@needs-script', entries: 'component-variants-in-cart' -%}
     <variants-in-cart
@@ -17,7 +16,7 @@
   </label>
   <div class='grid grid-cols-1 gap-y-2xs'>
     {%- assign quantiy_id = product_form_id | append: '-quantity' -%}
-    {%- render 'quantity-input',
+    {%- render 'inline-quantity-input',
       quantity: 1,
       variant: selected_variant,
       product: product,

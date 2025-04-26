@@ -1,0 +1,61 @@
+{%- assign cart_quantity = cart | item_count_for_variant: variant.id -%}
+{%- assign current_quantity = quantity | default: cart_quantity | default: 1 -%}
+<quantity-input
+  class='flex border border-r-0 border-t-foreground'
+  variant-id='{{ variant.id }}'
+  cart-quantity='{{ cart_quantity }}'
+  min='{{ variant.quantity_rule.min }}'
+  value='{{ current_quantity }}'
+  {% if variant.quantity_rule.max != null %}
+    max='{{ variant.quantity_rule.max | minus: cart_quantity }}'
+  {% endif %}
+
+  {% if cart_item != blank %}
+    key='{{ cart_item.key }}'
+  {% endif %}
+>
+  <input
+    class='text-center remove-arrow text-base w-[50px]'
+    type='number'
+    name='{{ name | default: 'quantity' }}'
+    value='{{ current_quantity }}'
+    inputmode='numeric'
+    {% # theme-check-disable %}
+    min='0'
+    {% if variant.quantity_rule.max != null %}
+      max='{{ variant.quantity_rule.max | minus: cart_quantity }}'
+    {% endif %}
+    step='{{ variant.quantity_rule.increment }}'
+    {% # theme-check-enable %}
+    aria-label='{{ 'products.product.quantity.input_label' | t: product: product.title | escape }}'
+    id='{{ id }}'
+
+    {% if form_id != blank %}
+      form='{{ form_id }}'
+    {% endif %}
+  >
+  <div class='flex flex-col items-center justify-center'>
+    <button
+      class='border-l border-b border-t-foreground inline-flex items-center justify-center aspect-square text-utility disabled:opacity-50 disabled:pointer-events-none'
+      name='minus'
+      type='button'
+      id='{{ id }}__decrement'
+    >
+      <span class='sr-only'>
+        {{- 'products.product.quantity.decrease' | t: product: product.title | escape -}}
+      </span>
+      {%- render 'icon' with 'icon-minus' -%}
+    </button>
+    <button
+      class='border-l border-t-foreground inline-flex items-center justify-center aspect-square text-utility disabled:opacity-50 disabled:pointer-events-none'
+      name='plus'
+      type='button'
+      id='{{ id }}__increment'
+    >
+      <span class='sr-only'>
+        {{- 'products.product.quantity.increase' | t: product: product.title | escape -}}
+      </span>
+      {%- render 'icon' with 'icon-plus' -%}
+    </button>
+  </div>
+</quantity-input>

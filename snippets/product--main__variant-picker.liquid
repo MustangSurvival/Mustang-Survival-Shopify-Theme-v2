@@ -34,8 +34,8 @@
         endif
       -%}
       {%- if picker_type == 'swatch' -%}
-        <fieldset>
-          <legend class='caption mb-xs'>
+        <fieldset class="lg:mt-[18px] mt-[8px]">
+          <legend class='caption mb-[14px]'>
             {{ option.name }}:
             <span data-selected-value>
               {{- option.selected_value -}}
@@ -52,9 +52,9 @@
           </div>
         </fieldset>
       {%- elsif picker_type == 'button' -%}
-        <fieldset>
-          <legend class='caption mb-xs'>{{ option.name }}</legend>
-          <div class='grid grid-cols-3 gap-1'>
+        <fieldset class="lg:mt-[18px] mt-[8px]">
+          <legend class='caption mb-[14px]'>{{ option.name }}</legend>
+          <div class='flex flex-wrap gap-[5px]'>
             {% render 'product-variant-options',
               product: product,
               option: option,
@@ -62,11 +62,17 @@
               product_form_id: product_form_id,
               picker_type: picker_type
             %}
+            {% comment %} Kiwi size chart {% endcomment %}
+            {% assign downcased_name = option.name | downcase %}
+            {% if downcased_name == 'size' %}
+              <div id="AddToCart-product-template"></div>
+            {% endif %}
+            {% comment %} End Kiwi size chart {% endcomment %}
           </div>
         </fieldset>
       {%- else -%}
-        <fieldset>
-          <legend class='caption mb-xs'>{{ option.name }}</legend>
+        <fieldset class="lg:mt-[18px] mt-[8px]">
+          <legend class='caption mb-[14px]'>{{ option.name }}</legend>
           {%- capture select_options -%}
             {%- render 'product-variant-options',
               product: product,

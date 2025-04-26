@@ -293,4 +293,12 @@
   .yotpo-reviews-star-ratings-widget {
     @apply !mb-0;
   }
+
+  .caption {
+    @apply text-[14px] font-medium;
+
+    span {
+      @apply text-t-foreground
+    }
+  }
 }

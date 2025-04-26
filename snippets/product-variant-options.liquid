@@ -86,7 +86,8 @@
       disabled: no_variant_available,
       additional_props: input_dataset,
       unavailable_text: label_unavailable,
-      available: value.variant.available
+      available: value.variant.available,
+      class: 'w-[41px] h-[41px]'
     -%}
     {%- if section.id != blank and template.name == 'product' -%}
       {% # theme-check-disable AssetPreload, RemoteAsset %}

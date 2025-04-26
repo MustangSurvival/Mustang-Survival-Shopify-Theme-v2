@@ -39,6 +39,34 @@
             {{- block.settings.text -}}
           </p>
         {%- endif -%}
+      {%- when 'awards' -%}
+        <div class="lg:mt-[18px] mt-[8px]">
+          <p class="caption mb-[14px]">
+            Awards
+          </p>
+          <p>[ Awards placeholder ]</p>
+          {% assign award_images = product.metafields.custom.product_awards %}
+          {% assign image_count = award_images.size %}
+
+          {% if image_count > 0 %}
+            <div class='product__awards' {{ block.shopify_attributes }}>
+              <p class='awards-heading'>Awards</p>
+              <div class='product__awards-images'>
+                {% for award_image in award_images %}
+                  <p>{{ award_image }}</p>
+                  {%
+                    render 'image',
+                    image: award_image,
+                    class: '-z-10',
+                    width: award_image.width,
+                    height: award_image.height
+                    alt: award_image.alt | default: 'Award Image',
+                  %}
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+          </div>
       {%- when 'modelsku' -%}
         <p
           class='rte text-[14px] text-t-secondary-text leading-[24px]'
@@ -153,7 +181,7 @@
         </p>
       {%- when 'description' -%}
         {%- if product.description != blank -%}
-          <div class='inline-richtext text-[16px] leading-[24px]' {{ block.shopify_attributes }}>
+          <div class='inline-richtext text-[16px] leading-[24px] mb-[8px] lg:mb-[18px]' {{ block.shopify_attributes }}>
             {{ product.description }}
           </div>
         {%- endif -%}

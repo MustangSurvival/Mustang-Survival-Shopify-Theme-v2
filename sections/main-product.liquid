@@ -152,6 +152,13 @@
             "default": false,
             "label": "Show Local Pickup Availability",
             "info": "Display pickup availability information."
+          },
+          {
+            "type": "checkbox",
+            "id": "show_quantity_selector",
+            "default": true,
+            "label": "Show Quantity Selector",
+            "info": "Display a quantity selector for the product inline with the ATC button."
           }
         ]
       },
@@ -159,6 +166,17 @@
         "type": "description",
         "name": "Description",
         "limit": 1
+      },
+      {
+        "type": "awards",
+        "name": "Awards",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "header",
+            "content": "Pulled from the metafield custom.product_awards"
+          }
+        ]
       },
       {
         "type": "custom_liquid",

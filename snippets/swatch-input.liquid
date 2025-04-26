@@ -11,6 +11,7 @@
   - disabled: {Boolean} default disabled status (optional)
   - help_text: {String} additional content to render inside the label (optional)
   - additional_props: {String} (optional) additional properties to attach to the input
+  - class: {String} (optional) additional classes to attach to the input
 
   Usage:
    {% render 'swatch-input',
@@ -46,7 +47,7 @@
     title='{{ value }}'
     class='caption'
   >
-    {% render 'swatch', swatch: swatch, shape: shape %}
+    {% render 'swatch', swatch: swatch, shape: shape, class: class %}
     {{ help_text }}
     {% unless available %}
       {{ unavailable_text }}

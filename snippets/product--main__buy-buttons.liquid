@@ -10,7 +10,7 @@
   Usage:
   {% render 'product--main__buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true %}
 {% endcomment %}
-<div {{ block.shopify_attributes }} sub-section-id='{{ block.id }}'>
+<div class="lg:pt-[28px] mt-[28px] lg:border-t lg:border-t-line-break" {{ block.shopify_attributes }} sub-section-id='{{ block.id }}'>
   {%- if product != blank -%}
     {%- liquid
       assign gift_card_recipient_feature_active = false
@@ -62,38 +62,49 @@
         {%- endif -%}
 
         <div class='grid grid-cols-1 gap-y-xs'>
-          {%- liquid
-            assign check_against_inventory = true
-            if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
-              assign check_against_inventory = false
-            endif
-            if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
-              assign quantity_rule_soldout = true
-            endif
-          -%}
-          <button
-            id='ProductSubmitButton-{{ section_id }}'
-            type='submit'
-            name='add'
-            variant='{% if show_dynamic_checkout %}secondary{% else %}primary{% endif %}'
-            class='btn'
-            {% if product.selected_or_first_available_variant.available == false
-              or quantity_rule_soldout
-              or product.selected_or_first_available_variant == null
-            %}
-              disabled
+          <div class='flex'>
+            {% if block.settings.show_quantity_selector %}
+              {%- render 'product--main-atc__quantity-selector',
+                block: block,
+                section: section,
+                product: product,
+                selected_variant: selected_variant,
+                product_form_id: product_form_id
+              -%}
             {% endif %}
-          >
-            <span>
-              {%- if product.selected_or_first_available_variant == null -%}
-                {{ 'products.product.unavailable' | t }}
-              {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
-                {{ 'products.product.sold_out' | t }}
-              {%- else -%}
-                {{ 'products.product.add_to_cart' | t }}
-              {%- endif -%}
-            </span>
-          </button>
+            {%- liquid
+              assign check_against_inventory = true
+              if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
+                assign check_against_inventory = false
+              endif
+              if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
+                assign quantity_rule_soldout = true
+              endif
+            -%}
+            <button
+              id='ProductSubmitButton-{{ section_id }}'
+              type='submit'
+              name='add'
+              variant='{% if show_dynamic_checkout %}secondary{% else %}primary{% endif %}'
+              class='btn flex-grow'
+              {% if product.selected_or_first_available_variant.available == false
+                or quantity_rule_soldout
+                or product.selected_or_first_available_variant == null
+              %}
+                disabled
+              {% endif %}
+            >
+              <span>
+                {%- if product.selected_or_first_available_variant == null -%}
+                  {{ 'products.product.unavailable' | t }}
+                {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+                  {{ 'products.product.sold_out' | t }}
+                {%- else -%}
+                  {{ 'products.product.add_to_cart' | t }}
+                {%- endif -%}
+              </span>
+            </button>
+          </div>
           {%- if show_dynamic_checkout -%}
             {{ form | payment_button }}
           {%- endif -%}
