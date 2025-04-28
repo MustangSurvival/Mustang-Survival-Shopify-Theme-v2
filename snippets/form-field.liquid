@@ -378,7 +378,7 @@
       {% endif %}
     >
       <div
-        class="relative w-full group peer"
+        class="relative group peer text-[16px] text-left w-full border appearance-none text-t-foreground disabled:text-t-border px-[13px] py-[14px] text-body bg-gray-50 bg-t-background border-t-line-break disabled:border-t-border focus:outline-none focus:ring-0 focus:border-t-foreground peer group-[[error]]:ring-u-error group-[[error]]:border-[transparent] group-[[error]]:ring-2 focus-visible:ring-2 focus-visible:ring-u-focus flex items-center justify-between"
         {% if has_errors %}
           error
         {% endif %}
@@ -387,21 +387,21 @@
           {% if help_text != blank %}
             aria-describedby="{{ id }}_text"
           {% endif %}
-          class="text-left block appearance-none text-[inherit] disabled:text-t-border pl-[10px] pr-[30px] h-sm-forms-inputheight lg:h-lg-forms-inputheight text-body focus:outline-none focus:ring-0 peer group-[[error]]:ring-u-error group-[[error]]:ring-2 focus-visible:ring-2 focus-visible:ring-u-focus"
+          class="text-left block appearance-none text-[inherit] disabled:text-t-border text-body focus:outline-none focus:ring-0 peer group-[[error]]:ring-u-error group-[[error]]:ring-2 focus-visible:ring-2 focus-visible:ring-u-focus"
           {{ element_attributes }}
         >
           {{ options }}
         </select>
 
         <div
-        class="absolute inset-y-0 flex items-center size-3 pointer-events-none end-sm-forms-padding lg:end-sm-forms-padding text-[inherit] group-[[error]]:text-u-error h-sm-forms-inputheight lg:h-lg-forms-inputheigh"
+        class="flex items-center size-3 pointer-events-none text-[inherit] group-[[error]]:text-u-error w-[9.8px] h-[6px]"
       >
         {%- render 'icon' with 'c-icon-caret', size: 12, class: 'block rotate-180 text-[inherit]' -%}
       </div>
       {% unless inline %}
       <label
         for="{{ id }}"
-        class="absolute caption text-t-foreground-secondary duration-300 transform -translate-y-2.5 scale-75 top-3.5 start-sm-forms-padding lg:start-sm-forms-padding z-10 origin-[0] peer-focus:text-t-foreground peer-disabled:text-t-border peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+        class="sr-only"
       >
         {{ label }}
       </label>

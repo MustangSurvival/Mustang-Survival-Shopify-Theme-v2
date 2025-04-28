@@ -1,0 +1,156 @@
+{% comment %}
+  Renders a form field with a label for the given field name, type, and options.
+
+  Accepts:
+    - kind (required): The kind of field to render. Supported kinds are 'input', 'select', 'textarea', 'checkbox', 'radio', and 'switch'.
+    - name (required): The name of the field.
+    - id (required): The id attribute of the field.
+    - label (required): The label for the field.
+    - type (optional): The type attribute of the field.
+    - value (optional): The value of the field.
+    - required (optional): Whether the field is required.
+    - error (optional) (Boolean): Whether the field has an error.
+    - disabled (optional) (Boolean): Whether the field is disabled.
+    - attributes (optional): Additional attributes to add to the field. eg. multiple etc.
+    - wrapper_class (optional): The class of the field wrapper.
+    - wrapper_attributes (optional): Additional attributes to add to the field wrapper.
+    - help_text (optional): The help text for the field.
+    - error_text (optional): The error text for the field.
+    - options (optional): The options for the field. Only required for 'select'.
+    - checked (optional): Whether the field is checked. Only required for 'checkbox', 'radio' and 'switch'.
+    - label_class (optional): The class of the label.
+    - placeholder (optional): The placeholder for the field. Only used for 'textarea'.
+    - icon (optional): The icon for the field. Only used for 'input'.
+    - autocomplete (optional): The autocomplete attribute for the field. Only used for 'input'.
+    - autofocus (optional): The autofocus attribute for the field. Only used for 'input'.
+    - custom_select (optional): Whether to use a custom select. Only used for 'select'.
+    - always_show_placeholder (optional): Whether to always show the placeholder. Only used for 'select'.
+    - form_id (optional): The form id for the field. Only used for 'select'.
+
+  Usage:
+  {%- render 'form-field', kind: 'input', name: 'name', id: 'first_name', label: 'First Name', help_text: 'Some help text here' -%}
+{% endcomment %}
+
+{%- liquid
+  assign has_errors = false
+  assign id = id | default: name
+  assign label = label | default: name | capitalize
+  if error != blank
+    assign has_errors = true
+  endif
+
+  if kind == 'radio' or kind == 'checkbox' or kind == 'switch'
+    assign error_text = blank
+  endif
+
+  if has_errors and error_text != blank
+    assign help_text = error_text
+  endif
+
+  assign wrapper_class_default = 'flex items-center gap-x-[5px]'
+-%}
+
+{%- capture field_content -%}
+      {%- liquid
+      if inline
+        assign wrapper_class = wrapper_class | append: 'inline-flex items-center'
+      else
+        assign wrapper_class = wrapper_class | default: 'flex flex-col gap-2xs w-full'
+      endif
+
+      assign select_wrapper_tag = 'div'
+    
+      if custom_select
+        assign select_wrapper_tag = 'custom-select'
+      endif
+    -%}
+
+    {% capture element_attributes %}
+      id="{{ id }}"
+      value="{{ value }}"
+      name="{{ name }}"
+
+      {% if multiple %}
+        multiple
+      {% endif %}
+
+      {% if disabled %}
+        disabled
+      {% endif %}
+      {% if required %}
+        required
+      {% endif %}
+
+      {% if placeholder %}
+        placeholder="{{ placeholder }}"
+      {% endif %}
+
+      {% if form_id != blank %}
+        form="{{ form_id }}"
+      {% endif %}
+
+      {{ attributes }}
+    {% endcapture %}
+    {%- render '@needs-script', entries: 'core-custom-select' -%}
+    <{{select_wrapper_tag}}
+      class='{{ wrapper_class }} group'
+      {{ wrapper_attributes }}
+    
+      {% if custom_select %}
+        {{ element_attributes }}
+        label="{{ label }}"
+    
+        {% if always_show_placeholder %}
+          always-show-placeholder="true"
+        {% endif %}
+    
+        {% if inline %}
+          inline="true"
+        {% endif %}
+      {% endif %}
+    >
+      <div
+        class="relative w-full group peer"
+        {% if has_errors %}
+          error
+        {% endif %}
+      >
+        <select
+          {% if help_text != blank %}
+            aria-describedby="{{ id }}_text"
+          {% endif %}
+          class="text-left block appearance-none text-[inherit] disabled:text-t-border pl-[10px] pr-[30px] h-sm-forms-inputheight lg:h-lg-forms-inputheight text-body focus:outline-none focus:ring-0 peer group-[[error]]:ring-u-error group-[[error]]:ring-2 focus-visible:ring-2 focus-visible:ring-u-focus"
+          {{ element_attributes }}
+        >
+          {{ options }}
+        </select>
+
+        <div
+        class="absolute inset-y-0 flex items-center size-3 pointer-events-none end-sm-forms-padding lg:end-sm-forms-padding text-[inherit] group-[[error]]:text-u-error h-sm-forms-inputheight lg:h-lg-forms-inputheigh"
+      >
+        {%- render 'icon' with 'c-icon-caret', size: 12, class: 'block rotate-180 text-[inherit]' -%}
+      </div>
+      {% unless inline %}
+      <label
+        for="{{ id }}"
+        class="absolute caption text-t-foreground-secondary duration-300 transform -translate-y-2.5 scale-75 top-3.5 start-sm-forms-padding lg:start-sm-forms-padding z-10 origin-[0] peer-focus:text-t-foreground peer-disabled:text-t-border peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+      >
+        {{ label }}
+      </label>
+      {% endunless %}
+    </div>
+
+    {%- if help_text != blank -%}
+      <p id="{{ id }}_text" class="caption text-t-foreground-secondary gap-x-2xs group-has-[[error]]:text-u-error flex items-center justify-start">
+        {%- if has_errors -%}
+          {%- render 'icon' with 'icon-error', class: 'block' -%}
+        {%- endif -%}
+        <span>{{ help_text }}</span>
+      </p>
+    {%- endif -%}
+  </{{ select_wrapper_tag }}>
+{%- endcapture -%}
+
+{%- if field_content != blank -%}
+  {{ field_content }}
+{%- endif -%}

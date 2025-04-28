@@ -28,8 +28,7 @@
       {%- endfor -%}
     {%- endcapture -%}
 
-    {%- render 'form-field',
-      kind: 'select',
+    {%- render 'inline-select',
       name: 'country_code',
       id: id,
       label: label,

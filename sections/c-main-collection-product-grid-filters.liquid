@@ -64,7 +64,7 @@
             </option>
           {%- endfor -%}
         {% endcapture %}
-        {%- render 'form-field', kind: 'select', name: 'sort_by', id: 'SortBy', options: options, label: label, inline: true, attributes: 'onchange="this.form?.submit()"' -%}
+        {%- render 'inline-select', kind: 'select', name: 'sort_by', id: 'SortBy', options: options, label: label, inline: true, attributes: 'onchange="this.form?.submit()"' -%}
       </div>
     </form>
   </facet-filters-form>

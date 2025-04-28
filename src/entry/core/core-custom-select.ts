@@ -1,12 +1,11 @@
-import { FormElement } from '@/base/FormElement';
-import firstFocusableElement from '@/lib/firstFocusableElement';
-import { MediaQueryUtility } from '@/mixins/MediaQueryUtility';
-import { autoUpdate, computePosition, flip, offset } from '@floating-ui/dom';
-import { PropertyValueMap, css, html, nothing } from 'lit';
-import { property, state } from 'lit/decorators.js';
-import { map } from 'lit/directives/map.js';
-import { type Ref, createRef, ref } from 'lit/directives/ref.js';
-
+import { FormElement } from '@/base/FormElement'
+import firstFocusableElement from '@/lib/firstFocusableElement'
+import { MediaQueryUtility } from '@/mixins/MediaQueryUtility'
+import { autoUpdate, computePosition, flip, offset } from '@floating-ui/dom'
+import { PropertyValueMap, css, html, nothing } from 'lit'
+import { property, state } from 'lit/decorators.js'
+import { map } from 'lit/directives/map.js'
+import { type Ref, createRef, ref } from 'lit/directives/ref.js'
 
 export type CustomSelectOptionType = {
   label: string
@@ -412,12 +411,13 @@ export class CustomSelect extends FormElement {
           ${this.helpText ? `aria-describedby="${this.id}_text"` : ''}
           class=${this.inline ? CLASSES_MAPPING.TOGGLE_INLINE : CLASSES_MAPPING.TOGGLE}
         >
-          <span class="block truncate pr-sm">
+          <span class="block truncate pr-[5px]">
             ${
               selectedOption?.icon
                 ? html`<img src="${selectedOption.icon}" class="size-[25px]"></img>`
                 : nothing
             }
+            ${this._currentToggleLabel}
           </span>
           <div class=${CLASSES_MAPPING.TOGGLE_ICON}>
             <svg-icon
@@ -473,17 +473,16 @@ if (!customElements.get('custom-select')) {
 
 const CLASSES_MAPPING = {
   TOGGLE:
-    'text-left block bg-c-form-bg w-full border appearance-none text-t-foreground disabled:text-t-border rounded-forms-radius px-sm-forms-padding lg:px-lg-forms-padding pt-sm-forms-padding lg:pt-lg-forms-padding h-sm-forms-inputheight lg:h-lg-forms-inputheight text-body bg-gray-50 bg-t-background border-t-foreground-secondary disabled:border-t-border focus:outline-none focus:ring-0 focus:border-t-foreground peer group-[[error]]:ring-u-error group-[[error]]:border-[transparent] group-[[error]]:ring-2 focus-visible:ring-2 focus-visible:ring-u-focus',
+    'text-[16px] text-left bg-c-form-bg w-full border appearance-none text-t-foreground disabled:text-t-border px-[13px] py-[14px] text-body bg-gray-50 bg-t-background border-t-line-break disabled:border-t-border focus:outline-none focus:ring-0 focus:border-t-foreground peer group-[[error]]:ring-u-error group-[[error]]:border-[transparent] group-[[error]]:ring-2 focus-visible:ring-2 focus-visible:ring-u-focus flex items-center justify-between',
   TOGGLE_INLINE:
-    'text-left block appearance-none text-[inherit] disabled:text-t-border px-sm-forms-padding lg:px-lg-forms-padding h-sm-forms-inputheight lg:h-lg-forms-inputheight text-body focus:outline-none focus:ring-0 peer group-[[error]]:ring-u-error group-[[error]]:ring-2 focus-visible:ring-2 focus-visible:ring-u-focus',
+    'text-left items-center flex appearance-none text-[inherit] disabled:text-t-border px-sm-forms-padding lg:px-lg-forms-padding h-sm-forms-inputheight lg:h-lg-forms-inputheight text-body focus:outline-none focus:ring-0 peer group-[[error]]:ring-u-error group-[[error]]:ring-2 focus-visible:ring-2 focus-visible:ring-u-focus',
   TOGGLE_ICON:
-    'absolute inset-y-0 flex items-center size-3 pointer-events-none end-sm-forms-padding lg:end-sm-forms-padding text-[inherit] group-[[error]]:text-u-error h-sm-forms-inputheight lg:h-lg-forms-inputheigh',
-  LABEL:
-    'absolute caption text-t-foreground-secondary duration-300 transform -translate-y-2.5 scale-75 top-3.5 start-sm-forms-padding lg:start-sm-forms-padding z-10 origin-[0] peer-focus:text-t-foreground peer-disabled:text-t-border peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto',
+    'flex items-center size-3 pointer-events-none text-[inherit] group-[[error]]:text-u-error w-[9.8px] h-[6px]',
+  LABEL: 'sr-only',
   HELP_TEXT:
     'caption text-t-foreground-secondary start-sm-forms-padding lg:start-sm-forms-padding',
   DROPDOWN:
-    'custom-select__dropdown min-w-max bg-c-form-bg max-h-[50vh] overflow-y-scroll overflow-x-clip scrollbar-thin scrollbar-track-[transparent] scrollbar-thumb-p-neutral absolute z-20 hidden top-full left-0 w-full border border-t-border bg-t-background drop-shadow-md rounded-forms-radius group-[[open]]:grid translate-y-4 opacity-0 transition-[opacity,display,transform] [transition-behavior:allow-discrete] motion-reduce:transition-none duration-300 group-[[open]]:translate-y-0 group-[[open]]:opacity-100 !motion-reduce:group-[[open]]:transition-none',
+    'custom-select__dropdown min-w-max bg-c-form-bg max-h-[50vh] overflow-y-scroll overflow-x-clip scrollbar-thin scrollbar-track-[transparent] scrollbar-thumb-p-neutral absolute z-20 hidden top-full left-0 w-full border border-t-line-break bg-t-background drop-shadow-md group-[[open]]:grid translate-y-4 opacity-0 transition-[opacity,display,transform] [transition-behavior:allow-discrete] motion-reduce:transition-none duration-300 group-[[open]]:translate-y-0 group-[[open]]:opacity-100 !motion-reduce:group-[[open]]:transition-none',
   DROPDOWN_ITEM:
-    'px-forms-padding group ring-0 focus:ring-0 appearance-none outline-none py-xs bg-t-background text-body disabled:text-t-disabled text-t-foreground-secondary [&[selected]]:text-t-foreground [&[selected]]:bg-t-brand-secondary focus-visible:text-t-foreground hover:text-t-foreground [&:disabled]:hover:text-t-disabled text-left border-b border-t-foreground-secondary last:border-b-0 border-solid',
+    'px-forms-padding group ring-0 focus:ring-0 appearance-none outline-none py-xs bg-t-background text-body disabled:text-t-disabled border-t-line-break [&[selected]]:text-t-foreground [&[selected]]:bg-t-line-break focus-visible:text-t-foreground hover:text-t-foreground [&:disabled]:hover:text-t-disabled text-left border-b border-t-line-break last:border-b-0 border-solid',
 }
