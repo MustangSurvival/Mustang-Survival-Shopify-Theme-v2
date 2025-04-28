@@ -25,4 +25,4 @@ turbo.json
 .turbo
 *.zip
 
-origin/
+origin/*
