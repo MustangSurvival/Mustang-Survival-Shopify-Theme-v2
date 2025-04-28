@@ -24,3 +24,5 @@ vite.config.ts
 turbo.json
 .turbo
 *.zip
+
+origin/

@@ -263,6 +263,39 @@
         <div {{ block.shopify_attributes }} sub-section-id='{{ block.id }}'>
           {%- render 'product--back-in-stock', klaviyo_list_id: block.settings.klaviyo_list_id -%}
         </div>
+      {%- when 'shipping_info' %}
+        <div class='mt-[26px]'>
+          {% if block.settings.shipping_info_text != blank %}
+            <div>
+              {{ block.settings.shipping_info_text }}
+            </div>
+          {% endif %}
+
+          {% if block.settings.enable_shipping_times %}
+            <div class='product__shipping-message' data-shipping-message>
+              Shipping to <span data-shipping-postal-code>loading..</span>. Order today and <br>
+              receive your order between
+              <span class='shipping-dates'>
+                <span data-shipping-date-1></span> and <span data-shipping-date-2></span></span
+              >.
+            </div>
+          {% endif %}
+        </div>
+      {%- when 'find_retailer' -%}
+        {% if block.settings.find_retailer_link and block.settings.find_retailer_text %}
+          <div class='flex items-center gap-[10px] font-medium underline mt-[26px]'>
+            {%- render 'icon' with 'c-icon-fishy', class: 'w-[24px] h-[32px]' -%}
+
+            <a
+              href='{{ block.settings.find_retailer_link }}'
+              {% if block.settings.find_retailer_new_tab %}
+                target='_blank'
+              {% endif %}
+            >
+              {{- block.settings.find_retailer_text -}}
+            </a>
+          </div>
+        {% endif %}
     {%- endcase -%}
   {%- endfor -%}
 </section>

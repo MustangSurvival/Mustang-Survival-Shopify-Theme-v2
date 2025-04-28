@@ -36,3 +36,16 @@
     },
   }
 </script>
+
+{% if shop.domain == 'mustangsurvival.com' or shop.domain == 'mustangsurvival.ca' or shop.domain contains 'dev' %}
+  {% comment %} Klarna Install Scripts {% endcomment %}
+  <script>
+    window.KlarnaThemeGlobals={};{%case template.name%} {%when"product"%} window.KlarnaThemeGlobals.data_purchase_amount={{product.first_available_variant.price}};window.KlarnaThemeGlobals.productVariants={{product.variants|json}};window.KlarnaThemeGlobals.documentCopy=document.cloneNode(true);{%when"cart"%} window.KlarnaThemeGlobals.data_purchase_amount={{cart.total_price}};window.KlarnaThemeGlobals.documentCopy=document.cloneNode(true);{%endcase%}
+  </script>
+
+  {% comment %} Klarna On-site Messaging {% endcomment %}
+  <script>
+    window.KlarnaOnsiteService = window.KlarnaOnsiteService || []
+    window.KlarnaOnsiteService.push({ eventName: 'refresh-placements' })
+  </script>
+{% endif %}

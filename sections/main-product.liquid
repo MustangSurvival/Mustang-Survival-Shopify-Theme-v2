@@ -224,6 +224,43 @@
             "info": "The Klaviyo list ID to use for back-in-stock notifications."
           }
         ]
+      },
+      {
+        "type": "shipping_info",
+        "name": "Shipping Info",
+        "limit": 1, 
+        "settings": [
+          {
+            "type": "text",
+            "id": "shipping_info_text",
+            "label": "Shipping Info Text",
+            "default": "Shipping info goes here."
+          }
+        ]
+      },
+      {
+        "type": "find_retailer",
+        "name": "Find Retailer",
+        "limit": 1, 
+        "settings": [
+          {
+            "type": "url",
+            "id": "find_retailer_link",
+            "label": "Link to Find Retailer"
+          },
+          {
+            "type": "text",
+            "id": "find_retailer_text",
+            "label": "Find Retailer Text",
+            "default": "Find a retailer near you."
+          },
+          {
+            "type": "checkbox",
+            "id": "find_retailer_new_tab",
+            "label": "Open Find Retailer Link in New Tab",
+            "default": false
+          }
+        ]
       }
     ],
     "settings": [

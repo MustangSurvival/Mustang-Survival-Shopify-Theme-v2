@@ -128,6 +128,42 @@
             {%- render 'product--main__pickup-availability', product: product -%}
           </fieldset>
         {%- endif -%}
+
+        {% if shop.permanent_domain contains 'mustang-survival.myshopify.com'
+          or shop.permanent_domain contains 'mustang-survival-ca.myshopify.com'
+          or shop.permanent_domain contains 'mustang-survival-uk.myshopify.com'
+        %}
+          {% if shop.permanent_domain contains 'mustang-survival.myshopify.com' %}
+            {% assign shopLocale = 'en-US' %}
+            <div class='shop-pay-klarna-container'>
+              <div class='shop-page-banner shop-klarna-child'>
+                {{ form | payment_terms }}
+              </div>
+              <!-- Klarna v2 Placement -->
+              <div class='klarna__container shop-klarna-child'>
+                <klarna-placement
+                  data-key='credit-promotion-standard'
+                  data-locale='en-US'
+                  data-purchase-amount='{{ product.price }}'
+                ></klarna-placement>
+              </div>
+              <!-- end Placement -->
+            </div>
+          {% elsif shop.permanent_domain contains 'mustang-survival-ca.myshopify.com' %}
+            {% assign shopLocale = 'en-CA' %}
+            <!-- Klarna v2 Placement -->
+            <div class='klarna__container'>
+              <klarna-placement
+                data-key='credit-promotion-auto-size'
+                data-locale='en-CA'
+                data-purchase-amount=''
+              ></klarna-placement>
+            </div>
+            <!-- end Placement -->
+          {% elsif shop.permanent_domain contains 'mustang-survival-uk.myshopify.com' %}
+            {% assign shopLocale = 'GB' %}
+          {% endif %}
+        {% endif %}
       {%- endform -%}
     </product-form>
   {%- else -%}
