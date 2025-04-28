@@ -10,7 +10,14 @@
   Usage:
   {% render 'product--main__buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true %}
 {% endcomment %}
-<div class="lg:pt-[28px] mt-[28px] lg:border-t lg:border-t-line-break" {{ block.shopify_attributes }} sub-section-id='{{ block.id }}'>
+
+{%- assign selected_variant = product.selected_or_first_available_variant | default: product.variants[0] -%}
+
+<div
+  class='lg:pt-[28px] mt-[28px] lg:border-t lg:border-t-line-break'
+  {{ block.shopify_attributes }}
+  sub-section-id='{{ block.id }}'
+>
   {%- if product != blank -%}
     {%- liquid
       assign gift_card_recipient_feature_active = false
@@ -85,7 +92,7 @@
               id='ProductSubmitButton-{{ section_id }}'
               type='submit'
               name='add'
-              variant='{% if show_dynamic_checkout %}secondary{% else %}primary{% endif %}'
+              variant='quinary'
               class='btn flex-grow'
               {% if product.selected_or_first_available_variant.available == false
                 or quantity_rule_soldout
@@ -100,6 +107,13 @@
                 {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
                   {{ 'products.product.sold_out' | t }}
                 {%- else -%}
+                  {%- render 'price',
+                    product: product,
+                    use_variant: selected_variant,
+                    show_badges: false,
+                    price_size_class: 'text-[inherit]'
+                  -%}
+                  -
                   {{ 'products.product.add_to_cart' | t }}
                 {%- endif -%}
               </span>

@@ -268,6 +268,13 @@
     color: var(--t-foreground);
   }
 
+  .btn[variant="quinary"] {
+    @apply text-body uppercase !text-[16px] !leading-[26px] py-[13.5px] px-[60px] tracking-[0.48px] font-medium;
+    border: 1px solid var(--t-foreground);
+    background-color: var(--t-foreground);
+    color: var(--t-background);
+  }
+
   .btn[variant="primary"]:hover,
   .btn[variant="primary"]:focus,
   .btn[variant="primary"]:active,

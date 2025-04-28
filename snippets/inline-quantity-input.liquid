@@ -36,18 +36,7 @@
   >
   <div class='flex flex-col items-center justify-center'>
     <button
-      class='border-l border-b border-t-foreground inline-flex items-center justify-center aspect-square text-utility disabled:opacity-50 disabled:pointer-events-none'
-      name='minus'
-      type='button'
-      id='{{ id }}__decrement'
-    >
-      <span class='sr-only'>
-        {{- 'products.product.quantity.decrease' | t: product: product.title | escape -}}
-      </span>
-      {%- render 'icon' with 'icon-minus' -%}
-    </button>
-    <button
-      class='border-l border-t-foreground inline-flex items-center justify-center aspect-square text-utility disabled:opacity-50 disabled:pointer-events-none'
+      class='border-l border-b border-t-foreground inline-flex items-center justify-center aspect-square text-utility disabled:opacity-50 disabled:pointer-events-none px-[12px] h-[27px]'
       name='plus'
       type='button'
       id='{{ id }}__increment'
@@ -55,7 +44,18 @@
       <span class='sr-only'>
         {{- 'products.product.quantity.increase' | t: product: product.title | escape -}}
       </span>
-      {%- render 'icon' with 'icon-plus' -%}
+      {%- render 'icon' with 'c-icon-caret', class: 'w-[9.8px]' -%}
+    </button>
+    <button
+      class='border-l border-t-foreground inline-flex items-center justify-center aspect-square text-utility disabled:opacity-50 disabled:pointer-events-none px-[12px] h-[27px]'
+      name='minus'
+      type='button'
+      id='{{ id }}__decrement'
+    >
+      <span class='sr-only'>
+        {{- 'products.product.quantity.decrease' | t: product: product.title | escape -}}
+      </span>
+      {%- render 'icon' with 'c-icon-caret', class: 'rotate-180 w-[9.8px]' -%}
     </button>
   </div>
 </quantity-input>

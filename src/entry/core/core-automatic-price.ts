@@ -103,9 +103,16 @@ export class AutomaticPrice extends WithApiClientMixin(BaseElement) {
   @property({ type: Boolean, attribute: 'hide-while-loading' })
   hideWhileLoading = false
 
+  private quantityInput: HTMLInputElement | null = null
+  private handleQuantityChange = () => {
+    console.log('Quantity changed')
+    this.fetchPriceTask.run()
+  }
+
   private fetchPriceTask = new Task(this, {
-    task: async ([variantId]) => {
-      const cachedPrice = VARIANT_PRICE_CACHE.get(variantId)
+    task: async ([variantId, quantity]) => {
+      const cacheKey = `${variantId}-${quantity}`
+      const cachedPrice = VARIANT_PRICE_CACHE.get(cacheKey)
       if (cachedPrice) {
         return cachedPrice
       }
@@ -118,7 +125,7 @@ export class AutomaticPrice extends WithApiClientMixin(BaseElement) {
               input: {
                 lines: [
                   {
-                    quantity: 1,
+                    quantity,
                     merchandiseId: `gid://shopify/ProductVariant/${variantId}`,
                     ...(this.sellingPlanId && {
                       sellingPlanId: `gid://shopify/SellingPlan/${this.sellingPlanId}`,
@@ -141,8 +148,8 @@ export class AutomaticPrice extends WithApiClientMixin(BaseElement) {
         throw new Error('No discount allocations found')
       }
 
-      const subtotalAmount = Number(cart.cost.subtotalAmount.amount) * 100 // The cost of the merchandise line before line-level discounts.
-      const totalAmount = Number(cart.cost.totalAmount.amount) * 100 // The total cost of the merchandise line.
+      const subtotalAmount = Number(cart.cost.subtotalAmount.amount) * 100
+      const totalAmount = Number(cart.cost.totalAmount.amount) * 100
       const priceDetails = {
         subtotalAmount,
         totalAmount,
@@ -150,11 +157,48 @@ export class AutomaticPrice extends WithApiClientMixin(BaseElement) {
         currencyCode: cart.cost.totalAmount.currencyCode,
       }
 
-      VARIANT_PRICE_CACHE.set(variantId, priceDetails)
+      VARIANT_PRICE_CACHE.set(cacheKey, priceDetails)
       return priceDetails
     },
-    args: () => [this.variantId],
+    args: () => [this.variantId, this.getQuantity()],
   })
+
+  private getQuantity(): number {
+    let quantity = 1
+    if (this.quantityInput) {
+      const value = parseInt(this.quantityInput.value, 10)
+      if (!isNaN(value) && value > 0) {
+        quantity = value
+      }
+    }
+    return quantity
+  }
+
+  connectedCallback() {
+    super.connectedCallback()
+
+    const form = this.closest('form')
+    if (form) {
+      const input = form.querySelector<HTMLInputElement>(
+        'input[name="quantity"], input#quantity-input'
+      )
+      if (input) {
+        this.quantityInput = input
+        this.quantityInput.addEventListener('change', this.handleQuantityChange)
+      }
+    }
+  }
+
+  disconnectedCallback() {
+    if (this.quantityInput) {
+      this.quantityInput.removeEventListener(
+        'change',
+        this.handleQuantityChange
+      )
+      this.quantityInput = null
+    }
+    super.disconnectedCallback()
+  }
 
   get hasAutomaticDiscount() {
     if (
@@ -184,7 +228,7 @@ export class AutomaticPrice extends WithApiClientMixin(BaseElement) {
       currency: currencyCode,
     })
 
-    return html` <span>${formatter.format(totalAmount / 100)}</span> `
+    return html`<span>${formatter.format(totalAmount / 100)}</span>`
   }
 
   render() {
@@ -204,6 +248,3 @@ export class AutomaticPrice extends WithApiClientMixin(BaseElement) {
     })
   }
 }
-
-// create a task to fetch price from cart with discount allocation
-// if price is fetched, update the price in the DOM

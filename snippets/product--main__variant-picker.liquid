@@ -24,6 +24,7 @@
       {% comment %} custom_select can also be a value for picker_type, as well as swatch_dropdown {% endcomment %}
       {%- liquid
         assign swatch_count = option.values | map: 'swatch' | compact | size
+        assign downcased_opt_name = option.name | downcase
         assign picker_type = 'button'
         if swatch_count > 0
           assign picker_type = 'swatch'
@@ -31,13 +32,15 @@
           assign picker_type = 'custom_select'
         elsif option.values.size > 10
           assign picker_type = 'dropdown'
+        elsif downcased_opt_name contains 'inflat'
+          assign picker_type = 'custom_select'
         endif
       -%}
       {%- if picker_type == 'swatch' -%}
-        <fieldset class="lg:mt-[18px] mt-[8px]">
+        <fieldset class='lg:mt-[18px] mt-[8px]'>
           <legend class='caption mb-[14px]'>
             {{ option.name }}:
-            <span data-selected-value>
+            <span data-selected-value class="font-normal">
               {{- option.selected_value -}}
             </span>
           </legend>
@@ -52,7 +55,7 @@
           </div>
         </fieldset>
       {%- elsif picker_type == 'button' -%}
-        <fieldset class="lg:mt-[18px] mt-[8px]">
+        <fieldset class='lg:mt-[18px] mt-[8px]'>
           <legend class='caption mb-[14px]'>{{ option.name }}</legend>
           <div class='flex flex-wrap gap-[5px]'>
             {% render 'product-variant-options',
@@ -65,13 +68,13 @@
             {% comment %} Kiwi size chart {% endcomment %}
             {% assign downcased_name = option.name | downcase %}
             {% if downcased_name == 'size' %}
-              <div id="AddToCart-product-template"></div>
+              <div id='AddToCart-product-template'></div>
             {% endif %}
             {% comment %} End Kiwi size chart {% endcomment %}
           </div>
         </fieldset>
       {%- else -%}
-        <fieldset class="lg:mt-[18px] mt-[8px]">
+        <fieldset class='lg:mt-[18px] mt-[8px]'>
           <legend class='caption mb-[14px]'>{{ option.name }}</legend>
           {%- capture select_options -%}
             {%- render 'product-variant-options',

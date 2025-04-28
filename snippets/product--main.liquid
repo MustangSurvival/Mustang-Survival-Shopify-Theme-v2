@@ -40,33 +40,43 @@
           </p>
         {%- endif -%}
       {%- when 'awards' -%}
-        <div class="lg:mt-[18px] mt-[8px]">
-          <p class="caption mb-[14px]">
-            Awards
-          </p>
-          <p>[ Awards placeholder ]</p>
-          {% assign award_images = product.metafields.custom.product_awards %}
-          {% assign image_count = award_images.size %}
-
-          {% if image_count > 0 %}
-            <div class='product__awards' {{ block.shopify_attributes }}>
-              <p class='awards-heading'>Awards</p>
-              <div class='product__awards-images'>
-                {% for award_image in award_images %}
-                  <p>{{ award_image }}</p>
-                  {%
-                    render 'image',
-                    image: award_image,
-                    class: '-z-10',
-                    width: award_image.width,
-                    height: award_image.height
-                    alt: award_image.alt | default: 'Award Image',
-                  %}
-                {% endfor %}
-              </div>
-            </div>
+        {% assign award_tags = '' %}
+        {% for tag in product.tags %}
+          {% if tag contains 'award:' %}
+            {% assign award_tags = tag %}
           {% endif %}
+        {% endfor %}
+        {% assign award_tags = award_tags | split: '|' %}
+
+        {% assign awards = 0 %}
+
+        {% capture awards_content %}
+        {% for tag in award_tags %}
+          {% assign handle = tag | remove: 'award:' | strip %}
+          {% assign award = shop.metaobjects.product_award[handle] %}
+          {% if award %}
+            {%
+              render 'image',
+              image: award.image.value,
+              class: '-z-10',
+              width: award.image.value.width,
+              height: award.image.value.height,
+              alt: award.alt_text.value | default: 'Award Image',
+              object_fit: 'contain'
+            %}
+            {% assign awards = awards | plus: 1 %}
+          {% endif %}
+          {% endfor %}
+        {% endcapture %}
+
+        {% if awards > 0 %}
+          <div class='lg:mt-[18px] mt-[8px]' {{ block.shopify_attributes }}>
+            <p class='caption mb-[14px]'>Awards</p>
+            <div class='grid grid-cols-2 lg:grid-cols-3'>
+              {{ awards_content }}
+            </div>
           </div>
+        {% endif %}
       {%- when 'modelsku' -%}
         <p
           class='rte text-[14px] text-t-secondary-text leading-[24px]'
@@ -84,7 +94,7 @@
             {%- render 'price',
               product: product,
               use_variant: selected_variant,
-              show_badges: true,
+              show_badges: false,
               price_size_class: 'h6 text-[45px] mb-[5px] lg:mb-[20px]'
             -%}
           {%- endcapture -%}
