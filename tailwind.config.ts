@@ -21,7 +21,7 @@ export default {
           Regular: 400,
         },
         Heading: {
-          Regular: 500,
+          Regular: 600,
         },
       },
       fluidTypography: false,
