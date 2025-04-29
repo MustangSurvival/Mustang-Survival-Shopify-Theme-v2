@@ -187,7 +187,7 @@ We leverage `npx`, for running Shopify CLI, that is not fully compatible with wi
 
 1. On the first shell run command `npm run theme:assets`;
 
-2. On the second shell run command `npm run theme:shopify:initial-push; npm run theme:shopify;`
+2. On the second shell run command `npm run theme:shopify:initial-push-w; npm run theme:shopify;`
 
 # Customizing Swiper with Injected CSS
 
