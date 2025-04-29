@@ -26,3 +26,5 @@ assets/icons.svg
 
 *.zip
 .shopify
+
+origin/*
