@@ -38,274 +38,291 @@
 </main-product>
 
 {% schema %}
-  {
-    "name": "Main Product",
-    "tag": "section",
-    "blocks": [
-      {
-        "type": "@app"
-      },
-      {
-        "type": "text",
-        "name": "Text",
-        "settings": [
-          {
-            "type": "inline_richtext",
-            "id": "text",
-            "default": "Text",
-            "label": "Text Content"
-          }
-        ]
-      },
-      {
-        "type": "modelsku",
-        "name": "Model / SKU"
-      },
-      {
-        "type": "title",
-        "name": "Title",
-        "limit": 1
-      },
-      {
-        "type": "price",
-        "name": "Price",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "checkbox",
-            "id": "show_automatic_price",
-            "label": "Show Compare At Price",
-            "default": false,
-            "info": "Display the compare at price if applicable."
-          }
-        ]
-      },
-      {
-        "type": "sku",
-        "name": "SKU",
-        "limit": 1,
-        "settings": []
-      },
-      {
-        "type": "inventory",
-        "name": "Inventory",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "range",
-            "id": "inventory_threshold",
-            "label": "Low Inventory Threshold",
-            "min": 0,
-            "max": 100,
-            "step": 1,
-            "info": "The inventory quantity to show low stock warnings.",
-            "default": 10
-          },
-          {
-            "type": "checkbox",
-            "id": "show_inventory_quantity",
-            "label": "Show Inventory Quantity",
-            "default": true
-          }
-        ]
-      },
-      {
-        "type": "quantity_selector",
-        "name": "Quantity Selector",
-        "limit": 1
-      },
-      {
-        "type": "variant_picker",
-        "name": "Variant Picker",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "checkbox",
-            "id": "use_custom_select",
-            "label": "Use Custom Dropdown",
-            "default": false
-          }
-        ]
-      },
-      {
-        "type": "buy_buttons",
-        "name": "Buy Buttons",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "checkbox",
-            "id": "show_dynamic_checkout",
-            "default": true,
-            "label": "Show Dynamic Checkout Buttons",
-            "info": "Display accelerated checkout buttons like Apple Pay."
-          },
-          {
-            "type": "checkbox",
-            "id": "show_gift_card_recipient",
-            "default": true,
-            "label": "Enable Gift Card Recipient Fields",
-            "info": "Allow gift cards to be sent to a recipient."
-          },
-          {
-            "type": "checkbox",
-            "id": "show_pickup_availability",
-            "default": false,
-            "label": "Show Local Pickup Availability",
-            "info": "Display pickup availability information."
-          },
-          {
-            "type": "checkbox",
-            "id": "show_quantity_selector",
-            "default": true,
-            "label": "Show Quantity Selector",
-            "info": "Display a quantity selector for the product inline with the ATC button."
-          }
-        ]
-      },
-      {
-        "type": "description",
-        "name": "Description",
-        "limit": 1
-      },
-      {
-        "type": "awards",
-        "name": "Awards",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "header",
-            "content": "Pulled from the metafield custom.product_awards"
-          }
-        ]
-      },
-      {
-        "type": "custom_liquid",
-        "name": "Custom Liquid",
-        "settings": [
-          {
-            "type": "liquid",
-            "id": "custom_liquid",
-            "label": "Custom Liquid Code"
-          }
-        ]
-      },
-      {
-        "type": "collapsible_tab",
-        "name": "Collapsible Tab",
-        "settings": [
-          {
-            "type": "text",
-            "id": "heading",
-            "default": "Tab Heading",
-            "info": "Heading for the collapsible tab.",
-            "label": "Tab Heading"
-          },
-          {
-            "type": "richtext",
-            "id": "content",
-            "label": "Tab Content"
-          },
-          {
-            "type": "page",
-            "id": "page",
-            "label": "Tab Content from Page"
-          }
-        ]
-      },
-      {
-        "type": "klaviyo_back_in_stock",
-        "name": "BIS Notification",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "text",
-            "id": "klaviyo_list_id",
-            "label": "Klaviyo List ID",
-            "info": "The Klaviyo list ID to use for back-in-stock notifications."
-          }
-        ]
-      },
-      {
-        "type": "shipping_info",
-        "name": "Shipping Info",
-        "limit": 1, 
-        "settings": [
-          {
-            "type": "text",
-            "id": "shipping_info_text",
-            "label": "Shipping Info Text",
-            "default": "Shipping info goes here."
-          }
-        ]
-      },
-      {
-        "type": "find_retailer",
-        "name": "Find Retailer",
-        "limit": 1, 
-        "settings": [
-          {
-            "type": "url",
-            "id": "find_retailer_link",
-            "label": "Link to Find Retailer"
-          },
-          {
-            "type": "text",
-            "id": "find_retailer_text",
-            "label": "Find Retailer Text",
-            "default": "Find a retailer near you."
-          },
-          {
-            "type": "checkbox",
-            "id": "find_retailer_new_tab",
-            "label": "Open Find Retailer Link in New Tab",
-            "default": false
-          }
-        ]
-      }
-    ],
-    "settings": [
-      {
-        "type": "checkbox",
-        "id": "enable_sticky_info",
-        "default": true,
-        "label": "Enable Sticky Product Info"
-      },
-      {
-        "type": "select",
-        "id": "media_position",
-        "options": [
-          {
-            "value": "left",
-            "label": "Media on Left"
-          },
-          {
-            "value": "right",
-            "label": "Media on Right"
-          }
-        ],
-        "default": "left",
-        "label": "Media Position",
-        "info": "Choose if product media appears on the left or right."
-      },
-      {
-        "type": "checkbox",
-        "id": "hide_variants",
-        "default": false,
-        "label": "Hide Variant Options"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_video_looping",
-        "default": false,
-        "label": "Enable Video Looping"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_breadcrumbs",
-        "default": false,
-        "label": "Show Breadcrumbs"
-      }
-    ]
-  }
-  {% endschema %}
-  
+{
+  "name": "Main Product",
+  "tag": "section",
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "default": "Text",
+          "label": "Text Content"
+        }
+      ]
+    },
+    {
+      "type": "modelsku",
+      "name": "Model / SKU"
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1
+    },
+    {
+      "type": "price",
+      "name": "Price",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_automatic_price",
+          "label": "Show Compare At Price",
+          "default": false,
+          "info": "Display the compare at price if applicable."
+        }
+      ]
+    },
+    {
+      "type": "sku",
+      "name": "SKU",
+      "limit": 1,
+      "settings": []
+    },
+    {
+      "type": "inventory",
+      "name": "Inventory",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "inventory_threshold",
+          "label": "Low Inventory Threshold",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "info": "The inventory quantity to show low stock warnings.",
+          "default": 10
+        },
+        {
+          "type": "checkbox",
+          "id": "show_inventory_quantity",
+          "label": "Show Inventory Quantity",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "quantity_selector",
+      "name": "Quantity Selector",
+      "limit": 1
+    },
+    {
+      "type": "variant_picker",
+      "name": "Variant Picker",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "use_custom_select",
+          "label": "Use Custom Dropdown",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "buy_buttons",
+      "name": "Buy Buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_dynamic_checkout",
+          "default": true,
+          "label": "Show Dynamic Checkout Buttons",
+          "info": "Display accelerated checkout buttons like Apple Pay."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_gift_card_recipient",
+          "default": true,
+          "label": "Enable Gift Card Recipient Fields",
+          "info": "Allow gift cards to be sent to a recipient."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_pickup_availability",
+          "default": false,
+          "label": "Show Local Pickup Availability",
+          "info": "Display pickup availability information."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_quantity_selector",
+          "default": true,
+          "label": "Show Quantity Selector",
+          "info": "Display a quantity selector for the product inline with the ATC button."
+        }
+      ]
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1
+    },
+    {
+      "type": "awards",
+      "name": "Awards",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Pulled from the metafield custom.product_awards"
+        }
+      ]
+    },
+    {
+      "type": "custom_liquid",
+      "name": "Custom Liquid",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "custom_liquid",
+          "label": "Custom Liquid Code"
+        }
+      ]
+    },
+    {
+      "type": "collapsible_tab",
+      "name": "Collapsible Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Tab Heading",
+          "info": "Heading for the collapsible tab.",
+          "label": "Tab Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Tab Content"
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "Tab Content from Page"
+        }
+      ]
+    },
+    {
+      "type": "klaviyo_back_in_stock",
+      "name": "BIS Notification",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "klaviyo_list_id",
+          "label": "Klaviyo List ID",
+          "info": "The Klaviyo list ID to use for back-in-stock notifications."
+        }
+      ]
+    },
+    {
+      "type": "shipping_info",
+      "name": "Shipping Info",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "shipping_info_text",
+          "label": "Shipping Info Text",
+          "default": "Shipping info goes here."
+        }
+      ]
+    },
+    {
+      "type": "find_retailer",
+      "name": "Find Retailer",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "url",
+          "id": "find_retailer_link",
+          "label": "Link to Find Retailer"
+        },
+        {
+          "type": "text",
+          "id": "find_retailer_text",
+          "label": "Find Retailer Text",
+          "default": "Find a retailer near you."
+        },
+        {
+          "type": "checkbox",
+          "id": "find_retailer_new_tab",
+          "label": "Open Find Retailer Link in New Tab",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "pairs_well_with",
+      "name": "Pairs Well With",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "product_list",
+          "id": "products",
+          "label": "Products"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Pairs with"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_info",
+      "default": true,
+      "label": "Enable Sticky Product Info"
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Media on Left"
+        },
+        {
+          "value": "right",
+          "label": "Media on Right"
+        }
+      ],
+      "default": "left",
+      "label": "Media Position",
+      "info": "Choose if product media appears on the left or right."
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_variants",
+      "default": false,
+      "label": "Hide Variant Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video_looping",
+      "default": false,
+      "label": "Enable Video Looping"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "default": false,
+      "label": "Show Breadcrumbs"
+    }
+  ]
+}
+{% endschema %}

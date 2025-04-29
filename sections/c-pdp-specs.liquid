@@ -1,0 +1,49 @@
+<section class='px-pagemargin 2xl:container mt-[26px] lg:mt-[22.5px] pt-[21px]'>
+  {% assign specifications_size = product.metafields.iamota.specification_title | size %}
+  {% if specifications_size > 1 %}
+    {% if section.settings.title != blank %}
+      <h2 class='h4 mb-[10px] lg:mb-[24px]'>{{ section.settings.title }}</h2>
+    {% endif %}
+
+    <table class='w-full'>
+      <tr class='sr-only'>
+        <th scope='col'>Title</th>
+        <th scope='col'>Description</th>
+      </tr>
+      {% for title in product.metafields.iamota.specification_title limit: 10 %}
+        <tr class='even:bg-t-superlight'>
+          <td class='py-[15px] pl-[43px] pr-[15px] w-[225px]'>
+            {{ title }}
+          </td>
+          <td>{{ product.metafields.iamota.specification_description[forloop.index0] }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Product Specifications",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Accordion Title"
+    },
+    {
+      "type": "image_picker",
+      "id": "close_icon",
+      "label": "Tooltip Close Icon"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Specifications"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

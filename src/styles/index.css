@@ -293,7 +293,7 @@
     @apply !flex-col gap-[3.4px];
   }
 
-  .template-product .yotpo-sr-bottom-line-summary {
+  [product-form] .yotpo-sr-bottom-line-summary {
     @apply !flex-row gap-px mb-[8px] lg:mb-[13px];
   }
 

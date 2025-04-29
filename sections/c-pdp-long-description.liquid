@@ -1,0 +1,35 @@
+<section class='px-pagemargin 2xl:container mt-[26px] lg:mt-[22.5px]'>
+  <h2 class='h4 mb-[10px] lg:mb-[24px] border-t border-t-line-break pt-[21px]'>{{ section.settings.title }}</h2>
+
+  {% if section.settings.content != blank %}
+    <div class='rte'>
+      {{ section.settings.content }}
+    </div>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Long Description",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Long Description"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}
