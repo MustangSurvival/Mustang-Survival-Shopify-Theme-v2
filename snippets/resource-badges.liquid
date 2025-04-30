@@ -4,11 +4,12 @@
 
   - product: {Object} Product Liquid object
   - variant: {Object} Variant Liquid object (optional)
+  - collection: {Object} Collection Liquid object (optional)
   - container_class: {String} Classes to add on the badges container (optional)
   - badge_class: {String} Classes to add on the individual badges (optional)
 
   Usage:
-  {% render 'product-badges', product: product, variant: product.variants[0], container_class: 'absolute top-2 left-2 right-2', badge_class: 'font-bold' %}
+  {% render 'resource-badges', product: product, variant: product.variants[0], container_class: 'absolute top-2 left-2 right-2', badge_class: 'font-bold' %}
 {%- endcomment -%}
 
 {%- capture badge_classes -%}
@@ -19,9 +20,16 @@
   assign container_class = container_class | default: ''
   assign badge_class = badge_class | default: ''
   assign resource = product
+  assign resource_type = 'product'
+
+  if collection
+    assign resource = collection
+    assign resource_type = 'collection'
+  endif
 
   if variant and variant.metafields.custom.badges.value.count > 0
     assign resource = variant
+    assign resource_type = 'variant'
   endif
 %}
 {% if resource != blank or settings.show_sold_out_badge or settings.show_sale_badge %}
@@ -48,13 +56,17 @@
       {% endif %}
     {% endfor %}
 
-    {%- if settings.show_sale_badge and product.compare_at_price > product.price and product.available -%}
+    {%- if resource_type != 'collection'
+      and settings.show_sale_badge
+      and product.compare_at_price > product.price
+      and product.available
+    -%}
       <span class='{{ badge_classes }} {{ badge_class }}'>
         {{- 'products.product.on_sale' | t -}}
       </span>
     {%- endif -%}
 
-    {%- if settings.show_sold_out_badge and product.available == false -%}
+    {%- if resource_type != 'collection' and settings.show_sold_out_badge and product.available == false -%}
       <span class='{{ badge_classes }} {{ badge_class }}'>
         {{- 'products.product.sold_out' | t -}}
       </span>

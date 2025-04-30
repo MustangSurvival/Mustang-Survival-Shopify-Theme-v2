@@ -1,0 +1,24 @@
+{% comment %}
+  Renders a target border around an element. `relative` and `group` classes are required on the parent.
+
+  Usage:
+    <div class="relative group">
+      {% render 'border-target' %}
+    </div>
+{% endcomment %}
+
+{% capture common_classes %}
+absolute border-black transition-opacity duration-300 size-[11px]
+{% endcapture %}
+
+{% assign static = static | default: false %}
+
+<div
+  class='absolute inset-0 pointer-events-none z-10 {% unless static %}opacity-0 group-hover:opacity-100 transition-opacity{% endunless %}'
+  aria-hidden='true'
+>
+  <div class='top-0 left-0 border-t-2 border-l-2 {{ common_classes }}'></div>
+  <div class='top-0 right-0 border-t-2 border-r-2 {{ common_classes }}'></div>
+  <div class='bottom-0 left-0 border-b-2 border-l-2 {{ common_classes }}'></div>
+  <div class='bottom-0 right-0 border-b-2 border-r-2 {{ common_classes }}'></div>
+</div>

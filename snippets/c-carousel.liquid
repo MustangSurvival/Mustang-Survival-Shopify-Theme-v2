@@ -1,0 +1,65 @@
+{%- comment -%}swiper-wrapper.liquid{%- endcomment -%}
+{% liquid
+  assign swiper_id = swiper_id | default: section.id
+%}
+
+<div>
+  <swiper-container
+    navigation='true'
+    pagination='
+      {
+        "el": "#swiper-pagination-{{ swiper_id }}",
+        "clickable": true,
+        "bulletClass": "swiper-pagination-bullet",
+        "bulletActiveClass": "swiper-pagination-bullet-active"
+      }
+    '
+    slides-per-view='2'
+    slides-per-group='2'
+    breakpoints='
+      {
+        "768": {
+          "slidesPerView": 2,
+          "slidesPerGroup": 2
+        },
+        "1024": {
+          "slidesPerView": 4,
+          "slidesPerGroup": 4
+        }
+      }
+    '
+    class='flex flex-col overflow-hidden w-full -mr-2 gap-4'
+  >
+    {{ slides }}
+  </swiper-container>
+
+  <div id='swiper-pagination-{{ swiper_id }}' class='flex justify-center gap-[3px] mt-4'></div>
+
+  <style>
+    #swiper-pagination-{{ swiper_id }} .swiper-pagination-bullet {
+      position: relative;
+      padding: 6px 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    #swiper-pagination-{{ swiper_id }} .swiper-pagination-bullet-active {
+      bottom: 1px;
+    }
+
+    #swiper-pagination-{{ swiper_id }} .swiper-pagination-bullet::before {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 1px;
+      border-radius: 0.25rem;
+      background-color: #bfbfbf;
+      margin: 0 auto;
+    }
+
+    #swiper-pagination-{{ swiper_id }} .swiper-pagination-bullet-active::before {
+      background-color: black;
+      height: 2px;
+    }
+  </style>
+</div>

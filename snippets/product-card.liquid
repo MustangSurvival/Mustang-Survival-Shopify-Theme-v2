@@ -114,7 +114,8 @@
 %}
 
 {% if product %}
-  <product-card default-image="{{ product.featured_image | image_url: width: 300 }}" class="w-full">
+  <product-card default-image="{{ product.featured_image | image_url: width: 300 }}" class="w-full relative group">
+    {% render 'border-target' %}
     <{{ wrapper_tag }}
       class='w-full group relative flex flex-col overflow-hidden bg-white {{ class }}'
     >
@@ -144,7 +145,7 @@
             {%- endif -%}
           {%- endif -%}
 
-          {%- render 'product-badges', product: product, container_class: 'absolute top-0 left-0 z-1' -%}
+          {%- render 'resource-badges', product: product, container_class: 'absolute top-0 left-0 z-1' -%}
         </div>
       </a>
 

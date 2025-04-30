@@ -1,0 +1,104 @@
+<div class='container py-[50px]'>
+  <div class='md:flex lg:items-center lg:justify-between'>
+    {%- if section.settings.title != blank -%}
+      <h2 class='{{ section.settings.heading_size }} text-[32px] lg:text-[60px] mx-auto'>
+        {{ section.settings.title }}
+      </h2>
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.description != blank
+    or section.settings.show_description
+    and section.settings.collection.description != empty
+  -%}
+    <div class='text-body rte mt-3 mx-auto text-center'>
+      {%- if section.settings.show_description -%}
+        {{ section.settings.collection.description }}
+      {%- else -%}
+        {{ section.settings.description -}}
+      {%- endif %}
+    </div>
+  {%- endif -%}
+
+  <div class='pt-[45px]'>
+    {% capture slides %}
+    {% for product in section.settings.collection.products, limit: section.settings.products_to_show %}
+      <swiper-slide class='flex-none h-auto justify-center px-2 {{ width_class }}'>
+        {% render 'product-card',
+          product: product,
+          media_aspect_ratio: 'portrait',
+          lazy_load: true,
+          class: 'h-full'
+        %}
+      </swiper-slide>
+    {% endfor %}
+  {% endcapture %}
+    {% render 'c-carousel', slides: slides %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured Collection",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Featured Collection",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Heading 2"
+        },
+        {
+          "value": "h1",
+          "label": "Heading 1"
+        }
+      ],
+      "default": "h2",
+      "label": "Heading Size"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show Description From Collection",
+      "default": false
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 25,
+      "step": 1,
+      "default": 4,
+      "label": "Number of Products to Show"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collection",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
