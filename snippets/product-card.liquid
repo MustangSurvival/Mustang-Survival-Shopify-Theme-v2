@@ -123,7 +123,7 @@
         <div class='{% if ratio %}{{ ratio }}{% else %}aspect-auto{% endif %} bg-gray-200 relative group'>
           {%- render 'image',
             image: featured_image,
-            class: 'h-full w-full object-cover object-center',
+            class: 'flex-none h-full w-full object-cover object-center max-w-[440px] max-h-[330px]',
             sizes: sizes,
             width: 300,
             widths: image_widths,

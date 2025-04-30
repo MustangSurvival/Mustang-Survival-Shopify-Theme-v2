@@ -23,11 +23,13 @@
   <div class='pt-[45px]'>
     {% capture slides %}
     {% for product in section.settings.collection.products, limit: section.settings.products_to_show %}
-      <swiper-slide class='flex-none h-auto justify-center px-2 {{ width_class }}'>
+      <swiper-slide class='flex-none h-auto justify-center px-2'>
         {% render 'product-card',
           product: product,
           media_aspect_ratio: 'portrait',
           lazy_load: true,
+          height: 500,
+          width: 400,
           class: 'h-full'
         %}
       </swiper-slide>
