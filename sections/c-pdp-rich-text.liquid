@@ -1,0 +1,33 @@
+<div class='px-pagemargin 2xl:container mt-[26px] lg:mt-[22.5px]'>
+  <h2 class='h4 mb-[10px] lg:mb-[24px] border-t border-t-line-break pt-[21px]'>{{ section.settings.title }}</h2>
+
+  <div class='rte'>
+    {{ section.settings.rich_text }}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Rich Text",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "rich_text",
+      "label": "Text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich Text"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}
