@@ -1,0 +1,29 @@
+<li>
+  <a class='underline' href='{{ block.settings.cta_button_url }}'>
+    {{- block.settings.title -}}
+  </a>
+</li>
+
+{% schema %}
+{
+  "name": "Resource",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "url",
+      "id": "cta_button_url",
+      "label": "CTA Button URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Resource"
+    }
+  ]
+}
+{% endschema %}

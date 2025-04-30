@@ -308,4 +308,8 @@
       @apply text-t-foreground
     }
   }
+
+  .yotpo-base-layout {
+    @apply !w-full;
+  }
 }

@@ -1,0 +1,76 @@
+<div class='px-pagemargin 2xl:container mt-[38px] lg:mt-[66px]'>
+  <h2 class='h4 mb-[10px] lg:mb-[24px] pt-[21px]'>{{ section.settings.title }}</h2>
+  <div class='grid gap-[13px] lg:gap-[33px] lg:grid-cols-3 auto-rows-fr'>
+    {%- content_for 'blocks' -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Resources",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Resources"
+    }
+  ],
+  "blocks": [{ "type": "_resource-column" }, { "type": "_metafield-column" }],
+  "presets": [
+    {
+      "name": "Product Resources"
+    }
+  ]
+}
+{% endschema %}
+
+{% comment %}
+  {
+    "type": "metafield_resource",
+    "name": "Metafield Resource",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "banner_image",
+        "label": "Banner Image"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+      },
+      {
+        "type": "text",
+        "id": "metafield_namespace",
+        "label": "Metafield Namespace"
+      },
+      {
+        "type": "text",
+        "id": "metafield_key",
+        "label": "Metafield Key"
+      }
+    ]
+  },
+  {
+    "type": "resource",
+    "name": "Resource",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "banner_image",
+        "label": "Banner Image"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+      },
+      {
+        "type": "url",
+        "id": "cta_button_url",
+        "label": "CTA Button URL"
+      }
+    ]
+  }
+{% endcomment %}

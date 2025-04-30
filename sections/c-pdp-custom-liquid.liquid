@@ -1,16 +1,14 @@
 <div class='px-pagemargin 2xl:container mt-[26px] lg:mt-[22.5px]'>
   <h2 class='h4 mb-[10px] lg:mb-[24px] border-t border-t-line-break pt-[21px]'>{{ section.settings.title }}</h2>
 
-  {% if section.settings.content != blank %}
-    <div class='rte'>
-      {{ section.settings.content }}
-    </div>
-  {% endif %}
+  <div class='rte'>
+    {{ section.settings.custom_liquid }}
+  </div>
 </div>
 
 {% schema %}
 {
-  "name": "Long Description",
+  "name": "Custom Liquid",
   "settings": [
     {
       "type": "text",
@@ -19,13 +17,13 @@
     },
     {
       "type": "richtext",
-      "id": "content",
-      "label": "Content"
+      "id": "custom_liquid",
+      "label": "Custom Liquid"
     }
   ],
   "presets": [
     {
-      "name": "Long Description"
+      "name": "Custom Liquid"
     }
   ],
   "enabled_on": {

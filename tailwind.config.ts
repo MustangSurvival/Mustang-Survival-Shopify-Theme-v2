@@ -4,8 +4,8 @@ import type { Config } from 'tailwindcss'
 
 export default {
   content: [
-    './{layout,sections,snippets,templates,src}/**/*.{ts,js,jsx,tsx,json,liquid,css}',
-    '!./{layout,sections,snippets,templates,src}/**/*styleguide.{liquid,css}',
+    './{blocks,layout,sections,snippets,templates,src}/**/*.{ts,js,jsx,tsx,json,liquid,css}',
+    '!./{blocks,layout,sections,snippets,templates,src}/**/*styleguide.{liquid,css}',
   ],
   plugins: [
     require('tailwind-scrollbar'),
@@ -21,7 +21,7 @@ export default {
           Regular: 400,
         },
         Heading: {
-          Regular: 600,
+          Regular: 500,
         },
       },
       fluidTypography: false,
