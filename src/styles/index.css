@@ -312,4 +312,9 @@
   .yotpo-base-layout {
     @apply !w-full;
   }
+
+  swiper-with-media swiper-container::part(button-next),
+  swiper-with-media swiper-container::part(button-prev) {
+    @apply h-[67.6px] w-[36px] py-[24px] px-[12px] box-border text-t-sale-price border-solid border border-t-sale-price bg-p-lightest;
+  }
 }
