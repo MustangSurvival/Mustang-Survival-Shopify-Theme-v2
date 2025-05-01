@@ -1,0 +1,90 @@
+<div class='container py-[50px]'>
+  <div class='md:flex lg:items-center lg:justify-between'>
+    {%- if section.settings.title != blank -%}
+      <h2 class='h2 text-[32px] lg:text-[60px] mx-auto text-center'>
+        {{ section.settings.title }}
+      </h2>
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.description != blank -%}
+    <div class='text-body rte mt-[10px] mb-[20px] mx-auto text-center'>
+      {{ section.settings.description -}}
+    </div>
+  {%- endif -%}
+
+  <div class='flex flex-wrap items-center justify-center gap-[58px] lg:gap-[74px] {% if section.settings.grayscale %}grayscale{% endif %} {% if section.settings.line_break %}border-t border-t-line-break pt-[25px] mt-[25px]{% else %}pt-[45px]{% endif %}'>
+    {% for block in section.blocks %}
+      {% assign image = block.settings.image %}
+      {%- render 'image',
+        image: image,
+        width: 150,
+        class: 'object-contain max-w-[150px]',
+        alt: block.settings.collection.title
+      -%}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Brag Bar",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "We're Featured In",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "checkbox",
+      "id": "line_break",
+      "label": "Add line break",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "grayscale",
+      "label": "Grayscale",
+      "default": true,
+      "info": "Apply grayscale effect to images"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brag",
+      "name": "Brag",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Overrides default collection image if set"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "info": "Overrides alt text if not set on the image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brag Bar",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

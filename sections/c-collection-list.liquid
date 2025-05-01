@@ -1,28 +1,29 @@
 <div class='container py-[50px]'>
   <div class='md:flex lg:items-center lg:justify-between'>
     {%- if section.settings.title != blank -%}
-      <h2 class='{{ section.settings.heading_size }} text-[32px] lg:text-[60px] mx-auto'>
+      <h2 class='{{ section.settings.heading_size }} h2 text-[32px] lg:text-[60px] mx-auto text-center'>
         {{ section.settings.title }}
       </h2>
     {%- endif -%}
   </div>
 
   {%- if section.settings.description != blank -%}
-    <div class='text-body rte mt-3 mx-auto text-center'>
+    <div class='text-body rte mt-[10px] mb-[20px] mx-auto text-center'>
       {{ section.settings.description -}}
     </div>
   {%- endif -%}
 
-  <div class='pt-[45px]'>
+  {%- render '@needs-script', entries: 'collection-list' -%}
+  <collection-list class='pt-[45px]'>
     {% capture slides %}
     {% for block in section.blocks %}
       {% assign image = block.settings.collection.image %}
       {% if block.settings.image %}
         {% assign image = block.settings.image %}
       {% endif %}
-      <swiper-slide class='flex-none h-auto justify-center px-2 peer peer-hover:grayscale'>
+      <swiper-slide class='flex-none h-auto justify-center px-2 grayscale-0 transition-colors'>
         <a class="h-full relative aspect-[3/4] flex items-end justify-center" href="{{ block.settings.collection.url }}">
-          {%- render 'image', image: image, class: 'absolute inset-0 -z-10 h-full object-cover w-full', alt: block.settings.collection.title -%}
+          {%- render 'image', image: image, class: 'absolute inset-0 -z-10 h-full object-cover w-full', alt: block.settings.collection.title, width: 500 -%}
           <p class="text-[18px] text-center font-medium text-p-lightest uppercase p-[17px]">
             {{ block.settings.collection.title }}
           </p>
@@ -31,7 +32,7 @@
     {% endfor %}
   {% endcapture %}
     {% render 'c-carousel', slides: slides %}
-  </div>
+  </collection-list>
 </div>
 
 {% schema %}
@@ -69,6 +70,11 @@
       "type": "richtext",
       "id": "description",
       "label": "Description"
+    },
+    {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "Collections"
     }
   ],
   "blocks": [
