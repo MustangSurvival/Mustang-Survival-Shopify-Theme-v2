@@ -15,7 +15,10 @@
   <div
     class='container z-20 grid items-center w-full h-full grid-cols-1 py-pagemargin'
   >
-    <div class='flex flex-col items-center xl:items-start gap-y-[14px] text-center xl:text-left px-[10px] xl:px-0 mx-[15px] my-[10px] xl:mx-[100px]'>
+    <div
+      class='z-10 flex flex-col items-center xl:items-start gap-y-[14px] text-center xl:text-left mx-[15px] my-[10px] xl:mx-[100px] [&>*]:last-child:mb-0 [&>*]:first-child:mt-0 {% if section.settings.content_background_color != blank %}p-[10px] lg:p-[20px]{% endif %}'
+      style='background-color: {{ section.settings.content_background_color }};'
+    >
       {%- for block in section.blocks -%}
         {% case block.type %}
           {%- when 'heading' -%}
@@ -109,7 +112,10 @@
     {% endif %}
 
     <!-- Second image (desktop only if layout is text_last) -->
-    {% if section.settings.second_image != blank or section.settings.background_color != blank and section.settings.layout == 'text_last'  %}
+    {% if section.settings.second_image != blank
+      or section.settings.background_color != blank
+      and section.settings.layout == 'text_last'
+    %}
       <div
         class='relative hidden xl:aspect-square max-w-none xl:block'
         style='background-color: {{ section.settings.background_color }};'
@@ -139,7 +145,10 @@
     {% endif %}
 
     <!-- Second Image (mobile) -->
-    {% if section.settings.second_mobile_image != blank or section.settings.background_color != blank and section.settings.layout == 'text_last' %}
+    {% if section.settings.second_mobile_image != blank
+      or section.settings.background_color != blank
+      and section.settings.layout == 'text_last'
+    %}
       <div
         class='relative max-w-none xl:hidden {% if section.settings.layout == 'text_first' %}aspect-square{% endif %}'
         style='background-color: {{ section.settings.background_color }};'
@@ -200,6 +209,13 @@
       "label": "Background color",
       "default": "#ffffff",
       "info": "This color will be used as a fallback for the image"
+    },
+    {
+      "type": "color",
+      "id": "content_background_color",
+      "label": "Content background color",
+      "default": "#ffffff",
+      "info": "This color be applied as a block around the text content"
     },
     {
       "type": "checkbox",
