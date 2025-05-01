@@ -3,9 +3,14 @@
   assign swiper_id = swiper_id | default: section.id
 %}
 
-<div>
+<div class="relative">
   <swiper-container
-    navigation='true'
+    navigation='
+      {
+        "nextEl": "#swiper-button-next-{{ swiper_id }}",
+        "prevEl": "#swiper-button-prev-{{ swiper_id }}"
+      }
+    '
     pagination='
       {
         "el": "#swiper-pagination-{{ swiper_id }}",
@@ -33,7 +38,18 @@
     {{ slides }}
   </swiper-container>
 
-  <div id='swiper-pagination-{{ swiper_id }}' class='flex justify-center gap-[3px] mt-4'></div>
+  <div class="hidden lg:flex justify-between items-center absolute top-1/2 w-[calc(100%_+_86px)] -left-[36px] right-0 z-10 transform -translate-y-1/2">
+    <button id='swiper-button-prev-{{ swiper_id }}' class='p-2'>
+      {%- render 'icon' with 'c-icon-caret', size: 10, class: '-rotate-90 h-[12.5px] w-[25px]' -%}
+    </button>
+    <button id='swiper-button-next-{{ swiper_id }}' class='p-2'>
+      {%- render 'icon' with 'c-icon-caret', size: 12, class: 'rotate-90 h-[12.5px] w-[25px]' -%}
+    </button>
+  </div>
+
+  <div class='flex justify-center items-center mt-4'>
+    <div id='swiper-pagination-{{ swiper_id }}' class='flex justify-center gap-[3px]'></div>
+  </div>
 
   <style>
     #swiper-pagination-{{ swiper_id }} .swiper-pagination-bullet {
