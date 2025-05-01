@@ -12,7 +12,9 @@
 {% endcapture %}
 
 {% capture content %}
-  <div class='container z-20 grid items-center w-full h-full grid-cols-1 py-pagemargin'>
+  <div
+    class='container z-20 grid items-center w-full h-full grid-cols-1 py-pagemargin'
+  >
     <div class='flex flex-col items-center xl:items-start gap-y-[14px] text-center xl:text-left px-[10px] xl:px-0 mx-[15px] my-[10px] xl:mx-[100px]'>
       {%- for block in section.blocks -%}
         {% case block.type %}
@@ -48,21 +50,26 @@
 <div class='mx-auto xl:mx-0 text-p-lightest'>
   <div class='flex flex-col xl:grid xl:grid-cols-2'>
     <!-- Desktop Image -->
-    {% if section.settings.image != blank %}
-      <div class='relative hidden xl:aspect-square max-w-none xl:block'>
+    {% if section.settings.image != blank or section.settings.background_color != blank %}
+      <div
+        class='relative hidden xl:aspect-square max-w-none xl:block'
+        style='background-color: {{ section.settings.background_color }};'
+      >
         {% capture sizes %}(min-width: 1100px) 100vw, (min-width: 750px) 50vw{% endcapture %}
         {% assign preload = true %}
         {% if section.index > 2 %}
           {% assign preload = false %}
         {% endif %}
-        {% render 'image',
-          image: section.settings.image,
-          sizes: sizes,
-          widths: '600, 900, 1100, 1440, 2180',
-          preload: preload,
-          class: 'w-full aspect-square absolute inset-0 -z-10',
-          fetchpriority: fetch_priority
-        %}
+        {% if section.settings.image != blank %}
+          {% render 'image',
+            image: section.settings.image,
+            sizes: sizes,
+            widths: '600, 900, 1100, 1440, 2180',
+            preload: preload,
+            class: 'w-full aspect-square absolute inset-0 -z-0',
+            fetchpriority: fetch_priority
+          %}
+        {% endif %}
 
         {{ image_overlay }}
 
@@ -73,20 +80,25 @@
     {% endif %}
 
     <!-- Mobile Image -->
-    {% if section.settings.mobile_image != blank %}
-      <div class='relative max-w-none xl:hidden {% if section.settings.layout != 'text_first' %}aspect-square{% endif %}'>
+    {% if section.settings.mobile_image != blank or section.settings.background_color != blank %}
+      <div
+        class='relative max-w-none xl:hidden {% if section.settings.layout != 'text_first' %}aspect-square{% endif %}'
+        style='background-color: {{ section.settings.background_color }};'
+      >
         {% assign preload = true %}
         {% if section.index > 2 %}
           {% assign preload = false %}
         {% endif %}
-        {% render 'image',
-          image: section.settings.mobile_image,
-          sizes: '100vw',
-          widths: '400, 600, 750',
-          preload: preload,
-          class: 'w-full h-full absolute inset-0 -z-10',
-          fetchpriority: fetch_priority
-        %}
+        {% if section.settings.mobile_image != blank %}
+          {% render 'image',
+            image: section.settings.mobile_image,
+            sizes: '100vw',
+            widths: '400, 600, 750',
+            preload: preload,
+            class: 'w-full h-full absolute inset-0 -z-0',
+            fetchpriority: fetch_priority
+          %}
+        {% endif %}
 
         {{ image_overlay }}
 
@@ -97,21 +109,26 @@
     {% endif %}
 
     <!-- Second image (desktop only if layout is text_last) -->
-    {% if section.settings.second_image != blank %}
-      <div class='relative hidden xl:aspect-square max-w-none xl:block'>
+    {% if section.settings.second_image != blank or section.settings.background_color != blank and section.settings.layout == 'text_last'  %}
+      <div
+        class='relative hidden xl:aspect-square max-w-none xl:block'
+        style='background-color: {{ section.settings.background_color }};'
+      >
         {% capture sizes %}(min-width: 1100px) 100vw, (min-width: 750px) 50vw{% endcapture %}
         {% assign preload = true %}
         {% if section.index > 2 %}
           {% assign preload = false %}
         {% endif %}
-        {% render 'image',
-          image: section.settings.second_image,
-          sizes: sizes,
-          widths: '600, 900, 1100, 1440, 2180',
-          preload: preload,
-          class: 'w-full aspect-square absolute inset-0 -z-10',
-          fetchpriority: fetch_priority
-        %}
+        {% if section.settings.second_image != blank %}
+          {% render 'image',
+            image: section.settings.second_image,
+            sizes: sizes,
+            widths: '600, 900, 1100, 1440, 2180',
+            preload: preload,
+            class: 'w-full aspect-square absolute inset-0 -z-0',
+            fetchpriority: fetch_priority
+          %}
+        {% endif %}
 
         {{ image_overlay }}
 
@@ -122,20 +139,25 @@
     {% endif %}
 
     <!-- Second Image (mobile) -->
-    {% if section.settings.second_mobile_image != blank %}
-      <div class='relative max-w-none xl:hidden {% if section.settings.layout == 'text_first' %}aspect-square{% endif %}'>
+    {% if section.settings.second_mobile_image != blank or section.settings.background_color != blank and section.settings.layout == 'text_last' %}
+      <div
+        class='relative max-w-none xl:hidden {% if section.settings.layout == 'text_first' %}aspect-square{% endif %}'
+        style='background-color: {{ section.settings.background_color }};'
+      >
         {% assign preload = true %}
         {% if section.index > 2 %}
           {% assign preload = false %}
         {% endif %}
-        {% render 'image',
-          image: section.settings.second_mobile_image,
-          sizes: '100vw',
-          widths: '400, 600, 750',
-          preload: preload,
-          class: 'w-full h-full absolute inset-0 -z-10',
-          fetchpriority: fetch_priority
-        %}
+        {% if section.settings.second_mobile_image != blank %}
+          {% render 'image',
+            image: section.settings.second_mobile_image,
+            sizes: '100vw',
+            widths: '400, 600, 750',
+            preload: preload,
+            class: 'w-full h-full absolute inset-0 -z-0',
+            fetchpriority: fetch_priority
+          %}
+        {% endif %}
 
         {{ image_overlay }}
 
@@ -171,6 +193,13 @@
       "type": "image_picker",
       "id": "second_mobile_image",
       "label": "Second Mobile Image"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff",
+      "info": "This color will be used as a fallback for the image"
     },
     {
       "type": "checkbox",
