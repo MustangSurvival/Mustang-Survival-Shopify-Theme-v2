@@ -66,7 +66,7 @@
         >
           <input
             class="group {{ icon_class }} px-[10px] py-[5x] text-base md:text-body block w-full border appearance-none text-t-foreground disabled:text-t-border bg-gray-50 bg-t-background border-t-foreground-secondary disabled:border-t-border focus:outline-none focus:ring-0 focus:border-t-foreground peer group-[[error]]:ring-u-error group-[[error]]:border-[transparent] group-[[error]]:ring-2"
-            placeholder=" "
+            placeholder="{{ placeholder | default: ' ' }}"
             type="{{- type | default: 'text' -}}"
             id="{{ id }}"
             name="{{ name }}"

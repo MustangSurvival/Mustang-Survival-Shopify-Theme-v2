@@ -52,7 +52,7 @@
 
   {% comment %} -- Column 3: Icons & Mobile Toggle -- {% endcomment %}
   <div class='flex items-center justify-end gap-[25px] md:gap-[30px]'>
-    {%- render 'header-search' -%}
+    {%- render 'header-search', mobile: true -%}
 
     {%- if shop.customer_accounts_enabled -%}
       <a

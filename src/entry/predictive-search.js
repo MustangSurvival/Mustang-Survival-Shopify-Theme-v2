@@ -30,6 +30,11 @@ export class PredictiveSearch extends BaseElementWithoutShadowDOM {
     this.addEventListener('focusout', this.onFocusOut.bind(this))
     this.addEventListener('keyup', this.onKeyup.bind(this))
     this.addEventListener('keydown', this.onKeydown.bind(this))
+
+    this.predictiveSearchResults.addEventListener(
+      'click',
+      this.onItemClick.bind(this)
+    )
   }
 
   get query() {
@@ -46,7 +51,6 @@ export class PredictiveSearch extends BaseElementWithoutShadowDOM {
 
     // Update the term asap, don't wait for the predictive search query to finish loading
     this.updateSearchForTerm(this.searchTerm, newSearchTerm)
-
     this.searchTerm = newSearchTerm
 
     if (!this.searchTerm.length) {
@@ -57,9 +61,21 @@ export class PredictiveSearch extends BaseElementWithoutShadowDOM {
     this.getSearchResults(this.searchTerm)
   }
 
+  onItemClick(event) {
+    const item = event.target.closest('[data-predictive-search-item]')
+    if (!item) return
+
+    const queryValue = item.getAttribute('data-predictive-search-query')
+    if (queryValue) {
+      // Update input and trigger search
+      this.input.value = queryValue
+      this.searchTerm = queryValue
+      this.getSearchResults(queryValue)
+    }
+  }
+
   onFormSubmit(event) {
-    if (!this.query.length || this.querySelector('[aria-selected="true"] a'))
-      event.preventDefault()
+    event.preventDefault()
   }
 
   onFocus() {

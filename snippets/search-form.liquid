@@ -1,3 +1,5 @@
+{% assign enable_search_page = false %}
+
 {%- liquid
   assign input_placeholder = 'general.search.search' | t
 -%}
@@ -10,7 +12,7 @@
     data-form='{{ input_id }}'
     class='grow'
   >
-    <div class='flex gap-2 items-center lg:max-w-[80%] mx-auto' autofocus>
+    <div class='container lg:min-w-[600px] p-md flex items-center gap-[15px]' autofocus>
       {% assign escaped_search_terms = search.terms | escape %}
 
       {% capture input_attributes %}
@@ -27,6 +29,7 @@
       {% endcapture %}
 
       {%- render 'form-field',
+        placeholder: input_placeholder,
         kind: 'input',
         name: 'q',
         id: input_id,
@@ -35,13 +38,16 @@
         value: escaped_search_terms,
         autocomplete: 'off',
         attributes: input_attributes,
-        wrapper_class: 'w-full'
+        wrapper_class: 'w-full',
+        icon_class: 'w-full py-[10px] text-sm border-b rounded-none bg-[transparent] focus-visible:ring-u-focus focus-visible:ring-2 placeholder:text-t-brand-secondary-contrast'
       -%}
 
-      <button data-search-submit type='submit' class='flex align-middle'>
-        <span>{% render 'icon' with 'icon-search', size: 18 %}</span>
-        <span class='sr-only'>{{ 'general.search.search' | t }}</span>
-      </button>
+      {% if enable_search_page %}
+        <button data-search-submit type='submit' class='flex align-middle'>
+          <span>{% render 'icon' with 'icon-search', size: 18 %}</span>
+          <span class='sr-only'>{{ 'general.search.search' | t }}</span>
+        </button>
+      {% endif %}
     </div>
 
     <div class='overflow-y-auto' tabindex='-1' data-predictive-search>
