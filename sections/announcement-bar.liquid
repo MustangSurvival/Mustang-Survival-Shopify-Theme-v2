@@ -23,67 +23,75 @@
 {% endcapture %}
 
 <div
-  class="flex items-center justify-center gap-[40px]"
-  style="background-color: {{ section.settings.background_color | default: '#f7f7f7' }}; color: {{ section.settings.text_color | default: '#000000' }};"
+  class='gap-[40px]'
+  style='background-color: {{ section.settings.background_color | default: '#f7f7f7' }}; color: {{ section.settings.text_color | default: '#000000' }};'
 >
-  {% if section.blocks.size > 0 %}
-    {% if is_slider %}
-        <div class="relative flex-shrink-0 lg:max-w-[50%] w-full">
+  <div class='px-pagemargin 2xl:container flex items-center justify-between'>
+    {% if section.blocks.size > 0 %}
+      {% if is_slider %}
+        <div class='relative flex-shrink-0 lg:max-w-[50%] w-full'>
           <swiper-container
-        slides-per-view='1'
-        navigation-next-el='.swiper-button-next--announcement'
-        navigation-prev-el='.swiper-button-prev--announcement'
-        auto-height='true'
-        loop='true'
-        role='region'
-        aria-label='{{ 'sections.header.announcement' | t }}'
-        {% if delay > 1 %}
-          autoplay-delay='{{ delay }}'
-        {% endif %}
-        class='announcement-bar flex whitespace-nowrap overflow-clip w-full'
-      >
-    {% else %}
-      <div class='announcement-bar'>
-    {% endif %}
-    {%- for block in section.blocks -%}
-      {%- if block.settings.text == blank -%}
-        {% continue %}
-      {%- endif -%}
+            slides-per-view='1'
+            navigation-next-el='.swiper-button-next--announcement'
+            navigation-prev-el='.swiper-button-prev--announcement'
+            auto-height='true'
+            loop='true'
+            role='region'
+            aria-label='{{ 'sections.header.announcement' | t }}'
+            {% if delay > 1 %}
+              autoplay-delay='{{ delay }}'
+            {% endif %}
+            class='announcement-bar flex whitespace-nowrap overflow-clip w-full'
+          >
+      {% else %}
+        <div class='announcement-bar'>
+      {% endif %}
+      {%- for block in section.blocks -%}
+        {%- if block.settings.text == blank -%}
+          {% continue %}
+        {%- endif -%}
 
-      {%- assign wrapper_tag = 'div' -%}
-      {%- if is_slider -%}
-        {%- assign wrapper_tag = 'swiper-slide' -%}
-      {%- endif -%}
-      <{{ wrapper_tag }}
-        class='flex flex-grow flex-shrink-0 flex-wrap w-full gap-x-4 items-center justify-center h-auto text-center py-1 {% if is_slider %}px-12{% else %}px-2 md:px-12{% endif %}'
-        {{ block.shopify_attributes }}
-      >
-        <p style="color: {{ section.settings.text_color | default: '#000000' }};">
-          {{ block.settings.text }}
-        </p>
-      </{{ wrapper_tag }}>
-    {%- endfor -%}
-    {% if is_slider %}
-      </swiper-container>
-      <button
-        class='swiper-button-prev swiper-button-prev--announcement left-0 -rotate-90 {{ swiper_button_styles }}'
-        aria-label='{{ 'general.slider.next_slide' | t }}'
-      >
-        <svg-icon src='c-icon-caret' inlineStyles='color: {{ section.settings.text_color | default: '#000000' }};'></svg-icon>
-      </button>
-      <button
-        class='swiper-button-next swiper-button-next--announcement right-0 rotate-90 {{ swiper_button_styles }}'
-        aria-label='{{ 'general.slider.previous_slide' | t }}'
-      >
-        <svg-icon src='c-icon-caret' inlineStyles='color: {{ section.settings.text_color | default: '#000000' }};'></svg-icon>
-      </button>
-      </div>
-    {% else %}
-      </div>
+        {%- assign wrapper_tag = 'div' -%}
+        {%- if is_slider -%}
+          {%- assign wrapper_tag = 'swiper-slide' -%}
+        {%- endif -%}
+        <{{ wrapper_tag }}
+          class='flex flex-grow flex-shrink-0 flex-wrap w-full gap-x-4 items-center justify-center h-auto text-center py-1 {% if is_slider %}px-12{% else %}px-2 md:px-12{% endif %}'
+          {{ block.shopify_attributes }}
+        >
+          <p style='color: {{ section.settings.text_color | default: '#000000' }};'>
+            {{ block.settings.text }}
+          </p>
+        </{{ wrapper_tag }}>
+      {%- endfor -%}
+      {% if is_slider %}
+        </swiper-container>
+        <button
+          class='swiper-button-prev swiper-button-prev--announcement left-0 -rotate-90 {{ swiper_button_styles }}'
+          aria-label='{{ 'general.slider.next_slide' | t }}'
+        >
+          <svg-icon
+            src='c-icon-caret'
+            inlineStyles='color: {{ section.settings.text_color | default: '#000000' }};'
+          ></svg-icon>
+        </button>
+        <button
+          class='swiper-button-next swiper-button-next--announcement right-0 rotate-90 {{ swiper_button_styles }}'
+          aria-label='{{ 'general.slider.previous_slide' | t }}'
+        >
+          <svg-icon
+            src='c-icon-caret'
+            inlineStyles='color: {{ section.settings.text_color | default: '#000000' }};'
+          ></svg-icon>
+        </button>
+        </div>
+      {% else %}
+        </div>
+      {% endif %}
     {% endif %}
-  {% endif %}
 
-  {{ menu_i18n }}
+    {{ menu_i18n }}
+  </div>
 </div>
 
 {% schema %}
