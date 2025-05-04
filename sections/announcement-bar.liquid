@@ -25,6 +25,7 @@
 <div
   class='gap-[40px]'
   style='background-color: {{ section.settings.background_color | default: '#f7f7f7' }}; color: {{ section.settings.text_color | default: '#000000' }};'
+  announcement-bar
 >
   <div class='px-pagemargin 2xl:container flex items-center justify-between'>
     {% if section.blocks.size > 0 %}
@@ -42,6 +43,7 @@
               autoplay-delay='{{ delay }}'
             {% endif %}
             class='announcement-bar flex whitespace-nowrap overflow-clip w-full'
+            navigation="false"
           >
       {% else %}
         <div class='announcement-bar'>
@@ -56,7 +58,7 @@
           {%- assign wrapper_tag = 'swiper-slide' -%}
         {%- endif -%}
         <{{ wrapper_tag }}
-          class='flex flex-grow flex-shrink-0 flex-wrap w-full gap-x-4 items-center justify-center h-auto text-center py-1 {% if is_slider %}px-12{% else %}px-2 md:px-12{% endif %}'
+          class='flex flex-grow flex-shrink-0 flex-wrap w-full gap-x-4 items-center h-auto py-1 text-center lg:text-left justify-center lg:justify-start'
           {{ block.shopify_attributes }}
         >
           <p style='color: {{ section.settings.text_color | default: '#000000' }};'>
