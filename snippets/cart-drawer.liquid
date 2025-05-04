@@ -11,7 +11,7 @@
     class='grid grid-cols-1 place-items-start px-sm py-xs'
   >
     {%- if cart == empty -%}
-      <h4>Empty Cart Drawer</h4>
+      <h4 class="text-body">{{ 'general.cart.empty' | t }}</h4>
     {%- else -%}
       <div class='grid grid-cols-[100px_1fr_auto] gap-y-sm w-full'>
         {%- liquid
@@ -21,7 +21,7 @@
     {%- endif -%}
   </form>
 
-  <div class='sticky bottom-0 bg-p-lightest p-sm drop-shadow grid grid-cols-1 gap-y-sm'>
+  <div class='sticky bottom-0 bg-p-lightest p-sm drop-shadow grid grid-cols-1 gap-y-[10px]'>
     {%- render 'cart-totals-content' -%}
     <button
       form='cart'

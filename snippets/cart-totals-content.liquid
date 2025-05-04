@@ -1,4 +1,4 @@
-<div class='grid grid-cols-1 gap-y-xs'>
+<div class='grid grid-cols-1 gap-y-[10px]'>
   {%- if cart.cart_level_discount_applications.size > 0 -%}
     <ul class='grid grid-cols-1' role='list' aria-label='{{ 'customer.order.discount' | t }}'>
       {%- for discount in cart.cart_level_discount_applications -%}
@@ -12,8 +12,8 @@
   {%- endif -%}
 
   <div class='grid grid-cols-2 gap-sm' role='status'>
-    <h2 class='utility font-semibold'>{{ 'sections.cart.estimated_total' | t }}</h2>
-    <p class='utility text-right'>{{ cart.total_price | money_with_currency }}</p>
+    <h2 class='text-body font-semibold'>{{ 'sections.cart.estimated_total' | t }}</h2>
+    <p class='text-right'>{{ cart.total_price | money_with_currency }}</p>
   </div>
 
   <div>

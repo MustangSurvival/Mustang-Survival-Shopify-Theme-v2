@@ -181,7 +181,7 @@
       "boundVariables": {}
     },
     "Utility/Desktop": {
-      "fontSize": 20,
+      "fontSize": 16,
       "fontName": { "family": "Gotham Narrow", "style": "Bold" },
       "letterSpacing": { "unit": "PERCENT", "value": 5 },
       "lineHeight": { "unit": "PERCENT", "value": 120 },
@@ -192,7 +192,7 @@
       "boundVariables": {}
     },
     "Utility/Mobile": {
-      "fontSize": 20,
+      "fontSize": 16,
       "fontName": { "family": "Gotham Narrow", "style": "Bold" },
       "letterSpacing": { "unit": "PERCENT", "value": 5 },
       "lineHeight": { "unit": "PERCENT", "value": 120 },
