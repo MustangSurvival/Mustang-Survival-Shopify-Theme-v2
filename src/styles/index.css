@@ -322,4 +322,11 @@
   [announcement-bar] .swiper-button-next {
     @apply hidden;
   }
+
+  .scaling-text {
+    font-size: clamp(1rem, 10vw, 10rem);
+    width: 100%;
+    white-space: nowrap;
+    text-align: center;
+  }
 }
