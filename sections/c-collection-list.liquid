@@ -23,6 +23,7 @@
       {% endif %}
       <swiper-slide class='flex-none h-auto justify-center px-2 grayscale-0 transition-colors'>
         <a class="h-full relative aspect-[3/4] flex items-end justify-center" href="{{ block.settings.collection.url }}">
+          {%- render 'resource-badges', collection: block.settings.collection, container_class: 'absolute top-0 left-0 z-1' -%}
           {%- render 'image', image: image, class: 'absolute inset-0 -z-10 h-full object-cover w-full', alt: block.settings.collection.title, width: 500 -%}
           <p class="text-[18px] text-center font-medium text-p-lightest uppercase p-[17px]">
             {{ block.settings.collection.title }}

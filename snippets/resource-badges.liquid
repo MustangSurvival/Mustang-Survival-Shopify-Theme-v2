@@ -13,7 +13,7 @@
 {%- endcomment -%}
 
 {%- capture badge_classes -%}
-!bg-p-background px-sm border-[2px] border-p-foreground bg-p-lightest flex justify-center items-center caption uppercase w-full text-[10px] lg:text-[12px] font-medium letter-spacing-[1px]
+w-[113px] text-ellipsis overflow-hidden whitespace-pre px-[3px] !bg-p-background border-[2px] border-p-foreground bg-p-lightest text-center caption uppercase w-full text-[10px] lg:text-[12px] font-medium letter-spacing-[1px]
 {%- endcapture -%}
 
 {% liquid
@@ -48,7 +48,7 @@
           {% endif %}
         '
       >
-        {{ badge.text }}
+        {{- badge.text | strip -}}
       </span>
 
       {% if settings.show_single_custom_badge %}
