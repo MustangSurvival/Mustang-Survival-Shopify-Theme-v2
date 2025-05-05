@@ -7,7 +7,7 @@
 {% endcomment %}
 
 <nav class='flex items-center justify-center gap-md h-full' role='navigation' aria-label='Main navigation'>
-  <ul class='list-none p-0 m-0 flex gap-[20px] items-center h-full'>
+  <ul class='list-none p-0 m-0 flex items-center h-full'>
     {%- comment %} Added items-center for separator alignment {%- endcomment %}
     {%- for block in blocks -%}
       {%- case block.type -%}
@@ -23,7 +23,7 @@
             {%- comment %} Added relative positioning back {%- endcomment %}
             <a
               href='{{ top_link_url }}'
-              class='inline-flex items-center gap-2xs group-hover:underline h-full py-[11px] text-heading-6 text-[23px]'
+              class='inline-flex items-center gap-2xs group-hover:underline h-full py-[11px] text-heading-6 text-[23px] px-[20px]'
             >
               {{ block.settings.top_label | escape }}
               {%- comment -%}
@@ -137,7 +137,7 @@
 
         {%- when 'separator' -%}
           {% comment %} --- Render Separator --- {% endcomment %}
-          <li class='list-none flex items-center h-full' role='separator' aria-hidden='true'>
+          <li class='list-none flex items-center h-full py-[20px]' role='separator' aria-hidden='true'>
             <div class='h-6 w-px bg-t-line-break'></div>
           </li>
       {%- endcase -%}
