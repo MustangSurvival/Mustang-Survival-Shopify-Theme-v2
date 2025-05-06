@@ -23,7 +23,7 @@
   >
     {% for product in products limit: limit %}
       <swiper-slide class='flex-none h-auto justify-center px-2 {{ width_class }}'>
-        {% render 'product-card', product: product, media_aspect_ratio: 'portrait', lazy_load: true, class: 'h-full' %}
+        {% render 'product-card', product: product, media_aspect_ratio: 'square', lazy_load: true, class: 'h-full' %}
       </swiper-slide>
     {% endfor %}
   </swiper-container>

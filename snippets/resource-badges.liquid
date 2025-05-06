@@ -33,17 +33,17 @@ w-[113px] text-ellipsis overflow-hidden whitespace-pre px-[3px] !bg-p-background
   endif
 %}
 {% if resource != blank or settings.show_sold_out_badge or settings.show_sale_badge %}
-  <div class='flex flex-col {{ container_class }}'>
+  <div class='flex flex-col {{ container_class }} z-10 w-[113px]'>
     {% for badge in resource.metafields.custom.badges.value %}
       <span
         class='{{ badge_classes }} {{ badge_class }}'
         style='
           {% if badge.text_color %}color: {{ badge.text_color | default: '#fff' }};{% endif %}
           {% if badge.solid %}
-            background-color: {{ badge.background_color | default: '#000' }} !important;
-            border-color: {{ badge.background_color | default: '#000' }} !important;
+            background-color: {{ badge.background_color }} !important;
+            border-color: {{ badge.background_color }} !important;
           {% else %}
-            border-color: {{ badge.background_color | default: '#000' }} !important;
+            border-color: {{ badge.background_color }} !important;
             background-color: white !important;
           {% endif %}
         '
