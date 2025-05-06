@@ -33,12 +33,10 @@ export class ComponentProductCard extends LitElement {
   _onFormChange(event) {
     const target = event.target
 
-    console.log({ event })
     if (target.tagName === 'INPUT' && target.closest('form[id$="-swatches"]')) {
       const selected = target.closest('li[data-option-value]')
       const image = selected?.getAttribute('data-variant-image')
 
-      console.log({ selected, image })
       if (image) {
         this._updateImage(image)
       } else {

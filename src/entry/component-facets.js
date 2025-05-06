@@ -44,7 +44,22 @@ export class FacetFiltersForm extends BaseElementWithoutShadowDOM {
 
     this.$htmlUpdateUtility.addPostProcessCallback(() => {
       this.loading = false
+      this.restoreCheckboxState()
     })
+
+    this.restoreCheckboxState()
+
+    const urlParams = new URLSearchParams(window.location.search)
+    if (
+      !urlParams.has('filter.v.price.gte') &&
+      !urlParams.has('filter.v.price.lte')
+    ) {
+      this.querySelectorAll("input[type='checkbox'][data-price-min]").forEach(
+        (checkbox) => {
+          checkbox.checked = false
+        }
+      )
+    }
   }
 
   updateURLHash(searchParams) {
@@ -96,8 +111,91 @@ export class FacetFiltersForm extends BaseElementWithoutShadowDOM {
       })
   }
 
+  updatePriceInputsFromCheckboxes() {
+    const checkedCheckboxes = Array.from(
+      this.querySelectorAll("input[type='checkbox'][data-price-min]:checked")
+    )
+    const fromInput = this.querySelector("input[id$='GTE']")
+    const toInput = this.querySelector("input[id$='LTE']")
+
+    if (!fromInput || !toInput) return
+
+    if (checkedCheckboxes.length === 0) {
+      fromInput.value = 0
+      const maxPrice =
+        fromInput.getAttribute('data-max') ||
+        toInput.getAttribute('data-max') ||
+        ''
+      toInput.value = maxPrice
+      return
+    }
+
+    let minVal = Infinity
+    let maxVal = -Infinity
+
+    checkedCheckboxes.forEach((checkbox) => {
+      const cbMin = Number(checkbox.getAttribute('data-price-min'))
+      const cbMax = Number(checkbox.getAttribute('data-price-max'))
+      if (cbMin < minVal) minVal = cbMin
+      if (cbMax > maxVal) maxVal = cbMax
+    })
+
+    fromInput.value = minVal
+    toInput.value = maxVal
+  }
+
+  restoreCheckboxState() {
+    const fromInput = this.querySelector("input[id$='GTE']")
+    const toInput = this.querySelector("input[id$='LTE']")
+    if (!fromInput || !toInput) return
+
+    const parseSanitizedValue = (value) => parseFloat(value.replace(/,/g, ''))
+    const currentFrom = parseSanitizedValue(fromInput.value)
+    const currentTo = parseSanitizedValue(toInput.value)
+
+    const checkboxes = this.querySelectorAll(
+      "input[type='checkbox'][data-price-min]"
+    )
+
+    if (isNaN(currentFrom) || isNaN(currentTo)) {
+      checkboxes.forEach((checkbox) => (checkbox.checked = false))
+      return
+    }
+
+    const defaultMax = parseFloat(
+      fromInput.getAttribute('data-max') ||
+        toInput.getAttribute('data-max') ||
+        '0'
+    )
+    const urlParams = new URLSearchParams(window.location.search)
+    const hasPriceFilter =
+      urlParams.has('filter.v.price.gte') || urlParams.has('filter.v.price.lte')
+
+    console.log({ currentFrom, currentTo, defaultMax, hasPriceFilter })
+
+    if (!hasPriceFilter && currentFrom === 0 && currentTo === defaultMax) {
+      checkboxes.forEach((checkbox) => (checkbox.checked = false))
+      return
+    }
+
+    if (hasPriceFilter && currentFrom === 0 && currentTo >= defaultMax) {
+      checkboxes.forEach((checkbox) => (checkbox.checked = true))
+      return
+    }
+
+    checkboxes.forEach((checkbox) => {
+      const cbMin = Number(checkbox.getAttribute('data-price-min'))
+      const cbMax = Number(checkbox.getAttribute('data-price-max'))
+      checkbox.checked = cbMin >= currentFrom && cbMax <= currentTo
+    })
+  }
+
   onChangeHandler(event) {
     event.preventDefault()
+
+    if (event.target.matches("input[type='checkbox'][data-price-min]")) {
+      this.updatePriceInputsFromCheckboxes()
+    }
 
     this.onChange(this.createSearchParams(this.facetForm))
   }

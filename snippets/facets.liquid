@@ -137,11 +137,6 @@
                 id='FacetMobile-{{ forloop.index }}'
                 class='pt-[20px]'
               >
-                {%- assign max_price_amount = filter.range_max | money | strip_html | escape -%}
-                <p class='pb-4'>
-                  {{ 'sections.collection_template.facets.max_price' | t: price: max_price_amount }}
-                </p>
-
                 {% render 'price-facet', filter: filter, id_prefix: 'Mobile-Filter-' %}
               </div>
             </details>

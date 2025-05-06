@@ -1,10 +1,34 @@
-<div class='flex gap-2 items-center'>
+{%- assign price_ranges = 'Under $50|0|50/$50 to $250|50|250/$250 to $750|250|750/Over $750|750|9999'
+  | split: '/'
+-%}
+  <ul class="list-unstyled space-y-[10px] pb-[25px] pt-[10px] pl-[10px]">
+    {%- for range in price_ranges -%}
+      {%- liquid
+        assign range_parts = range | split: '|'
+        assign range_name = range_parts[0]
+        assign range_min = range_parts[1]
+        assign range_max = range_parts[2]
+
+        assign input_id = 'Filter-Price-' | append: forloop.index
+      -%}
+
+      {% capture checkbox_attributes %}
+        data-price-min='{{ range_min }}' data-price-max='{{ range_max }}'
+      {% endcapture %}
+
+      <li>
+        {%- render 'form-field', kind: 'checkbox', id: input_id, label: range_name, attributes: checkbox_attributes -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+
+<div class='gap-2 items-center hidden'>
   <span class='field-currency'>{{ cart.currency.symbol }}</span>
 
   {% capture attributes %}
     data-pattern='\d| |,|\.'
     data-min='0'
-    data-max='{{ filter.range_max | money_without_currency }}'
+    data-max='{{ filter.range_max | money_without_currency | replace: ',', '' }}'
     inputmode='decimal'
   {% endcapture %}
 
@@ -27,9 +51,7 @@
     -%}
   </div>
 
-  
   {%- if filter_type != 'vertical' -%}
-    <span>to</span>
     <span class='field-currency'>{{ cart.currency.symbol }}</span>
   {%- endif -%}
 
