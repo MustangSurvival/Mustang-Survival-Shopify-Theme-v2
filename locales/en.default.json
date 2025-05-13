@@ -70,7 +70,7 @@
     "cart": {
       "view": "View my cart ({{ count }})",
       "item_added": "Item added to your cart",
-      "empty": "Your cart is empty"
+      "empty": "Your cart is currently empty."
     },
     "share": {
       "copy_to_clipboard": "Copy link",
@@ -303,9 +303,9 @@
       "payment": "Payment methods",
       "newsletter": {
         "email_error": "Please enter a valid email address.",
-        "agree_terms": "I agree to the terms of service.",
+        "agree_terms": "I agree to the terms of service."
       },
-      "copyright": "2025 Store.",
+      "copyright": "2025 Store."
     },
     "video": {
       "load_video": "Load video: {{ description }}"
@@ -539,7 +539,7 @@
       "checkout": "Proceed to Checkout",
       "empty": "Your cart is currently empty.",
       "cookies_required": "Enable cookies to use the shopping cart",
-      "continue_shopping": "Continue shopping",
+      "continue_shopping_html": "Continue shopping <a href=\"{{ link }}\">here</a>.",
       "cart_error": "There was an error while updating your cart. Please try again.",
       "promo_gift_card_only_html": "Add <strong>{{ count }}</strong> pillows to get {{ percent }}% off",
       "promo_message_html": "Add <strong>{{ count }} more</strong> pillows to get {{ percent }}% off",

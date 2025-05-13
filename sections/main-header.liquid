@@ -86,11 +86,14 @@
     {%- if template.name == 'cart' -%}
       {{- cart_toggle_button -}}
     {%- else -%}
-      {%- render 'modal-dialog-toggle',
-        modal_id: 'cart-drawer-dialog',
-        label: 'Toggle Cart Modal',
-        toggle_element: cart_toggle_button
-      -%}
+      {% comment %}
+        {%- render 'modal-dialog-toggle',
+          modal_id: 'cart-drawer-dialog',
+          label: 'Toggle Cart Modal',
+          toggle_element: cart_toggle_button
+        -%}
+      {% endcomment %}
+      {{- cart_toggle_button -}}
     {%- endif -%}
 
     {% comment %} Mobile Menu Toggle (Hamburger - Hidden on Desktop) {% endcomment %}
