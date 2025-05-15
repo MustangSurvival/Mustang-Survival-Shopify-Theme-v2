@@ -1,22 +1,13 @@
-import { type apiClientFetch, createApiClient } from './WithApiClient'
-import type BaseElement from '@/base/BaseElement'
-import cartContext from '@/contexts/cart-context'
-import cartSectionsContext, {
-  type CartSections,
-} from '@/contexts/cart-sections'
-import type {
-  AddToCartEventPayload,
-  AddToShopifyCartResponse,
-  CartItemPayload,
-  ShopifyCart,
-  ShopifyCartError,
-  ShopifyCartLineItem,
-  UpdateCartPayload,
-} from '@/custom_typings/shopify'
-import { consume } from '@lit/context'
+import { type apiClientFetch, createApiClient } from './WithApiClient';
+import type BaseElement from '@/base/BaseElement';
+import cartContext from '@/contexts/cart-context';
+import cartSectionsContext, { type CartSections } from '@/contexts/cart-sections';
+import type { AddToCartEventPayload, AddToShopifyCartResponse, CartItemPayload, ShopifyCart, ShopifyCartError, ShopifyCartLineItem, UpdateCartPayload } from '@/custom_typings/shopify';
+import { consume } from '@lit/context';
 // @ts-ignore
-import defer from 'defer-promise'
-import { state } from 'lit/decorators.js'
+import defer from 'defer-promise';
+import { state } from 'lit/decorators.js';
+
 
 export declare class WithApiClientInterface {
   client: apiClientFetch
@@ -306,6 +297,7 @@ export const WithShopifyCartClientMixin = <
           sections_url: window.location.pathname,
         },
       })
+      console.log(cart)
       await this._handleCartChange(cart)
       cart.sections && this._handleCartSectionsChange(cart.sections)
     }

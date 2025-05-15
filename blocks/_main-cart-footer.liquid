@@ -3,12 +3,11 @@
   <cart-sections
     section-id='{{ section.id }}'
     id='{{ section.id }}'
-    class='py-md'
   >
     <h1 class='h4 mb-[20px]'>{{ 'sections.cart.summary' | t }}</h1>
 
-    <div class='w-full max-w-md grid grid-cols-1 gap-sm'>
-      {%- render 'cart-note-input' -%}
+    <div class='w-full max-w-md grid grid-cols-1 gap-sm bg-t-grey-bg p-[25px]'>
+      {% comment %} {%- render 'cart-note-input' -%} {% endcomment %}
       {% for block in section.blocks %}
         {%- case block.type -%}
           {%- else -%}
@@ -16,8 +15,6 @@
       {% endfor %}
 
       {%- content_for 'blocks' -%}
-
-      <div id='cart-errors'></div>
     </div>
   </cart-sections>
 {%- endunless -%}

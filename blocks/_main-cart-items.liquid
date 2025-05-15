@@ -2,7 +2,6 @@
 <cart-sections
   section-id='{{ section.id }}'
   id='{{ section.id }}'
-  class='grid grid-cols-1 gap-y-sm'
 >
   {%- if cart == empty -%}
     <div class='grid grid-cols-1 gap-[20px]'>
@@ -10,7 +9,7 @@
       <p class='rte'>{{ 'cart.general.continue_shopping_html' | t }}</p>
     </div>
   {%- else -%}
-    <h1 class='h4 mb-[20px]'>{{ 'sections.cart.title' | t }}</h1>
+    <h1 class='h4 pb-[20px] border-b border-b-t-line-break'>{{ 'sections.cart.title' | t }}</h1>
 
     {% comment %}
       {%- if shop.customer_accounts_enabled and customer == null -%}

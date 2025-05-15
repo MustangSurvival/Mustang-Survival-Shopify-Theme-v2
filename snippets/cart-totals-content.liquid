@@ -11,9 +11,9 @@
     </ul>
   {%- endif -%}
 
-  <div class='grid grid-cols-2 gap-sm' role='status'>
-    <h2 class='text-body font-semibold'>{{ 'sections.cart.estimated_total' | t }}</h2>
-    <p class='text-right'>{{ cart.total_price | money_with_currency }}</p>
+  <div class='flex flex-wrap gap-sm justify-between' role='status'>
+    <h2 class='text-body font-semibold'>{{ 'sections.cart.estimated_total' | t: count: cart.item_count }}</h2>
+    <p class='text-right font-semibold'>{{ cart.total_price | money_with_currency }}</p>
   </div>
 
   <div>
@@ -53,5 +53,8 @@
         {%- endif -%}
       {%- endif -%}
     </small>
+  </div>
+  <div>
+    <div id='cart-errors'></div>
   </div>
 </div>

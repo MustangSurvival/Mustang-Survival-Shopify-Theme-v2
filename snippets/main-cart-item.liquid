@@ -7,7 +7,7 @@
 
 <div
   id='MainCart-Item-{{ item.index | plus: 1 }}'
-  class='col-span-4 grid grid-cols-subgrid gap-x-[40px] items-start border-b border-solid border-t-border py-sm'
+  class='col-span-4 grid grid-cols-subgrid gap-x-[40px] items-start border-b border-b-t-line-break py-[20px]'
 >
   {% comment %} Media {% endcomment %}
   <div class='relative aspect-square'>
@@ -32,7 +32,7 @@
   </div>
 
   {% comment %} Item Details {% endcomment %}
-  <div class='grid grid-cols-[200px_1fr_1fr_1fr] gap-[40px] place-content-start'>
+  <div class='grid lg:grid-cols-[200px_1fr_1fr_1fr] gap-[20px] lg:gap-[40px] place-content-start'>
     <div class='grid place-content-start font-bold'>
       <a href='{{ item.url }}' class='body'>
         {{- item.product.title | escape -}}
@@ -101,7 +101,7 @@
     </div>
 
     {% comment %} Per price column {% endcomment %}
-    <div>
+    <div class="hidden lg:block">
       <p class='mb-[5px]'>{{ 'cart.line_item.price' | t }}</p>
       {%- if item.original_price != item.final_price -%}
         <div>
@@ -140,9 +140,9 @@
     </div>
 
     {% comment %} Price Column {% endcomment %}
-    <div class='text-right flex-col flex justify-between items-end'>
+    <div class='lg:text-right flex-col flex lg:justify-between lg:items-end'>
       <div>
-      <p class='mb-[5px]'>{{ 'cart.line_item.total' | t }}</p>
+      <p class='mb-[5px] hidden lg:block'>{{ 'cart.line_item.total' | t }}</p>
         {%- if item.original_line_price != item.final_line_price -%}
           <dl class='inline-flex items-center justify-end gap-x-2xs flex-wrap'>
             <dt class='sr-only'>
@@ -187,7 +187,7 @@
       >
         <button
           type='button'
-          class='body underline'
+          class='body underline mt-[20px] lg:mt-[40px]'
           aria-label='{{ 'sections.cart.remove_title' | t: title: item.title }}'
           data-variant-id='{{ item.variant.id }}'
         >

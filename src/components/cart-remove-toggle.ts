@@ -1,7 +1,8 @@
-import BaseElement from '@/base/BaseElement'
-import { WithShopifyCartClientMixin } from '@/mixins/WithShopifyCart'
-import { html } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import BaseElement from '@/base/BaseElement';
+import { WithShopifyCartClientMixin } from '@/mixins/WithShopifyCart';
+import { html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+
 
 @customElement('cart-remove-toggle')
 export class CartRemoveToggle extends WithShopifyCartClientMixin(BaseElement) {
@@ -10,6 +11,7 @@ export class CartRemoveToggle extends WithShopifyCartClientMixin(BaseElement) {
 
   _handleClick(event: Event) {
     event.preventDefault()
+    console.log(this.key, this)
     if (!this.key) return
 
     this.removeItemFromCart([this.key])
