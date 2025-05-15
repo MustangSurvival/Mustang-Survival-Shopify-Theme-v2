@@ -1,0 +1,33 @@
+<div class='grid grid-cols-1 gap-2xs' {{ block.shopify_attributes }}>
+  <button
+    type='submit'
+    id='checkout'
+    class='btn'
+    variant='primary'
+    name='checkout'
+    {% if cart == empty %}
+      disabled
+    {% endif %}
+    form='cart'
+  >
+    {{ 'sections.cart.checkout' | t }}
+  </button>
+</div>
+
+{%- if additional_checkout_buttons -%}
+  <div class='grid grid-cols-1 gap-xs'>
+    {{ content_for_additional_checkout_buttons }}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Cart Buttons",
+  "tag": null,
+  "presets": [
+    {
+      "name": "Cart Buttons"
+    }
+  ]
+}
+{% endschema %}

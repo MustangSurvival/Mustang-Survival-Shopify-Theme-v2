@@ -1,7 +1,8 @@
 {%- assign cart_quantity = cart | item_count_for_variant: variant.id -%}
 {%- assign current_quantity = quantity | default: cart_quantity | default: 1 -%}
+{%- assign connected = connected | default: false -%}
 <quantity-input
-  class='flex border border-r-0 border-t-foreground'
+  class='h-max w-max flex border border-t-foreground {% if connected %}border-r-0{% endif %}'
   variant-id='{{ variant.id }}'
   cart-quantity='{{ cart_quantity }}'
   min='{{ variant.quantity_rule.min }}'

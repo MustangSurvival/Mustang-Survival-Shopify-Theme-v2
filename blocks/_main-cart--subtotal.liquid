@@ -1,0 +1,15 @@
+<div class='grid grid-cols-1 gap-2xs' {{ block.shopify_attributes }}>
+  {%- render 'cart-totals-content' -%}
+</div>
+
+{% schema %}
+{
+  "name": "Cart Subtotal",
+  "tag": null,
+  "presets": [
+    {
+      "name": "Cart Subtotal"
+    }
+  ]
+}
+{% endschema %}

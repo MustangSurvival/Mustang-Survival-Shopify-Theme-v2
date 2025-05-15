@@ -1,0 +1,42 @@
+{%- render '@needs-script', entries: 'core-cart-sections' -%}
+<cart-sections
+  section-id='{{ section.id }}'
+  id='{{ section.id }}'
+  class='grid grid-cols-1 gap-y-sm'
+>
+  {%- if cart == empty -%}
+    <div class='grid grid-cols-1 gap-[20px]'>
+      <h1 class='text-body'>{{ 'cart.general.empty' | t }}</h1>
+      <p class='rte'>{{ 'cart.general.continue_shopping_html' | t }}</p>
+    </div>
+  {%- else -%}
+    <h1 class='h4 mb-[20px]'>{{ 'sections.cart.title' | t }}</h1>
+
+    {% comment %}
+      {%- if shop.customer_accounts_enabled and customer == null -%}
+        <div>
+          <h2 class='h6 inline'>{{ 'sections.cart.login.title' | t }}</h2>
+          <p class='inline'>
+            {{ 'sections.cart.login.paragraph_html' | t: link: routes.account_login_url }}
+          </p>
+        </div>
+      {%- endif -%}
+    {% endcomment %}
+
+    <form action='{{ routes.cart_url }}' class='cart__contents critical-hidden' method='post' id='cart'>
+      <div class='grid grid-cols-[120px_1fr_auto_auto]' id='main-cart-items'>
+        {%- liquid
+          render 'main-cart-item' for cart.items as item
+        -%}
+      </div>
+    </form>
+  {%- endif -%}
+</cart-sections>
+
+{% schema %}
+{
+  "name": "Cart Items",
+  "tag": null,
+  "settings": []
+}
+{% endschema %}

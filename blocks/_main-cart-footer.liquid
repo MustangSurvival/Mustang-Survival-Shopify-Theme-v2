@@ -1,0 +1,32 @@
+{%- unless cart == empty -%}
+  {%- render '@needs-script', entries: 'core-cart-sections' -%}
+  <cart-sections
+    section-id='{{ section.id }}'
+    id='{{ section.id }}'
+    class='py-md'
+  >
+    <h1 class='h4 mb-[20px]'>{{ 'sections.cart.summary' | t }}</h1>
+
+    <div class='w-full max-w-md grid grid-cols-1 gap-sm'>
+      {%- render 'cart-note-input' -%}
+      {% for block in section.blocks %}
+        {%- case block.type -%}
+          {%- else -%}
+        {%- endcase -%}
+      {% endfor %}
+
+      {%- content_for 'blocks' -%}
+
+      <div id='cart-errors'></div>
+    </div>
+  </cart-sections>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Cart Footer",
+  "tag": null,
+  "settings": [],
+  "blocks": [{ "type": "_main-cart--subtotal" }, { "type": "_main-cart--buttons" }]
+}
+{% endschema %}

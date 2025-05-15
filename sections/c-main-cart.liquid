@@ -1,0 +1,23 @@
+{%- unless cart == empty -%}
+  {%- render '@needs-script', entries: 'core-cart-sections' -%}
+  <cart-sections
+    section-id='{{ section.id }}'
+    id='{{ section.id }}'
+    class='flex justify-end px-pagemargin 2xl:container py-md'
+  >
+    <div class='grid grid-cols-4 gap-[20px] [&>*:first-child]:col-span-3'>
+      {%- content_for 'blocks' -%}
+    </div>
+  </cart-sections>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Cart",
+  "enabled_on": {
+    "templates": ["cart"]
+  },
+  "settings": [],
+  "blocks": [{ "type": "_main-cart-items" }, { "type": "_main-cart-footer" }]
+}
+{% endschema %}

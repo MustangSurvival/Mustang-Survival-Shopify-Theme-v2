@@ -267,7 +267,8 @@
       }
     },
     "cart": {
-      "title": "Your cart",
+      "title": "My cart",
+      "summary": "Order summary",
       "caption": "Cart items",
       "remove_title": "Remove {{ title }}",
       "estimated_total": "Estimated total",
@@ -522,6 +523,11 @@
     }
   },
   "cart": {
+    "line_item": {
+      "price": "Price",
+      "quantity": "Quantity",
+      "total": "Total"
+    },
     "general": {
       "title": "Your cart",
       "note": "Add a note to your order",
