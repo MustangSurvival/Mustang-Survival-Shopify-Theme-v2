@@ -233,12 +233,16 @@
   }
 
   .btn {
-    @apply text-[30px] uppercase transition-colors font-medium;
+    @apply text-[30px] uppercase transition-colors font-medium cursor-pointer;
     padding: 6px 30px !important;
     font-family: var(--font-family-tertiary);
     font-size: 30px !important;
     letter-spacing: 1.5px;
     line-height: 29px;
+  }
+
+  .btn:disabled {
+    @apply cursor-not-allowed;
   }
 
   .btn[variant="primary"] {

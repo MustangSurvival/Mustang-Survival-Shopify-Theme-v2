@@ -114,6 +114,7 @@
     "accordion_toggle": "Toggle {{ title }} accordion"
   },
   "blogs": {
+    "minute_read": "{{ minutes }} minute read",
     "article": {
       "blog": "Blog",
       "read_more_title": "Read more: {{ title }}",

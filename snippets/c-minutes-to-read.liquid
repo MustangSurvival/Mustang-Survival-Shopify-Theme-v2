@@ -1,0 +1,5 @@
+{%- assign words_per_minute = 200 -%}
+{%- assign words = content | strip_html | split: ' ' | size -%}
+{%- assign read_time = words | divided_by: words_per_minute | ceil -%}
+
+{{ 'blogs.minute_read' | t: minutes: read_time }}

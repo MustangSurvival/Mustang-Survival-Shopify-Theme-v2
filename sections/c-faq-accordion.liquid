@@ -1,4 +1,4 @@
-<div class='container py-[50px]'>
+<div class='px-pagemargin 2xl:container py-[50px]'>
   <div class='md:flex lg:items-center lg:justify-between'>
     {%- if section.settings.title != blank -%}
       <h2 class='h2 text-[32px] lg:text-[60px] mx-auto text-center'>
@@ -25,7 +25,8 @@
                 title: block.settings.question,
                 content: block.settings.answer,
                 container_classes: 'justify-between',
-                title_classes: 'text-body !text-[16px] uppercase font-[500]'
+                title_classes: 'text-body !text-[16px] uppercase font-[500] leading-[18px]',
+                answer_classes: '!pt-[20px]'
               -%}
             </div>
           {% endif %}
@@ -37,7 +38,7 @@
               {% else %}
                 href='{{ block.settings.button_link }}'
               {% endif %}
-              class='btn {% if buttons > 0 %}hidden md:block{% endif %} text-center'
+              class='btn text-center'
               variant='{{ block.settings.button_variant }}'
               {{ block.shopify_attributes }}
             >
