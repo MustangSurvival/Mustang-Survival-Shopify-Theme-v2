@@ -1,0 +1,145 @@
+<div class='container py-[50px]'>
+  <div class='md:flex lg:items-center lg:justify-between'>
+    {%- if section.settings.title != blank -%}
+      <h2 class='h2 text-[32px] lg:text-[60px] mx-auto text-center'>
+        {{ section.settings.title }}
+      </h2>
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.description != blank -%}
+    <div class='text-body rte mt-[10px] mb-[20px] mx-auto text-center'>
+      {{ section.settings.description -}}
+    </div>
+  {%- endif -%}
+
+  <div class='flex flex-wrap items-center justify-center gap-[20px] {% if section.settings.line_break %}border-t border-t-line-break pt-[25px] mt-[25px]{% else %}pt-[45px]{% endif %}'>
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'question' %}
+          {% if block.settings.question and block.settings.answer %}
+            <div class='pb-[20px] border-b last-of-type:border-b-0 border-b-t-line-break'>
+              {%- assign block_nav_id = 'block-faq-id-' | append: block.id %}
+              {%- render 'accordion-item',
+                id: block_nav_id,
+                title: block.settings.question,
+                content: block.settings.answer,
+                container_classes: 'justify-between',
+                title_classes: 'text-body !text-[16px] uppercase font-[500]'
+              -%}
+            </div>
+          {% endif %}
+        {% when 'cta' %}
+          {%- if block.settings.button_label != blank -%}
+            <a
+              {% if block.settings.button_link == blank %}
+                role='link' aria-disabled='true'
+              {% else %}
+                href='{{ block.settings.button_link }}'
+              {% endif %}
+              class='btn {% if buttons > 0 %}hidden md:block{% endif %} text-center'
+              variant='{{ block.settings.button_variant }}'
+              {{ block.shopify_attributes }}
+            >
+              {{ block.settings.button_label | escape }}
+            </a>
+          {%- endif -%}
+      {% endcase %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "FAQ Accordion",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Frequently Asked Questions",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "checkbox",
+      "id": "line_break",
+      "label": "Add line break",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer"
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "name": "Call to Action",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "More FAQs",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "button_variant",
+          "label": "Button variant",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "tertiary",
+              "label": "Tertiary"
+            },
+            {
+              "value": "quaternary",
+              "label": "Quaternary"
+            }
+          ],
+          "default": "quaternary"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Accordion",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
