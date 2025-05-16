@@ -1,15 +1,21 @@
-{%- unless cart == empty -%}
-  {%- render '@needs-script', entries: 'core-cart-sections' -%}
+{%- render '@needs-script', entries: 'core-cart-sections' -%}
+<div class='px-pagemargin 2xl:container'>
   <cart-sections
     section-id='{{ section.id }}'
     id='{{ section.id }}'
-    class='flex justify-end px-pagemargin 2xl:container py-md'
   >
     <div class='grid lg:grid-cols-4 gap-[40px] lg:gap-[20px] lg:[&>*:first-child]:col-span-3 lg:py-[50px] py-[20px]'>
-      {%- content_for 'blocks' -%}
+      {%- if cart == empty -%}
+        <div class='grid grid-cols-1 gap-[20px]'>
+          <h1 class='text-body'>{{ 'cart.general.empty' | t }}</h1>
+          <p class='rte'>{{ 'cart.general.continue_shopping_html' | t }}</p>
+        </div>
+      {%- else -%}
+        {%- content_for 'blocks' -%}
+      {%- endif -%}
     </div>
   </cart-sections>
-{%- endunless -%}
+</div>
 
 {% schema %}
 {

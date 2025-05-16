@@ -1,0 +1,17 @@
+<div
+  class='free-shipping-progress__container'
+  data-cart-page='true'
+  data-minimum-subtotal='{{ shop.metafields.iamota.minimum_cart_subtotal_for_free | default: "" }} '
+></div>
+
+{% schema %}
+{
+  "name": "Free Shipping Progress",
+  "tag": null,
+  "presets": [
+    {
+      "name": "Free Shipping Progress"
+    }
+  ]
+}
+{% endschema %}
