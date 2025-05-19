@@ -3,7 +3,7 @@
   "editor.formatOnType": true,
   "css.customData": [".vscode/tailwind.json"],
   "[liquid]": {
-    "editor.defaultFormatter": "Shopify.theme-check-vscode",
+    "editor.defaultFormatter": "sissel.shopify-liquid",
     "editor.formatOnSave": true
   }
 }

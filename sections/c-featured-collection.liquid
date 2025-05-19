@@ -1,27 +1,5 @@
-<div class='container py-[50px]'>
-  <div class='md:flex lg:items-center lg:justify-between'>
-    {%- if section.settings.title != blank -%}
-      <h2 class='{{ section.settings.heading_size }} h2 text-[32px] lg:text-[60px] mx-auto text-center'>
-        {{ section.settings.title }}
-      </h2>
-    {%- endif -%}
-  </div>
-
-  {%- if section.settings.description != blank
-    or section.settings.show_description
-    and section.settings.collection.description != empty
-  -%}
-    <div class='text-body rte mt-[10px] mb-[20px] mx-auto text-center'>
-      {%- if section.settings.show_description -%}
-        {{ section.settings.collection.description }}
-      {%- else -%}
-        {{ section.settings.description -}}
-      {%- endif %}
-    </div>
-  {%- endif -%}
-
-  <div class='pt-[45px]'>
-    {% capture slides %}
+<div class='px-pagemargin 2xl:container py-[50px]'>
+  {% capture slides %}
     {% for product in section.settings.collection.products, limit: section.settings.products_to_show %}
       <swiper-slide class='flex-none h-auto justify-center px-2'>
         {% render 'product-card',
@@ -35,8 +13,7 @@
       </swiper-slide>
     {% endfor %}
   {% endcapture %}
-    {% render 'c-carousel', slides: slides %}
-  </div>
+  {% render 'c-carousel', slides: slides, arrows: 'center' %}
 </div>
 
 {% schema %}

@@ -1,0 +1,130 @@
+<div class='container py-[50px]'>
+  <div class='md:flex lg:items-center lg:justify-between'>
+    {%- if section.settings.title != blank -%}
+      <h2 class='{{ section.settings.heading_size }} h2 text-[32px] lg:text-[60px] mx-auto text-center'>
+        {{ section.settings.title }}
+      </h2>
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.description != blank or section.settings.show_description and section.settings.collection.description != empty
+  -%}
+    <div class='text-body rte mt-[10px] mb-[20px] mx-auto text-center'>
+      {%- if section.settings.show_description -%}
+        {{ section.settings.collection.description }}
+      {%- else -%}
+        {{ section.settings.description -}}
+      {%- endif %}
+    </div>
+  {%- endif -%}
+
+  <div class='pt-[45px]'>
+    {% capture slides %}
+    {% for block in section.blocks %}
+      <swiper-slide class='flex-none h-auto justify-center px-2 mb-[36px] lg:mb-[62px]'>
+        <div class="grid lg:grid-cols-2 gap-[32px] lg:gap-[55px] h-full">
+            {% capture sizes %}(min-width: 1100px) 100vw, (min-width: 750px) 50vw{% endcapture %}
+            {% assign preload = true %}
+            {% if section.index > 2 %}
+              {% assign preload = false %}
+            {% endif %}
+            {% render 'image',
+              image: block.settings.image,
+              sizes: sizes,
+              widths: '600, 900, 1100, 1440, 2180',
+              preload: preload,
+              class: 'h-full'
+            %}
+          <div class="flex flex-col gap-[25px] justify-center">
+            <h4>{{ block.settings.title }}</h4>
+            <p>{{block.settings.description}}</p>
+          </div>
+        </div>
+      </swiper-slide>
+    {% endfor %}
+  {% endcapture %}
+    {% render 'c-carousel'
+      , slides: slides
+      , arrows: 'inline'
+      , slides_per_view_mobile: 1
+      , slides_per_view_desktop: 1
+      , arrows_on_mobile: true %}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Timeline",
+    "tag": "section",
+    "class": "section",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
+    "blocks": [
+      {
+        "type": "time",
+        "name": "Time",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Founded 1964"
+          },
+          {
+            "type": "text",
+            "id": "description",
+            "label": "Description",
+            "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "text",
+            "id": "button_label",
+            "default": "Shop now",
+            "label": "Button label"
+          },
+          {
+            "type": "url",
+            "id": "button_link",
+            "label": "Button link"
+          },
+          {
+            "type": "select",
+            "id": "button_variant",
+            "label": "Button variant",
+            "options": [
+              {
+                "value": "primary",
+                "label": "Primary"
+              },
+              {
+                "value": "secondary",
+                "label": "Secondary"
+              },
+              {
+                "value": "tertiary",
+                "label": "Tertiary"
+              },
+              {
+                "value": "quaternary",
+                "label": "Quaternary"
+              }
+            ],
+            "default": "quaternary"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Timeline",
+        "category": "Custom"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,7 +1,32 @@
 {%- comment -%}swiper-wrapper.liquid{%- endcomment -%}
 {% liquid
   assign swiper_id = swiper_id | default: section.id
+  assign arrow_position = arrows | default: 'center'
+  assign slides_per_view_mobile = slides_per_view_mobile | default: 2
+  assign slides_per_view_desktop = slides_per_view_desktop | default: slides_per_view_mobile
+  assign arrows_on_mobile = arrows_on_mobile | default: false
+
+  if arrow_position == 'center'
+    assign swiper_button_styles = 'absolute top-1/2 w-[calc(100%_+_86px)] -left-[36px] right-0 -translate-y-1/2'
+  elsif arrow_position == 'inline'
+    assign swiper_button_styles = ''
+  endif
 %}
+
+{% capture prev_button %}
+  <button id='swiper-button-prev-{{ swiper_id }}' class='p-2'>
+    {%- render 'icon' with 'c-icon-caret'
+      , size: 10
+      , class: '-rotate-90 h-[12.5px] w-[25px]' -%}
+  </button>
+{% endcapture %}
+{% capture next_button %}
+  <button id='swiper-button-next-{{ swiper_id }}' class='p-2'>
+    {%- render 'icon' with 'c-icon-caret'
+      , size: 12
+      , class: 'rotate-90 h-[12.5px] w-[25px]' -%}
+  </button>
+{% endcapture %}
 
 <div class="relative">
   <swiper-container
@@ -19,36 +44,39 @@
         "bulletActiveClass": "swiper-pagination-bullet-active"
       }
     '
-    slides-per-view='2'
-    slides-per-group='2'
+    slides-per-view='{{ slides_per_view_mobile }}'
+    slides-per-group='{{ slides_per_view_mobile }}'
     breakpoints='
       {
         "768": {
-          "slidesPerView": 2,
-          "slidesPerGroup": 2
+          "slidesPerView": {{ slides_per_view_mobile }},
+          "slidesPerGroup": {{ slides_per_view_mobile }}
         },
         "1024": {
-          "slidesPerView": 4,
-          "slidesPerGroup": 4
+          "slidesPerView": {{ slides_per_view_desktop }},
+          "slidesPerGroup": {{ slides_per_view_desktop }}
         }
       }
     '
-    class='flex flex-col overflow-hidden w-full -mr-2 gap-4'
-  >
+    class='flex flex-col overflow-hidden w-full gap-4'>
     {{ slides }}
   </swiper-container>
 
-  <div class="hidden lg:flex justify-between items-center absolute top-1/2 w-[calc(100%_+_86px)] -left-[36px] right-0 z-10 transform -translate-y-1/2">
-    <button id='swiper-button-prev-{{ swiper_id }}' class='p-2'>
-      {%- render 'icon' with 'c-icon-caret', size: 10, class: '-rotate-90 h-[12.5px] w-[25px]' -%}
-    </button>
-    <button id='swiper-button-next-{{ swiper_id }}' class='p-2'>
-      {%- render 'icon' with 'c-icon-caret', size: 12, class: 'rotate-90 h-[12.5px] w-[25px]' -%}
-    </button>
+  {% unless arrow_position == 'inline' %}
+  <div class="{% if arrows_on_mobile %}flex{% else %}hidden lg:flex{% endif %} justify-between items-center z-10 transform {{ swiper_button_styles }}">
+    {{ prev_button }}
+    {{ next_button }}
   </div>
+  {% endunless %}
 
   <div class='flex justify-center items-center mt-4'>
-    <div id='swiper-pagination-{{ swiper_id }}' class='flex justify-center gap-[3px]'></div>
+    {% if arrow_position == 'inline' %}
+      {{ prev_button }}
+    {% endif %}
+    <div id='swiper-pagination-{{ swiper_id }}' class='flex justify-center gap-[3px] px-[12px]'></div>
+    {% if arrow_position == 'inline' %}
+      {{ next_button }}
+    {% endif %}
   </div>
 
   <style>
@@ -59,11 +87,13 @@
       cursor: pointer;
     }
 
-    #swiper-pagination-{{ swiper_id }} .swiper-pagination-bullet-active {
+    #swiper-pagination-{{ swiper_id }}
+    .swiper-pagination-bullet-active {
       bottom: 1px;
     }
 
-    #swiper-pagination-{{ swiper_id }} .swiper-pagination-bullet::before {
+    #swiper-pagination-{{ swiper_id }}
+    .swiper-pagination-bullet::before {
       content: '';
       display: block;
       width: 50px;
@@ -73,7 +103,8 @@
       margin: 0 auto;
     }
 
-    #swiper-pagination-{{ swiper_id }} .swiper-pagination-bullet-active::before {
+    #swiper-pagination-{{ swiper_id }}
+    .swiper-pagination-bullet-active::before {
       background-color: black;
       height: 2px;
     }
