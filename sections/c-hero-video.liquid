@@ -15,9 +15,8 @@
     <div class='absolute inset-0 z-10 pointer-events-none bg-p-darkest bg-opacity-10'></div>
   {% endif %}
 {% endcapture %}
-
 {% capture content %}
-  <div class="mx-[15px] lg:mx-[100px] h-full flex items-center z-20">
+  <div class="h-full flex items-center z-20">
     <div class='flex flex-col justify-center gap-y-[14px] container text-center mx-auto lg:mx-0 lg:text-left px-[10px] lg:px-0 my-[10px] max-w-[549px] items-center lg:items-start lg:ml-0'>
       {%- for block in section.blocks -%}
         {% case block.type %}
@@ -49,157 +48,168 @@
     </div>
   </div>
 {% endcapture %}
-
 <div class='isolate grid grid-cols-1 gap-y-sm relative text-p-lightest min-h-[675px]'>
-  {{ content }}
+  <div class="px-pagemargin 2xl:container">
+    {{ content }}
+  </div>
 
-  {%- render 'inline-media',
-    video: video,
-    video_alt: video_alt,
-    cover_image: cover_image,
-    loop: loop,
-    poster_loading: poster_loading,
-    controls: section.settings.controls,
-    muted: true,
-    autoplay: section.settings.video_autoplay,
-    class: 'absolute inset-0 w-full h-full -z-10',
-    object_fit: 'object-cover'
+  {%- render 'inline-media'
+    , video: video
+    , video_alt: video_alt
+    , cover_image: cover_image
+    , loop: loop
+    , poster_loading: poster_loading
+    , controls: section.settings.controls
+    , muted: true
+    , autoplay: section.settings.video_autoplay
+    , class: 'absolute inset-0 w-full h-full -z-10'
+    , object_fit: 'object-cover'
   -%}
 
   {{ image_overlay }}
 </div>
 
 {% schema %}
-{
-  "name": "Hero — Video",
-  "class": "section",
-  "settings": [
-    {
-      "type": "video",
-      "id": "video",
-      "label": "Video"
-    },
-    {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Fallback image"
-    },
-    {
-      "type": "text",
-      "id": "video_alt",
-      "label": "Video alt text",
-      "default": "Promotional video"
-    },
-    {
-      "type": "checkbox",
-      "id": "video_autoplay",
-      "label": "Autoplay video",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "loop_video",
-      "default": false,
-      "label": "Loop video"
-    },
-    {
-      "type": "checkbox",
-      "id": "controls",
-      "label": "Show video controls",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "image_overlay",
-      "label": "Add gradient overlay on video",
-      "default": false
-    }
-  ],
-  "blocks": [
-    {
-      "type": "heading",
-      "name": "Heading",
-      "settings": [
-        {
-          "type": "inline_richtext",
-          "id": "heading",
-          "default": "Add a heading",
-          "label": "Heading"
-        },
-        {
-          "type": "select",
-          "id": "heading_size",
-          "options": [
-            {
-              "value": "h2",
-              "label": "Medium"
-            },
-            {
-              "value": "h1",
-              "label": "Large"
-            }
-          ],
-          "default": "h2",
-          "label": "Heading size"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "name": "Text",
-      "settings": [
-        {
-          "type": "richtext",
-          "id": "text",
-          "default": "<p>Use this section to welcome customers or highlight your store’s main features.</p>",
-          "label": "Text"
-        }
-      ]
-    },
-    {
-      "type": "button",
-      "name": "Button",
-      "settings": [
-        {
-          "type": "text",
-          "id": "button_label",
-          "default": "Shop now",
-          "label": "Button label"
-        },
-        {
-          "type": "url",
-          "id": "button_link",
-          "label": "Button link"
-        },
-        {
-          "type": "select",
-          "id": "button_variant",
-          "label": "Button variant",
-          "options": [
-            {
-              "value": "primary",
-              "label": "Primary"
-            },
-            {
-              "value": "secondary",
-              "label": "Secondary"
-            },
-            {
-              "value": "tertiary",
-              "label": "Tertiary"
-            }
-          ],
-          "default": "primary"
-        }
-      ]
-    }
-  ],
-  "presets": [
-    {
-      "name": "Hero — Video",
-      "category": "Custom",
-      "blocks": [{ "type": "heading" }, { "type": "text" }, { "type": "button" }]
-    }
-  ]
-}
+  {
+    "name": "Hero — Video",
+    "class": "section",
+    "settings": [
+      {
+        "type": "video",
+        "id": "video",
+        "label": "Video"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Fallback image"
+      },
+      {
+        "type": "text",
+        "id": "video_alt",
+        "label": "Video alt text",
+        "default": "Promotional video"
+      },
+      {
+        "type": "checkbox",
+        "id": "video_autoplay",
+        "label": "Autoplay video",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "loop_video",
+        "default": false,
+        "label": "Loop video"
+      },
+      {
+        "type": "checkbox",
+        "id": "controls",
+        "label": "Show video controls",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "image_overlay",
+        "label": "Add gradient overlay on video",
+        "default": false
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "name": "Heading",
+        "settings": [
+          {
+            "type": "inline_richtext",
+            "id": "heading",
+            "default": "Add a heading",
+            "label": "Heading"
+          },
+          {
+            "type": "select",
+            "id": "heading_size",
+            "options": [
+              {
+                "value": "h2",
+                "label": "Medium"
+              },
+              {
+                "value": "h1",
+                "label": "Large"
+              }
+            ],
+            "default": "h2",
+            "label": "Heading size"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "name": "Text",
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "text",
+            "default": "<p>Use this section to welcome customers or highlight your store’s main features.</p>",
+            "label": "Text"
+          }
+        ]
+      },
+      {
+        "type": "button",
+        "name": "Button",
+        "settings": [
+          {
+            "type": "text",
+            "id": "button_label",
+            "default": "Shop now",
+            "label": "Button label"
+          },
+          {
+            "type": "url",
+            "id": "button_link",
+            "label": "Button link"
+          },
+          {
+            "type": "select",
+            "id": "button_variant",
+            "label": "Button variant",
+            "options": [
+              {
+                "value": "primary",
+                "label": "Primary"
+              },
+              {
+                "value": "secondary",
+                "label": "Secondary"
+              },
+              {
+                "value": "tertiary",
+                "label": "Tertiary"
+              }
+            ],
+            "default": "primary"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Hero — Video",
+        "category": "Custom",
+        "blocks": [
+          {
+            "type": "heading"
+          },
+          {
+            "type": "text"
+          },
+          {
+            "type": "button"
+          }
+        ]
+      }
+    ]
+  }
 {% endschema %}
