@@ -13,7 +13,8 @@
     </div>
   {%- endif -%}
 
-  {%- render '@needs-script', entries: 'collection-list' -%}
+  {%- render '@needs-script'
+    , entries: 'collection-list' -%}
   <collection-list class='pt-[45px]'>
     {% capture slides %}
     {% for block in section.blocks %}
@@ -32,76 +33,86 @@
       </swiper-slide>
     {% endfor %}
   {% endcapture %}
-    {% render 'c-carousel', slides: slides, arrows: 'center' %}
+    {% render 'c-carousel'
+      , slides: slides
+      , arrows: 'center' %}
   </collection-list>
 </div>
 
 {% schema %}
-{
-  "name": "Collection List",
-  "tag": "section",
-  "class": "section",
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  },
-  "settings": [
-    {
-      "type": "inline_richtext",
-      "id": "title",
-      "default": "Featured Products",
-      "label": "Heading"
+  {
+    "name": "Collection List",
+    "tag": "section",
+    "class": "section",
+    "disabled_on": {
+      "groups": ["header", "footer"]
     },
-    {
-      "type": "select",
-      "id": "heading_size",
-      "options": [
-        {
-          "value": "h2",
-          "label": "Heading 2"
-        },
-        {
-          "value": "h1",
-          "label": "Heading 1"
-        }
-      ],
-      "default": "h2",
-      "label": "Heading Size"
-    },
-    {
-      "type": "richtext",
-      "id": "description",
-      "label": "Description"
-    },
-    {
-      "type": "collection_list",
-      "id": "collections",
-      "label": "Collections"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "collection",
-      "name": "Collection",
-      "settings": [
-        {
-          "type": "collection",
-          "id": "collection",
-          "label": "Collection"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image",
-          "info": "Overrides default collection image if set"
-        }
-      ]
-    }
-  ],
-  "presets": [
-    {
-      "name": "Collection List",
-      "category": "Custom"
-    }
-  ]
-}
+    "settings": [
+      {
+        "type": "inline_richtext",
+        "id": "title",
+        "default": "Featured Products",
+        "label": "Heading"
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "options": [
+          {
+            "value": "!h1",
+            "label": "H1"
+          },
+          {
+            "value": "!h2",
+            "label": "H2"
+          },
+          {
+            "value": "!h3",
+            "label": "H3"
+          },
+          {
+            "value": "!h4",
+            "label": "H4"
+          }
+        ],
+        "default": "!h2",
+        "label": "Heading Size"
+      },
+      {
+        "type": "richtext",
+        "id": "description",
+        "label": "Description"
+      },
+      {
+        "type": "collection_list",
+        "id": "collections",
+        "label": "Collections"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "collection",
+        "name": "Collection",
+        "settings": [
+          {
+            "type": "collection",
+            "id": "collection",
+            "label": "Collection"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image",
+            "info": "Overrides default collection image if set"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Collection List",
+        "category": "Custom"
+      }
+    ]
+  }
 {% endschema %}

@@ -13,71 +13,81 @@
       </swiper-slide>
     {% endfor %}
   {% endcapture %}
-  {% render 'c-carousel', slides: slides, arrows: 'center' %}
+  {% render 'c-carousel'
+    , slides: slides
+    , arrows: 'center' %}
 </div>
 
 {% schema %}
-{
-  "name": "Featured Collection",
-  "tag": "section",
-  "class": "section",
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  },
-  "settings": [
-    {
-      "type": "inline_richtext",
-      "id": "title",
-      "default": "Featured Collection",
-      "label": "Heading"
+  {
+    "name": "Featured Collection",
+    "tag": "section",
+    "class": "section",
+    "disabled_on": {
+      "groups": ["header", "footer"]
     },
-    {
-      "type": "select",
-      "id": "heading_size",
-      "options": [
-        {
-          "value": "h2",
-          "label": "Heading 2"
-        },
-        {
-          "value": "h1",
-          "label": "Heading 1"
-        }
-      ],
-      "default": "h2",
-      "label": "Heading Size"
-    },
-    {
-      "type": "richtext",
-      "id": "description",
-      "label": "Description"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_description",
-      "label": "Show Description From Collection",
-      "default": false
-    },
-    {
-      "type": "collection",
-      "id": "collection",
-      "label": "Collection"
-    },
-    {
-      "type": "range",
-      "id": "products_to_show",
-      "min": 2,
-      "max": 25,
-      "step": 1,
-      "default": 4,
-      "label": "Number of Products to Show"
-    }
-  ],
-  "presets": [
-    {
-      "name": "Featured Collection",
-      "category": "Custom"
-    }
-  ]
-}
+    "settings": [
+      {
+        "type": "inline_richtext",
+        "id": "title",
+        "default": "Featured Collection",
+        "label": "Heading"
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "options": [
+          {
+            "value": "!h1",
+            "label": "H1"
+          },
+          {
+            "value": "!h2",
+            "label": "H2"
+          },
+          {
+            "value": "!h3",
+            "label": "H3"
+          },
+          {
+            "value": "!h4",
+            "label": "H4"
+          }
+        ],
+        "default": "!h2",
+        "label": "Heading Size"
+      },
+      {
+        "type": "richtext",
+        "id": "description",
+        "label": "Description"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_description",
+        "label": "Show Description From Collection",
+        "default": false
+      },
+      {
+        "type": "collection",
+        "id": "collection",
+        "label": "Collection"
+      },
+      {
+        "type": "range",
+        "id": "products_to_show",
+        "min": 2,
+        "max": 25,
+        "step": 1,
+        "default": 4,
+        "label": "Number of Products to Show"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Featured Collection",
+        "category": "Custom"
+      }
+    ]
+  }
 {% endschema %}
