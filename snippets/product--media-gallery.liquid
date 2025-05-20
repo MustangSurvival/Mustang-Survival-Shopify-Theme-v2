@@ -214,6 +214,7 @@
         slides-per-view='auto'
         space-between='10'
         id='{{ thumbnails_id }}'
+        center-insufficient-slides='true'
       >
         {% for media in final_media %}
           <swiper-slide class='cursor-pointer w-auto h-[68px] relative block bg-p-lightest aspect-square duration-300 transition group [&>[border-target]]:hidden [&.swiper-slide-thumb-active_[border-target]]:block'>

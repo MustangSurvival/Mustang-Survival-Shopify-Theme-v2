@@ -15,7 +15,9 @@
   {% endcapture %}
   {% render 'c-carousel'
     , slides: slides
-    , arrows: 'center' %}
+    , arrows: 'center'
+    , slides_per_view_mobile: 2
+    , slides_per_view_desktop: 4 %}
 </div>
 
 {% schema %}
