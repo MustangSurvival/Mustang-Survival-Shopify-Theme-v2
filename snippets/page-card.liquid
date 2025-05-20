@@ -1,0 +1,56 @@
+{% comment %}
+  Renders a page card with optional image, date, and excerpt.
+
+  Accepts:
+  - page: {Object} Page object
+  - show_date: {String} Show the page creation date (optional)
+  - show_excerpt: {String} Show a preview of the page content (optional)
+  - lazy_load: {Boolean} Image should be lazy loaded. Default: true (optional)
+
+  Usage:
+  {% render 'page-card', page: page %}
+{% endcomment %}
+
+{%- capture sizes -%}(min-width: 1440px) 300px, (min-width: 1024px) 33vw, 50vw{%- endcapture -%}
+{%- assign image_widths = '300, 500, 750, 800' -%}
+
+<article aria-labelledby='Page-{{ page.id }}' class='grid grid-cols-1 gap-y-[20px]'>
+  {%- if image -%}
+    <div class='relative aspect-video'>
+      {%- render 'image'
+        , image: image
+        , class: 'h-full w-full inset-0 absolute'
+        , sizes: sizes
+        , width: 300
+        , widths: image_widths
+        , loading: true
+      -%}
+    </div>
+  {%- endif -%}
+
+  <div class='grid grid-cols-1 gap-y-[10px] items-start place-content-start px-[10px]'>
+    <h3 id='Page-{{ page.id }}' class='h5 text-[28px]'>
+      <a href='{{ page.url }}'>
+        {{ page.title | truncate: 50 | escape }}
+      </a>
+    </h3>
+
+    {%- if show_date -%}
+      <div class='leading-none text-end'>
+        <span class='caption'>{{ page.created_at | time_tag: format: 'date' }}</span>
+      </div>
+    {%- endif -%}
+
+    {%- if show_excerpt -%}
+      {%- if page.content -%}
+        <p class='rte'>
+          {{ page.content | strip_html | truncatewords: 30 }}
+        </p>
+      {%- endif -%}
+    {%- endif -%}
+
+    <a href='{{ page.url }}' class='text-[14px] uppercase font-[700]'>
+      {{ 'blogs.article.read_more' | t }}
+    </a>
+  </div>
+</article>

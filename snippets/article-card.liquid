@@ -18,7 +18,7 @@
 
   <article
     aria-labelledby='Article-{{ article.id }}'
-    class='grid grid-cols-1 gap-y-xs'
+    class='grid grid-cols-1 gap-y-[20px]'
   >
     {%- if article.image -%}
       <div class='relative aspect-video'>
@@ -33,8 +33,13 @@
       </div>
     {%- endif -%}
 
-    <div class='grid grid-cols-1 gap-y-xs items-start place-content-start'>
-      <h3 id='Article-{{ article.id }}' class='h5'>
+    <div class='grid grid-cols-1 gap-y-[10px] items-start place-content-start px-[10px]'>
+      {%- if show_time_to_read -%}
+      <p class="text-[12px]">
+        {%- render 'c-minutes-to-read', content: article.content -%}
+      </p>
+      {%- endif -%}
+      <h3 id='Article-{{ article.id }}' class='h5 text-[28px]'>
         <a href='{{ article.url }}'>
           {{ article.title | truncate: 50 | escape }}
         </a>
@@ -63,6 +68,12 @@
           {%- endif -%}
         </div>
       {%- endif -%}
+      <a
+        href='{{ article.url }}'
+        class='text-[14px] uppercase font-[700] text-t-medium-grey'
+      >
+        {{ 'blogs.article.read_more' | t }}
+      </a>
     </div>
   </article>
 {%- endif -%}

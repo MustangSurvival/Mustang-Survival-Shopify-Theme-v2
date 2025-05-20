@@ -5,6 +5,8 @@
   assign slides_per_view_mobile = slides_per_view_mobile | default: 2
   assign slides_per_view_desktop = slides_per_view_desktop | default: slides_per_view_mobile
   assign arrows_on_mobile = arrows_on_mobile | default: false
+  assign show_controls_on_desktop = show_controls_on_desktop | default: 1
+  assign gap = gap | default: 0
 
   if arrow_position == 'center'
     assign swiper_button_styles = 'absolute top-1/2 w-[calc(100%_+_86px)] -left-[36px] right-0 -translate-y-1/2'
@@ -46,6 +48,7 @@
     '
     slides-per-view='{{ slides_per_view_mobile }}'
     slides-per-group='{{ slides_per_view_mobile }}'
+    space-between='{{ gap }}'
     breakpoints='
       {
         "768": {
@@ -69,7 +72,7 @@
   </div>
   {% endunless %}
 
-  <div class='flex justify-center items-center mt-4'>
+  <div class='{% if show_controls_on_desktop == 1 %}flex{% else %}flex lg:hidden{% endif %} justify-center items-center mt-4'>
     {% if arrow_position == 'inline' %}
       {{ prev_button }}
     {% endif %}
