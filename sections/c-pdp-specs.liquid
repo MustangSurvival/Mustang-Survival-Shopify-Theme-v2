@@ -12,7 +12,7 @@
       </tr>
       {% for title in product.metafields.iamota.specification_title limit: 10 %}
         <tr class='even:bg-t-superlight'>
-          <td class='py-[15px] pl-[43px] pr-[15px] w-[225px]'>
+          <td class='py-[15px] px-[12px] lg:pl-[43px] lg:pr-[15px] w-1/2'>
             {{ title }}
           </td>
           <td>{{ product.metafields.iamota.specification_description[forloop.index0] }}</td>
