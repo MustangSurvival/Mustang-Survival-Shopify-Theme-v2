@@ -12,13 +12,12 @@
   {%- assign is_quick_shop = true -%}
 {%- endif -%}
 
+{% if section.settings.show_breadcrumbs %}
 <div class='mt-[21px] lg:mt-[57px] flex flex-col gap-[8px] lg:gap-[9px] items-center justify-center mb-[3px] lg:mb-[41px]'>
-  {% if section.settings.show_breadcrumbs %}
-    {%- render 'product--breadcrumbs' -%}
-  {% endif %}
-
+  {%- render 'product--breadcrumbs' -%}
   <h1 class='h3 font-[600] text-[40px] lg:text-[84px]'>{{ product.title | escape }}</h1>
 </div>
+{% endif %}
 
 <main-product
   {% if is_quick_shop %}
@@ -46,6 +45,42 @@
       "type": "@app"
     },
     {
+      "type": "breadcrumbs",
+      "name": "Breadcrumbs",
+      "limit": 1
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "settings": [
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "!h1",
+              "label": "H1"
+            },
+            {
+              "value": "!h2",
+              "label": "H2"
+            },
+            {
+              "value": "!h3",
+              "label": "H3"
+            },
+            {
+              "value": "!h4",
+              "label": "H4"
+            }
+          ],
+          "default": "!h2",
+          "label": "Heading size"
+        }
+      ],
+      "limit": 1
+    },
+    {
       "type": "text",
       "name": "Text",
       "settings": [
@@ -60,11 +95,6 @@
     {
       "type": "modelsku",
       "name": "Model / SKU"
-    },
-    {
-      "type": "title",
-      "name": "Title",
-      "limit": 1
     },
     {
       "type": "price",
@@ -321,7 +351,7 @@
       "type": "checkbox",
       "id": "show_breadcrumbs",
       "default": false,
-      "label": "Show Breadcrumbs"
+      "label": "Show Breadcrumbs + Title"
     }
   ]
 }

@@ -14,7 +14,7 @@
 {%- assign selected_variant = product.selected_or_first_available_variant | default: product.variants[0] -%}
 <section
   id='ProductInfo-{{ section.id }}'
-  class='grid grid-cols-1 gap-y-sm place-content-start {% if is_quick_shop %}px-sm{% endif %} mt-[26px] lg:mt-0'
+  class='grid grid-cols-1 gap-y-[20px] place-content-start {% if is_quick_shop %}px-sm{% endif %} mt-[26px] lg:mt-0'
 >
   {%- for block in section.blocks -%}
     {%- case block.type -%}
@@ -84,10 +84,6 @@
         >
           Model: {{ product.vendor }} / SKU: {{ selected_variant.sku }}
         </p>
-      {%- when 'title' -%}
-        <div {{ block.shopify_attributes }}>
-          <h1 class='h3'>{{ product.title | escape }}</h1>
-        </div>
       {%- when 'price' -%}
         <div sub-section-id='{{ block.id }}'>
           {%- capture price_line -%}
@@ -303,6 +299,10 @@
             {%- render 'product-cards-carousel', products: block.settings.products, width_class: 'w-1/2 lg:w-1/3' -%}
           </div>
         {% endif %}
+      {%- when 'breadcrumbs' -%}
+        {%- render 'product--breadcrumbs' -%}
+      {%- when 'title' -%}
+        <h1 {{ block.shopify_attributes }} class='{{ block.settings.heading_size }}'>{{ product.title | escape }}</h1>
     {%- endcase -%}
   {%- endfor -%}
 </section>
