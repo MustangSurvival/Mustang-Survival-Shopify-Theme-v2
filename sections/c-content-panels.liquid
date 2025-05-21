@@ -3,6 +3,22 @@
   if section.index == 1
     assign fetch_priority = 'high'
   endif
+
+  assign image_left = false
+  assign border_classes = ''
+  assign order_classes = ''
+
+  if section.settings.image_position == 'left'
+    assign image_left = true
+  endif
+
+  if image_left
+    assign border_classes = 'pl-[20px] mx-[20px] lg:mr-[80px] lg:mr-0 lg:pr-[70px] relative border-l lg:border-l-0 border-t-line-break'
+    assign order_classes = 'relative -order-1 min-h-[237px] lg:min-h-[463px]'
+  else
+    assign border_classes = 'pl-[20px] mx-[20px] lg:ml-[80px] lg:ml-0 lg:pl-[70px] relative border-l lg:border-l-0 border-t-line-break'
+    assign order_classes = 'relative order-1 lg:order-none min-h-[237px] lg:min-h-[463px]'
+  endif
 -%}
 
 {% capture content %}
@@ -48,15 +64,15 @@
   {% endif %}
 {% endcapture %}
 <div class='relative grid lg:grid-cols-2 gap-[45px] lg:gap-[50px] isolate gap-y-sm mb-[50px] lg:mb-[177px]'>
-  <div class="pl-[20px] mx-[20px] lg:ml-[80px] lg:mr-0 lg:pl-[70px] relative border-l lg:border-l-0 border-t-line-break">
+  <div class="{{ border_classes }}">
     {% if section.settings.line_break %}
-      <span class="hidden absolute lg:block pointer-events-none w-[150%] h-[80%] top-[40%] left-0 border-b border-l border-t-line-break"></span>
+      <span class="hidden absolute lg:block pointer-events-none w-[150%] h-[80%] top-[40%] {% if image_left %}right-0 border-r{% else %}left-0 border-l{% endif %} border-b border-t-line-break"></span>
     {% endif %}
     {{ content }}
   </div>
 
   {% if section.settings.image %}
-    <div class="relative -order-1 lg:order-1 min-h-[237px] lg:min-h-[463px]">
+    <div class="{{ order_classes }}">
       {% capture sizes %}(min-width: 1100px) 100vw, (min-width: 750px) 50vw{% endcapture %}
       {% assign preload = true %}
       {% if section.index > 2 %}
@@ -74,6 +90,7 @@
     </div>
   {% endif %}
 </div>
+
 
 {% schema %}
   {
@@ -96,6 +113,22 @@
         "id": "line_break",
         "label": "Add line break",
         "default": true
+      },
+      {
+        "type": "select",
+        "id": "image_position",
+        "label": "Image position",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ],
+        "default": "left"
       }
     ],
     "blocks": [
