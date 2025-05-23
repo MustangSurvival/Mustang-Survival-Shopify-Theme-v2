@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        environment: [Development, Plus Dev]
+        environment: [Development, Production]
     environment: ${{ matrix.environment }}
     env:
       SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
