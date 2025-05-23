@@ -23,12 +23,19 @@
       -%}
     </div>
   </form>
+
+  {%- if block.blocks.size > 0 -%}
+    <div class='flex flex-wrap items-center gap-[20px] bg-t-grey-bg p-[25px]'>
+      {%- content_for 'blocks' -%}
+    </div>
+  {%- endif -%}
 </cart-sections>
 
 {% schema %}
 {
   "name": "Cart Items",
   "tag": null,
-  "settings": []
+  "settings": [],
+  "blocks": [{ "type": "_main-cart-items--message" }]
 }
 {% endschema %}

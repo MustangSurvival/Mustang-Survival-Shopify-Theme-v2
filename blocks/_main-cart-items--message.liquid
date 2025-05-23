@@ -1,0 +1,37 @@
+<span class='flex gap-[5px]'>
+  {% if block.settings.icon %}
+    <img
+      src='{{ block.settings.icon | image_url: width: 50, height: 50 }}'
+      alt='Icon'
+      class='w-6 h-6 mr-2'
+      width='24'
+      height='24'
+    >
+  {% endif %}
+  {{ block.settings.message }}
+</span>
+
+{% schema %}
+{
+  "name": "Message",
+  "tag": null,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "icon",
+      "label": "Icon"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "message",
+      "label": "Message",
+      "default": "Free shipping on orders over $50"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Message"
+    }
+  ]
+}
+{% endschema %}
