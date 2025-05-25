@@ -3,11 +3,11 @@
   <cart-sections
     section-id='{{ section.id }}'
     id='{{ section.id }}'
+    class='lg:col-span-3'
   >
     <h1 class='h4 mb-[20px]'>{{ 'sections.cart.summary' | t }}</h1>
 
     <div class='w-full max-w-md grid grid-cols-1 gap-sm bg-t-grey-bg p-[25px] [&>*:empty]:hidden'>
-      {% comment %} {%- render 'cart-note-input' -%} {% endcomment %}
       {% for block in section.blocks %}
         {%- case block.type -%}
           {%- else -%}
@@ -23,7 +23,10 @@
 {
   "name": "Cart Footer",
   "tag": null,
-  "settings": [],
-  "blocks": [{ "type": "_main-cart--subtotal" }, { "type": "_main-cart--buttons" }, { "type": "_main-cart--free-shipping" }]
+  "blocks": [
+    { "type": "_main-cart--subtotal" },
+    { "type": "_main-cart--buttons" },
+    { "type": "_main-cart--free-shipping" }
+  ]
 }
 {% endschema %}

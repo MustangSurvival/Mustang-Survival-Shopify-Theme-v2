@@ -530,6 +530,8 @@
       "total": "Total"
     },
     "general": {
+      "free_shipping_reached": "You qualify for free shipping",
+      "free_shipping_remaining": "{{ amount }} away from free shipping",
       "title": "Your cart",
       "note": "Add a note to your order",
       "removed_item_html": "Removed <span class=\"cart__removed-product-details\">({{ quantity }}) {{ link }}</span> from your cart.",
