@@ -1,4 +1,18 @@
 <div class='px-pagemargin 2xl:container py-[50px]'>
+  <div class='md:flex lg:items-center lg:justify-between'>
+    {%- if section.settings.title != blank -%}
+      <h2 class='{{ section.settings.heading_size }} h2 text-[32px] lg:text-[60px] mx-auto text-center'>
+        {{ section.settings.title }}
+      </h2>
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.description != blank -%}
+    <div class='text-body rte mt-[10px] mb-[20px] mx-auto text-center'>
+      {{ section.settings.description -}}
+    </div>
+  {%- endif -%}
+
   {% capture slides %}
     {% for product in section.settings.collection.products, limit: section.settings.products_to_show %}
       <swiper-slide class='flex-none h-auto justify-center px-2'>
@@ -13,83 +27,80 @@
       </swiper-slide>
     {% endfor %}
   {% endcapture %}
-  {% render 'c-carousel'
-    , slides: slides
-    , arrows: 'center'
-    , slides_per_view_mobile: 2
-    , slides_per_view_desktop: 4 %}
+  {% render 'c-carousel', slides: slides, arrows: 'center', slides_per_view_mobile: 2, slides_per_view_desktop: 4 %}
 </div>
 
 {% schema %}
-  {
-    "name": "Featured Collection",
-    "tag": "section",
-    "class": "section",
-    "disabled_on": {
-      "groups": ["header", "footer"]
+{
+  "name": "Featured Collection",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Featured Collection",
+      "label": "Heading"
     },
-    "settings": [
-      {
-        "type": "inline_richtext",
-        "id": "title",
-        "default": "Featured Collection",
-        "label": "Heading"
-      },
-      {
-        "type": "select",
-        "id": "heading_size",
-        "options": [
-          {
-            "value": "!h1",
-            "label": "H1"
-          },
-          {
-            "value": "!h2",
-            "label": "H2"
-          },
-          {
-            "value": "!h3",
-            "label": "H3"
-          },
-          {
-            "value": "!h4",
-            "label": "H4"
-          }
-        ],
-        "default": "!h2",
-        "label": "Heading Size"
-      },
-      {
-        "type": "richtext",
-        "id": "description",
-        "label": "Description"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_description",
-        "label": "Show Description From Collection",
-        "default": false
-      },
-      {
-        "type": "collection",
-        "id": "collection",
-        "label": "Collection"
-      },
-      {
-        "type": "range",
-        "id": "products_to_show",
-        "min": 2,
-        "max": 25,
-        "step": 1,
-        "default": 4,
-        "label": "Number of Products to Show"
-      }
-    ],
-    "presets": [
-      {
-        "name": "Featured Collection",
-        "category": "Custom"
-      }
-    ]
-  }
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "!h1",
+          "label": "H1"
+        },
+        {
+          "value": "!h2",
+          "label": "H2"
+        },
+        {
+          "value": "!h3",
+          "label": "H3"
+        },
+        {
+          "value": "!h4",
+          "label": "H4"
+        }
+      ],
+      "default": "!h2",
+      "label": "Heading Size"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show Description From Collection",
+      "default": false
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 25,
+      "step": 1,
+      "default": 4,
+      "label": "Number of Products to Show"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collection",
+      "category": "Custom"
+    }
+  ]
+}
 {% endschema %}
