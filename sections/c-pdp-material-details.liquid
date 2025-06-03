@@ -1,5 +1,6 @@
 {% assign valid_tags = 'marinespec-bp,marinespec-sp,marinespec-mp,milspec65' %}
 {% assign product_has_valid_tag = false %}
+{% assign has_content = false %}
 
 {% for tag in product.tags %}
   {% if valid_tags contains tag %}
@@ -8,75 +9,87 @@
   {% endif %}
 {% endfor %}
 
-{% if product_has_valid_tag %}
-  {% if product.tags contains 'marinespec-mp' %}
-    {% assign spec_image = shop.metafields.globals.marine_spec_image %}
-    {% assign material_graph = shop.metafields.globals.marine_spec_material_graph %}
-    {% assign material_name = shop.metafields.globals.marine_spec_material_name %}
-    {% assign material_description = shop.metafields.globals.marine_spec_material_description %}
-  {% elsif product.tags contains 'marinespec-sp' %}
-    {% assign spec_image = shop.metafields.globals.marine_spec_sp_image %}
-    {% assign material_graph = shop.metafields.globals.marine_spec_sp_material_graph %}
-    {% assign material_name = shop.metafields.globals.marine_spec_sp_material_name %}
-    {% assign material_description = shop.metafields.globals.marine_spec_sp_material_description %}
-  {% elsif product.tags contains 'marinespec-bp' %}
-    {% assign spec_image = shop.metafields.globals.marine_spec_bp_image %}
-    {% assign material_graph = shop.metafields.globals.marine_spec_bp_material_graph %}
-    {% assign material_name = shop.metafields.globals.marine_spec_bp_material_name %}
-    {% assign material_description = shop.metafields.globals.marine_spec_bp_material_description %}
-  {% elsif product.tags contains 'milspec65' %}
-    {% assign spec_image = shop.metafields.globals.mil_spec_65_image %}
-    {% assign material_graph = shop.metafields.globals.mil_spec_65_material_graph %}
-    {% assign material_name = shop.metafields.globals.mil_spec_65_material_name %}
-    {% assign material_description = shop.metafields.globals.mil_spec_65_material_description %}
-  {% endif %}
+{% if product.tags contains 'marinespec-mp' %}
+  {% assign spec_image = shop.metafields.globals.marine_spec_image %}
+  {% assign material_graph = shop.metafields.globals.marine_spec_material_graph %}
+  {% assign material_name = shop.metafields.globals.marine_spec_material_name %}
+  {% assign material_description = shop.metafields.globals.marine_spec_material_description %}
+{% elsif product.tags contains 'marinespec-sp' %}
+  {% assign spec_image = shop.metafields.globals.marine_spec_sp_image %}
+  {% assign material_graph = shop.metafields.globals.marine_spec_sp_material_graph %}
+  {% assign material_name = shop.metafields.globals.marine_spec_sp_material_name %}
+  {% assign material_description = shop.metafields.globals.marine_spec_sp_material_description %}
+{% elsif product.tags contains 'marinespec-bp' %}
+  {% assign spec_image = shop.metafields.globals.marine_spec_bp_image %}
+  {% assign material_graph = shop.metafields.globals.marine_spec_bp_material_graph %}
+  {% assign material_name = shop.metafields.globals.marine_spec_bp_material_name %}
+  {% assign material_description = shop.metafields.globals.marine_spec_bp_material_description %}
+{% elsif product.tags contains 'milspec65' %}
+  {% assign spec_image = shop.metafields.globals.mil_spec_65_image %}
+  {% assign material_graph = shop.metafields.globals.mil_spec_65_material_graph %}
+  {% assign material_name = shop.metafields.globals.mil_spec_65_material_name %}
+  {% assign material_description = shop.metafields.globals.mil_spec_65_material_description %}
 {% endif %}
 
-{% if spec_image or material_name or material_graph or material_description %}
-  <div class='material-details-section shopify-section container'>
-    <div class='material-details-content'>
-      {% if spec_image %}
-        <div class='material-image'>
-          {% assign image_object = spec_image[0] %}
-          {% capture sizes %}(min-width: 1100px) 100vw, (min-width: 750px) 50vw{% endcapture %}
-          {% assign preload = true %}
-          {% if section.index > 2 %}
-            {% assign preload = false %}
-          {% endif %}
-          {% render 'image',
-            image: image_object,
-            sizes: sizes,
-            widths: '600, 900, 1100, 1440, 2180',
-            preload: preload,
-            alt: product.title
-          %}
+{% if spec_image %}
+  {% assign has_content = true %}
+  {% assign image_object = spec_image[0] %}
+{% endif %}
+
+{% if material_graph %}
+  {% assign has_content = true %}
+  {% assign graph_object = material_graph[0] %}
+{% endif %}
+
+{% if material_name %}
+  {% assign has_content = true %}
+  {% assign material_name = material_name | strip_html %}
+{% endif %}
+
+{% if material_description %}
+  {% assign has_content = true %}
+  {% assign material_description = material_description | strip_html %}
+{% endif %}
+
+{% if product_has_valid_tag and has_content %}
+  <div class='bg-t-grey-bg'>
+    <div class='flex flex-col lg:flex-row px-pagemargin 2xl:container mt-[26px] lg:mt-[22.5px] py-[38px] gap-[30px] lg:gap-[39px]'>
+      {% if image_object %}
+        <div>
+          <img
+            src='{{ image_object.src | image_url: "1000x" }}'
+            width='{{ image_object.width }}'
+            height='{{ image_object.height }}'
+            alt='{{ material_name | strip_html }} fabric sample displayed for {{ product.title }} in a technical product environment. The image shows detailed texture and weave of the material, conveying a sense of durability and innovation. Any visible text in the image: {{ image_object.alt }}.'
+          >
         </div>
       {% endif %}
 
-      <div class='material-text'>
-        {{ material_name }}
-
-        <h4 class='material-product-name'>{{ product.title }}</h4>
-
-        {% if material_graph %}
-          <div class='material-secondary-image'>
-            {% assign graph_object = material_graph[0] %}
-            {% capture sizes %}(min-width: 1100px) 100vw, (min-width: 750px) 50vw{% endcapture %}
-            {% assign preload = true %}
-            {% if section.index > 2 %}
-              {% assign preload = false %}
-            {% endif %}
-            {% render 'image',
-              image: graph_object,
-              sizes: sizes,
-              widths: '600, 900, 1100, 1440, 2180',
-              preload: preload,
-              alt: 'Material Graph'
-            %}
-          </div>
+      <div class="flex flex-col justify-center">
+        {% if material_name %}
+          {% assign material_name_parts = material_name | split: '|' %}
+          <h3>
+            <span>{{ material_name_parts[0] }} | </span>
+            <span class='text-t-marine-spec-mp'>{{ material_name_parts[1] }}</span>
+          </h3>
         {% endif %}
 
-        {{ material_description }}
+        <h4 class='h5'>{{ product.title }}</h4>
+
+        {% if material_graph %}
+            <img
+              src='{{ graph_object.src | image_url: "1000x" }}'
+              width='{{ graph_object.width }}'
+              height='{{ graph_object.height }}'
+              alt='Material performance graph illustrating key properties such as durability, breathability, and water resistance. The graph is set against a clean technical background, emphasizing clarity and precision. Any visible text in the graph: {{ graph_object.alt }}. The tone is informative and professional.'
+              class="my-[14px] lg:max-w-[400px]"
+            >
+        {% endif %}
+
+        {% if material_description %}
+          {% assign has_content = true %}
+          {{ material_description }}
+        {% endif %}
       </div>
     </div>
   </div>

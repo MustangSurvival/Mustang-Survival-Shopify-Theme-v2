@@ -24,13 +24,13 @@
   endfor
 
   if show_ingrid_items
-    assign colleciton_ingrids = collection.metafields.custom.in_grid_content.value
+    assign collection_ingrids = collection.metafields.custom.in_grid_content.value
 
-    if colleciton_ingrids == blank
+    if collection_ingrids == blank
       assign show_ingrid_items = false
     else
-      assign collection_ingrids_mobile_positions = colleciton_ingrids | map: 'grid_position_small_screen' | uniq
-      assign collection_ingrids_positions = colleciton_ingrids | map: 'grid_position' | uniq
+      assign collection_ingrids_mobile_positions = collection_ingrids | map: 'grid_position_small_screen' | uniq
+      assign collection_ingrids_positions = collection_ingrids | map: 'grid_position' | uniq
 
       assign count_desktop = 0
       assign adjusted_index_desktop = 0
@@ -109,8 +109,8 @@
         </aside>
 
         <div class='grid lg:grid-cols-4 gap-[20px]'>
-          <div class="hidden lg:block">
-            <p class="h6">Filter By</p>
+          <div class='hidden lg:block'>
+            <p class='h6'>Filter By</p>
             {% render 'facets', results: collection, prefix: 'desktop' %}
           </div>
           <div class='lg:col-span-3' sub-section-id='product-grid-container' id='product-grid-container'>
@@ -121,7 +121,17 @@
                 {{ collection.products_count | pluralize: 'Product', 'Products' }}
               </p>
             </div>
-            {% render 'c-product-grid' %}
+            {% render 'c-product-grid',
+              collection_ingrids: collection_ingrids,
+              collection_ingrids_mobile_positions: collection_ingrids_mobile_positions,
+              collection_ingrids_positions: collection_ingrids_positions,
+              count_desktop: count_desktop,
+              adjusted_index_desktop: adjusted_index_desktop,
+              occupied_positions_desktop: occupied_positions_desktop,
+              count_mobile: count_mobile,
+              adjusted_index_mobile: adjusted_index_mobile,
+              occupied_positions_mobile: occupied_positions_mobile
+            %}
           </div>
         </div>
       </div>

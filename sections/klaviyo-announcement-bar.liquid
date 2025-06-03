@@ -33,7 +33,7 @@
     {%- endif -%}
     {% liquid
       if block.type == 'announcement_pers'
-        assign klaviyo_pesonalization_group_id = block.settings.klaviyo_pesonalization_group_id
+        assign klaviyo_personalization_group_id = block.settings.klaviyo_personalization_group_id
         assign klaviyo_pesonalization_enable_group = block.settings.klaviyo_pesonalization_enable_group
         assign show_bar = false
         assign allowed_groups = ''
@@ -61,8 +61,8 @@
             endfor
           endif
         endif
-        if klaviyo_pesonalization_group_id != blank and klaviyo_pesonalization_enable_group
-          if allowed_groups contains klaviyo_pesonalization_group_id
+        if klaviyo_personalization_group_id != blank and klaviyo_pesonalization_enable_group
+          if allowed_groups contains klaviyo_personalization_group_id
             assign show_bar = true
           endif
         endif
@@ -289,9 +289,9 @@
         },
         {
           "type": "text",
-          "id": "klaviyo_pesonalization_group_id",
-          "label": "t:sections.klaviyo-personalization_announcement-bar.settings.klaviyo_pesonalization_group_id.label",
-          "info": "t:sections.klaviyo-personalization_announcement-bar.settings.klaviyo_pesonalization_group_id.info"
+          "id": "klaviyo_personalization_group_id",
+          "label": "t:sections.klaviyo-personalization_announcement-bar.settings.klaviyo_personalization_group_id.label",
+          "info": "t:sections.klaviyo-personalization_announcement-bar.settings.klaviyo_personalization_group_id.info"
         },
         {
           "type": "inline_richtext",

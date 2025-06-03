@@ -30,7 +30,7 @@
 
           if collection_ingrids_mobile_positions contains adjusted_index_mobile
             unless occupied_positions_mobile contains adjusted_index_mobile
-              assign in_grid_for_position = colleciton_ingrids | where: 'grid_position_small_screen', adjusted_index_mobile | first
+              assign in_grid_for_position = collection_ingrids | where: 'grid_position_small_screen', adjusted_index_mobile | first
 
               render 'collection-ingrid-item', item: in_grid_for_position, is_mobile: true, index: index_with_offset
 
@@ -43,7 +43,7 @@
 
           if collection_ingrids_positions contains adjusted_index_desktop
             unless occupied_positions_desktop contains adjusted_index_desktop
-              assign in_grid_for_position = colleciton_ingrids | where: 'grid_position', adjusted_index_desktop | first
+              assign in_grid_for_position = collection_ingrids | where: 'grid_position', adjusted_index_desktop | first
 
               render 'collection-ingrid-item', item: in_grid_for_position, is_mobile: false, index: index_with_offset
 

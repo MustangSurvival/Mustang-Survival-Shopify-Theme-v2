@@ -163,7 +163,7 @@
   },
   "sections": {
     "gift-card-balance": {
-      "name" : "Gift card balance",
+      "name": "Gift card balance",
       "title": {
         "label": "Title"
       }
@@ -224,7 +224,7 @@
     "klaviyo-personalization_announcement-bar": {
       "name": "Klaviyo Announcement Bar",
       "settings": {
-        "klaviyo_pesonalization_group_id": {
+        "klaviyo_personalization_group_id": {
           "label": "Group ID",
           "info": "Group ID for personalization content"
         },
@@ -341,7 +341,7 @@
           "label": "Heading",
           "default": "Video"
         },
-        "main_description" : {
+        "main_description": {
           "label": "Description"
         },
         "cover_image": {
@@ -697,7 +697,7 @@
         "description": {
           "label": "Description"
         },
-      "show_description": {
+        "show_description": {
           "label": "Show collection description from the admin"
         },
         "description_style": {
@@ -768,7 +768,7 @@
         "name": "Klaviyo Image carousel"
       },
       "settings": {
-        "klaviyo_pesonalization_group_id": {
+        "klaviyo_personalization_group_id": {
           "label": "Group ID",
           "info": "Group ID for personalization content"
         },

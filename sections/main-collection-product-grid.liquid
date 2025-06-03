@@ -53,13 +53,13 @@
   endfor
 
   if show_ingrid_items
-    assign colleciton_ingrids = collection.metafields.custom.in_grid_content.value
+    assign collection_ingrids = collection.metafields.custom.in_grid_content.value
 
-    if colleciton_ingrids == blank
+    if collection_ingrids == blank
       assign show_ingrid_items = false
     else
-      assign collection_ingrids_mobile_positions = colleciton_ingrids | map: 'grid_position_small_screen' | uniq
-      assign collection_ingrids_positions = colleciton_ingrids | map: 'grid_position' | uniq
+      assign collection_ingrids_mobile_positions = collection_ingrids | map: 'grid_position_small_screen' | uniq
+      assign collection_ingrids_positions = collection_ingrids | map: 'grid_position' | uniq
 
       assign count_desktop = 0
       assign adjusted_index_desktop = 0
@@ -136,7 +136,7 @@
 
                     if collection_ingrids_mobile_positions contains adjusted_index_mobile
                       unless occupied_positions_mobile contains adjusted_index_mobile 
-                        assign in_grid_for_position = colleciton_ingrids | where: 'grid_position_small_screen', adjusted_index_mobile | first
+                        assign in_grid_for_position = collection_ingrids | where: 'grid_position_small_screen', adjusted_index_mobile | first
                         if section.settings.klaviyo_pesonalization_enable_group
                           render 'personalization-collection-ingrid-item', item: in_grid_for_position, is_mobile: true, index: index_with_offset, allowed_groups: allowed_groups
                         else
@@ -152,7 +152,7 @@
 
                     if collection_ingrids_positions contains adjusted_index_desktop
                       unless occupied_positions_desktop contains adjusted_index_desktop
-                        assign in_grid_for_position = colleciton_ingrids | where: 'grid_position', adjusted_index_desktop | first
+                        assign in_grid_for_position = collection_ingrids | where: 'grid_position', adjusted_index_desktop | first
                         
                         if section.settings.klaviyo_pesonalization_enable_group
                           render 'personalization-collection-ingrid-item', item: in_grid_for_position, is_mobile: false, index: index_with_offset, allowed_groups: allowed_groups

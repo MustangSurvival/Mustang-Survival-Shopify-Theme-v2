@@ -138,29 +138,16 @@ You can find the Project Demo built using the `styleguide.liquid` layout, by cre
 
 ## Deployments
 
-### Setting up the deployments
-
-You can automate the deployment process of your project using GitHub Actions and ensure a smooth release to your Shopify store(s).
-To setup deployments for your project using GitHub Actions, follow these steps:
-
-1. Create a new environment on your GitHub repository, such as "Dev".
-
-2. Set up an environment variable named `SHOPIFY_FLAG_STORE` with the URL of your Shopify store (e.g., `https://yourstore.myshopify.com`).
-
-3. Generate a Shopify CLI theme token using the Theme Access app installed on your store.
-
-4. Set up an environment secret named `SHOPIFY_CLI_THEME_TOKEN` and paste the generated theme token as the value.
-
 ### Running a deployment
 
-Use the `deploy.yml` GitHub Actions workflow file for deploying to a single store, or use the `deployAll.yml` workflow file for deploying to multiple stores.
+Use the `deploy.yml` GitHub Actions workflow file for deploying to a single store.
 
 To start a new deployment use the following steps:
 
 1. Go to Github repo > **Actions**
-2. On left sidebar choose the correct deployment workflow. This will either be **Deploy v3** or **Deploy to Multi Environment**.
+2. On left sidebar choose **Deploy V3**
 3. Click on the **Run Workflow** button and a popup will open
-4. Choose the branch you want to deploy from and the store environment you want to deploy too
+4. Choose the branch you want to deploy from and the store environment you want to deploy to
 5. Optionally, specify a theme ID in the **Theme Override** field if you want to deploy to an existing (non live) theme, otherwise the live theme will be duplicated and this newly duplicated theme will be used to deploy too
 6. Optionally, select whether to publish this new theme as part of the deployment process or not
 7. Click the **Run workflow** button to start the deployment
@@ -181,12 +168,11 @@ This action works by:
 - For any template files that exist in both the published theme and the deployment theme, only the published themes version will be kept
 - All these JSON files will then be pushed to the deployment theme
 
-## Working with a Windows Computer ?
+## Working with a Windows Computer?
 
 We leverage `npx`, for running Shopify CLI, that is not fully compatible with windows machines as a work around to start development we need to use multiple shells
 
 1. On the first shell run command `npm run theme:assets`;
-
 2. On the second shell run command `npm run theme:shopify:initial-push-w; npm run theme:shopify;`
 
 # Customizing Swiper with Injected CSS

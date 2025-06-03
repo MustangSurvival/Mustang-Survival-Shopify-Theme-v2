@@ -53,19 +53,19 @@
   endfor
 
   if show_ingrid_items
-    assign colleciton_ingrids = collection.metafields.custom.in_grid_content.value
+    assign collection_ingrids = collection.metafields.custom.in_grid_content.value
 
-    if colleciton_ingrids == blank
+    if collection_ingrids == blank
       assign show_ingrid_items = false
     else
-      assign klaviyo_pesonalization_group_id = colleciton_ingrids.klaviyo_group_id.value
-      if klaviyo_pesonalization_group_id != blank and klaviyo_pesonalization_enable_group
-        unless allowed_groups contains klaviyo_pesonalization_group_id
+      assign klaviyo_personalization_group_id = collection_ingrids.klaviyo_group_id.value
+      if klaviyo_personalization_group_id != blank and klaviyo_pesonalization_enable_group
+        unless allowed_groups contains klaviyo_personalization_group_id
           assign show_ingrid_items = false
         endunless
       endif
-      assign collection_ingrids_mobile_positions = colleciton_ingrids | map: 'grid_position_small_screen' | uniq
-      assign collection_ingrids_positions = colleciton_ingrids | map: 'grid_position' | uniq
+      assign collection_ingrids_mobile_positions = collection_ingrids | map: 'grid_position_small_screen' | uniq
+      assign collection_ingrids_positions = collection_ingrids | map: 'grid_position' | uniq
     endif
   endif
 %}
@@ -131,12 +131,12 @@
                     endif
 
                     if collection_ingrids_mobile_positions contains index_with_offset
-                      assign in_grid_for_position = colleciton_ingrids | where: 'grid_position_small_screen', index_with_offset | first
+                      assign in_grid_for_position = collection_ingrids | where: 'grid_position_small_screen', index_with_offset | first
                       render 'collection-ingrid-item', item: in_grid_for_position, is_mobile: true, index: forloop.index
                     endif
 
                     if collection_ingrids_positions contains index_with_offset
-                      assign in_grid_for_position = colleciton_ingrids | where: 'grid_position', index_with_offset | first
+                      assign in_grid_for_position = collection_ingrids | where: 'grid_position', index_with_offset | first
                       render 'collection-ingrid-item', item: in_grid_for_position, is_mobile: false, index: forloop.index
                     endif
                   -%}

@@ -1,6 +1,6 @@
 {%- liquid
   assign slides = section.blocks | where: 'type', 'slide'
-  assign klaviyo_pesonalization_group_id = section.settings.klaviyo_pesonalization_group_id
+  assign klaviyo_personalization_group_id = section.settings.klaviyo_personalization_group_id
   assign klaviyo_pesonalization_enable_group = section.settings.klaviyo_pesonalization_enable_group
   assign cart_attributes = cart.attributes
   assign show_section = false
@@ -30,8 +30,8 @@
       endfor
     endif
   endif
-  if klaviyo_pesonalization_group_id != blank and klaviyo_pesonalization_enable_group
-    if allowed_groups contains klaviyo_pesonalization_group_id
+  if klaviyo_personalization_group_id != blank and klaviyo_pesonalization_enable_group
+    if allowed_groups contains klaviyo_personalization_group_id
       assign show_section = true
     endif
   endif
@@ -144,9 +144,9 @@
     },
     {
       "type": "text",
-      "id": "klaviyo_pesonalization_group_id",
-      "label": "t:sections.klaviyo-personalization_image-carousel.settings.klaviyo_pesonalization_group_id.label",
-      "info": "t:sections.klaviyo-personalization_image-carousel.settings.klaviyo_pesonalization_group_id.info"
+      "id": "klaviyo_personalization_group_id",
+      "label": "t:sections.klaviyo-personalization_image-carousel.settings.klaviyo_personalization_group_id.label",
+      "info": "t:sections.klaviyo-personalization_image-carousel.settings.klaviyo_personalization_group_id.info"
     }
   ],
   "blocks": [
