@@ -33,7 +33,7 @@
   >
     <div
       aria-label='{{ alt }}'
-      class='absolute inset-0 w-full h-full flex justify-end items-end z-10'
+      class='w-full h-full flex justify-end items-end z-10'
     >
       {%- if poster != null -%}
         {%- render 'image',
@@ -48,27 +48,29 @@
       {%- else -%}
         {{ 'hero-apparel-3' | placeholder_svg_tag: 'absolute inset-0 w-full h-full' }}
       {%- endif -%}
-      <div class='flex items-center justify-end gap-xs m-sm'>
-        <button
-          type='button'
-          play-toggle
-          class='size-10 text-t-foreground rounded bg-t-background bg-opacity-40 inline-flex items-center justify-center z-10 drop-shadow'
-        >
-          {%- render 'icon' with 'icon-play', size: 16, class: 'group-[[playing="true"]]:hidden' -%}
-          {%- render 'icon' with 'icon-pause', size: 16, class: 'group-[[playing="false"]]:hidden' -%}
-        </button>
-
-        {%- if toggle_muting -%}
+      {%- unless controls -%}
+        <div class='flex items-center justify-end gap-xs m-sm'>
           <button
             type='button'
-            volume-toggle
+            play-toggle
             class='size-10 text-t-foreground rounded bg-t-background bg-opacity-40 inline-flex items-center justify-center z-10 drop-shadow'
           >
-            {%- render 'icon' with 'icon-unmute', size: 16, class: 'group-[[muted="true"]]:hidden' -%}
-            {%- render 'icon' with 'icon-mute', size: 16, class: 'group-[[muted="false"]]:hidden' -%}
+            {%- render 'icon' with 'icon-play', size: 16, class: 'group-[[playing="true"]]:hidden' -%}
+            {%- render 'icon' with 'icon-pause', size: 16, class: 'group-[[playing="false"]]:hidden' -%}
           </button>
-        {%- endif -%}
-      </div>
+
+          {%- if toggle_muting -%}
+            <button
+              type='button'
+              volume-toggle
+              class='size-10 text-t-foreground rounded bg-t-background bg-opacity-40 inline-flex items-center justify-center z-10 drop-shadow'
+            >
+              {%- render 'icon' with 'icon-unmute', size: 16, class: 'group-[[muted="true"]]:hidden' -%}
+              {%- render 'icon' with 'icon-mute', size: 16, class: 'group-[[muted="false"]]:hidden' -%}
+            </button>
+          {%- endif -%}
+        </div>
+      {%- endunless -%}
     </div>
 
     {%- assign video_class = 'absolute w-full h-full inset-0' | append: ' ' | append: object_fit -%}
