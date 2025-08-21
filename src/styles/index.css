@@ -329,7 +329,7 @@
   .btn[variant='quaternary']:focus,
   .btn[variant='quaternary']:active {
     background-color: #ddcf2e;
-    border-color: #ddcf2e;
+    border-color: black;
     color: black;
   }
 
