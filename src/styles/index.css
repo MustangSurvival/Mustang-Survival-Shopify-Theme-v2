@@ -225,7 +225,7 @@
   }
 
   .blur-bg:before {
-    @apply content-[""] absolute w-full h-full blur-md;
+    @apply absolute h-full w-full blur-md content-[""];
   }
 
   .blur-bg {
@@ -237,7 +237,7 @@
   }
 
   .btn {
-    @apply uppercase transition-colors font-medium cursor-pointer;
+    @apply cursor-pointer font-medium uppercase transition-colors;
     padding: 6px 30px !important;
     font-family: var(--font-family-tertiary); /* Default Tungsten */
     font-size: 30px !important;
@@ -245,13 +245,13 @@
     line-height: 29px;
   }
 
-  .btn[data-font="gotham"] {
+  .btn[data-font='gotham'] {
     font-family: var(--font-family-primary);
     font-size: 15px !important;
     line-height: 1.3;
   }
 
-  .btn[data-font="tungsten"] {
+  .btn[data-font='tungsten'] {
     font-family: var(--font-family-tertiary);
     font-size: 1.875rem !important; /* 30px - comparable to Gotham but slightly larger for Tungsten */
     line-height: 1.3;
@@ -270,25 +270,25 @@
     @apply cursor-not-allowed;
   }
 
-  .btn[variant="primary"] {
-    border: 1px solid var(--t-foreground);
-    background-color: var(--t-background);
-    color: var(--t-foreground);
+  .btn[variant='primary'] {
+    border: 1px solid transparent;
+    background-color: white;
+    color: black;
   }
 
-  .btn[variant="secondary"] {
-    border: 1px solid var(--t-background);
-    background-color: var(--t-background);
-    color: var(--t-foreground);
+  .btn[variant='secondary'] {
+    border: 1px solid black;
+    background-color: white;
+    color: black;
   }
 
-  .btn[variant="tertiary"] {
-    border: 1px solid var(--t-foreground);
-    background-color: var(--t-brand-primary);
-    color: var(--t-foreground);
+  .btn[variant='tertiary'] {
+    border: 1px solid transparent;
+    background-color: white;
+    color: black;
   }
 
-  .btn[variant="quaternary"] {
+  .btn[variant='quaternary'] {
     @apply text-body normal-case;
     font-size: 15px !important;
     line-height: 24px !important;
@@ -297,25 +297,35 @@
     color: var(--t-foreground);
   }
 
-  .btn[variant="quinary"] {
-    @apply text-body uppercase !text-[16px] !leading-[26px] py-[13.5px] px-[60px] tracking-[0.48px] font-medium;
+  .btn[variant='quinary'] {
+    @apply text-body px-[60px] py-[13.5px] !text-[16px] font-medium uppercase !leading-[26px] tracking-[0.48px];
     border: 1px solid var(--t-foreground);
     background-color: var(--t-foreground);
     color: var(--t-background);
   }
 
-  .btn[variant="primary"]:hover,
-  .btn[variant="primary"]:focus,
-  .btn[variant="primary"]:active,
-  .btn[variant="secondary"]:hover,
-  .btn[variant="secondary"]:focus,
-  .btn[variant="secondary"]:active,
-  .btn[variant="tertiary"]:hover,
-  .btn[variant="tertiary"]:focus,
-  .btn[variant="tertiary"]:active {
-    background-color: var(--t-foreground);
-    border-color: var(--t-foreground);
-    color: var(--t-background);
+  .btn[variant='primary']:hover,
+  .btn[variant='primary']:focus,
+  .btn[variant='primary']:active {
+    background-color: black;
+    border-color: black;
+    color: white;
+  }
+
+  .btn[variant='secondary']:hover,
+  .btn[variant='secondary']:focus,
+  .btn[variant='secondary']:active {
+    background-color: black;
+    border-color: black;
+    color: white;
+  }
+
+  .btn[variant='tertiary']:hover,
+  .btn[variant='tertiary']:focus,
+  .btn[variant='tertiary']:active {
+    background-color: #DDCF2E;
+    border-color: #DDCF2E;
+    color: black;
   }
 
   .yotpo-sr-bottom-line-summary {
@@ -323,7 +333,7 @@
   }
 
   [product-form] .yotpo-sr-bottom-line-summary {
-    @apply !flex-row gap-px mb-[8px] lg:mb-[13px];
+    @apply mb-[8px] !flex-row gap-px lg:mb-[13px];
   }
 
   .yotpo-reviews-star-ratings-widget {
@@ -334,7 +344,7 @@
     @apply text-[14px] font-medium;
 
     span {
-      @apply text-t-foreground
+      @apply text-t-foreground;
     }
   }
 
@@ -344,7 +354,7 @@
 
   swiper-with-media swiper-container::part(button-next),
   swiper-with-media swiper-container::part(button-prev) {
-    @apply h-[67.6px] w-[36px] py-[24px] px-[12px] box-border text-t-sale-price border-solid border border-t-sale-price bg-p-lightest;
+    @apply box-border h-[67.6px] w-[36px] border border-solid border-t-sale-price bg-p-lightest px-[12px] py-[24px] text-t-sale-price;
   }
 
   [announcement-bar] .swiper-button-prev,
