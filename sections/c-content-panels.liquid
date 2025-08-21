@@ -48,6 +48,7 @@
                 {% endif %}
                 class='my-2 btn w-max'
                 variant='{% if block.settings.button_style_secondary %}secondary{% else %}primary{% endif %}'
+                data-font='{{ block.settings.button_font | default: "tungsten" }}'
                 {{ block.shopify_attributes }}
               >
                 {{ block.settings.button_label | escape }}
@@ -64,211 +65,228 @@
   {% endif %}
 {% endcapture %}
 <div class='relative grid lg:grid-cols-2 gap-[45px] lg:gap-[50px] isolate gap-y-sm mb-[50px] lg:mb-[177px]'>
-  <div class="{{ border_classes }}">
+  <div class='{{ border_classes }}'>
     {% if section.settings.line_break %}
-      <span class="hidden absolute lg:block pointer-events-none w-[150%] h-[80%] top-[40%] {% if image_left %}right-0 border-r{% else %}left-0 border-l{% endif %} border-b border-t-line-break"></span>
+      <span
+        class='hidden absolute lg:block pointer-events-none w-[150%] h-[80%] top-[40%] {% if image_left %}right-0 border-r{% else %}left-0 border-l{% endif %} border-b border-t-line-break'
+      ></span>
     {% endif %}
     {{ content }}
   </div>
 
   {% if section.settings.image %}
-    <div class="{{ order_classes }}">
+    <div class='{{ order_classes }}'>
       {% capture sizes %}(min-width: 1100px) 100vw, (min-width: 750px) 50vw{% endcapture %}
       {% assign preload = true %}
       {% if section.index > 2 %}
         {% assign preload = false %}
       {% endif %}
-      {% render 'image'
-        , image: section.settings.image
-        , sizes: sizes
-        , widths: '600, 900, 1100, 1440, 2180'
-        , preload: preload
-        , class: 'absolute inset-0 w-full h-full -z-10'
-        , fetchpriority: fetch_priority
+      {% render 'image',
+        image: section.settings.image,
+        sizes: sizes,
+        widths: '600, 900, 1100, 1440, 2180',
+        preload: preload,
+        class: 'absolute inset-0 w-full h-full -z-10',
+        fetchpriority: fetch_priority
       %}
       {{ image_overlay }}
     </div>
   {% endif %}
 </div>
 
-
 {% schema %}
-  {
-    "name": "Content Panels",
-    "class": "section",
-    "settings": [
-      {
-        "type": "image_picker",
-        "id": "image",
-        "label": "Image"
-      },
-      {
-        "type": "checkbox",
-        "id": "image_overlay",
-        "default": false,
-        "label": "Image overlay"
-      },
-      {
-        "type": "checkbox",
-        "id": "line_break",
-        "label": "Add line break",
-        "default": true
-      },
-      {
-        "type": "select",
-        "id": "image_position",
-        "label": "Image position",
-        "options": [
-          {
-            "value": "left",
-            "label": "Left"
-          },
-          {
-            "value": "right",
-            "label": "Right"
-          }
-        ],
-        "default": "left"
-      }
-    ],
-    "blocks": [
-      {
-        "type": "heading",
-        "name": "Heading",
-        "settings": [
-          {
-            "type": "inline_richtext",
-            "id": "heading",
-            "default": "Add a heading",
-            "label": "Heading"
-          },
-          {
-            "type": "select",
-            "id": "heading_size",
-            "options": [
-              {
-                "value": "!h1",
-                "label": "H1"
-              },
-              {
-                "value": "!h2",
-                "label": "H2"
-              },
-              {
-                "value": "!h3",
-                "label": "H3"
-              },
-              {
-                "value": "!h4",
-                "label": "H4"
-              }
-            ],
-            "default": "!h4",
-            "label": "Heading size"
-          }
-        ]
-      },
-      {
-        "type": "caption",
-        "name": "Caption",
-        "settings": [
-          {
-            "type": "text",
-            "id": "caption",
-            "default": "Add a caption",
-            "label": "Caption"
-          },
-          {
-            "type": "select",
-            "id": "text_size",
-            "options": [
-              {
-                "value": "text-sm",
-                "label": "Small"
-              },
-              {
-                "value": "text-base",
-                "label": "Base"
-              },
-              {
-                "value": "text-lg",
-                "label": "Large"
-              }
-            ],
-            "default": "text-base",
-            "label": "Text size"
-          }
-        ]
-      },
-      {
-        "type": "text",
-        "name": "Text",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "richtext",
-            "id": "text",
-            "default": "<p>Use this section to welcome customers or highlight your store’s main features.</p>",
-            "label": "Text"
-          },
-          {
-            "type": "select",
-            "id": "text_size",
-            "label": "Text size",
-            "options": [
-              {
-                "value": "text-body",
-                "label": "Body"
-              },
-              {
-                "value": "text-body-large",
-                "label": "Large body"
-              }
-            ],
-            "default": "text-body"
-          }
-        ]
-      },
-      {
-        "type": "button",
-        "name": "Button",
-        "settings": [
-          {
-            "type": "text",
-            "id": "button_label",
-            "default": "Shop now",
-            "label": "Button label"
-          },
-          {
-            "type": "url",
-            "id": "button_link",
-            "label": "Button link"
-          },
-          {
-            "type": "checkbox",
-            "id": "button_style_secondary",
-            "default": false,
-            "label": "Use outline style"
-          }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Content Panels",
-        "category": "Custom",
-        "blocks": [
-          {
-            "type": "heading"
-          },
-          {
-            "type": "text"
-          },
-          {
-            "type": "button"
-          }
-        ]
-      }
-    ]
-  }
+{
+  "name": "Content Panels",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "image_overlay",
+      "default": false,
+      "label": "Image overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "line_break",
+      "label": "Add line break",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Add a heading",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "!h1",
+              "label": "H1"
+            },
+            {
+              "value": "!h2",
+              "label": "H2"
+            },
+            {
+              "value": "!h3",
+              "label": "H3"
+            },
+            {
+              "value": "!h4",
+              "label": "H4"
+            }
+          ],
+          "default": "!h4",
+          "label": "Heading size"
+        }
+      ]
+    },
+    {
+      "type": "caption",
+      "name": "Caption",
+      "settings": [
+        {
+          "type": "text",
+          "id": "caption",
+          "default": "Add a caption",
+          "label": "Caption"
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "options": [
+            {
+              "value": "text-sm",
+              "label": "Small"
+            },
+            {
+              "value": "text-base",
+              "label": "Base"
+            },
+            {
+              "value": "text-lg",
+              "label": "Large"
+            }
+          ],
+          "default": "text-base",
+          "label": "Text size"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Use this section to welcome customers or highlight your store’s main features.</p>",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text size",
+          "options": [
+            {
+              "value": "text-body",
+              "label": "Body"
+            },
+            {
+              "value": "text-body-large",
+              "label": "Large body"
+            }
+          ],
+          "default": "text-body"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Shop now",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_style_secondary",
+          "default": false,
+          "label": "Use outline style"
+        },
+        {
+          "type": "select",
+          "id": "button_font",
+          "label": "Button Font",
+          "options": [
+            {
+              "value": "gotham",
+              "label": "Gotham Narrow"
+            },
+            {
+              "value": "tungsten",
+              "label": "Tungsten"
+            }
+          ],
+          "default": "tungsten"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Content Panels",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}

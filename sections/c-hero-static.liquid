@@ -38,6 +38,7 @@
                 {% endif %}
                 class='my-2 btn'
                 variant='{{ block.settings.button_variant }}'
+                data-font='{{ block.settings.button_font | default: "tungsten" }}'
                 {{ block.shopify_attributes }}
               >
                 {{ block.settings.button_label | escape }}
@@ -52,20 +53,23 @@
   <div class='flex flex-col xl:grid xl:grid-cols-2'>
     <!-- Desktop Image -->
     {% if section.settings.image != blank or section.settings.background_color != blank %}
-      <div class='relative hidden xl:aspect-square max-w-none xl:block' style='background-color: {{ section.settings.background_color }};'>
+      <div
+        class='relative hidden xl:aspect-square max-w-none xl:block'
+        style='background-color: {{ section.settings.background_color }};'
+      >
         {% capture sizes %}(min-width: 1100px) 100vw, (min-width: 750px) 50vw{% endcapture %}
         {% assign preload = true %}
         {% if section.index > 2 %}
           {% assign preload = false %}
         {% endif %}
         {% if section.settings.image != blank %}
-          {% render 'image'
-            , image: section.settings.image
-            , sizes: sizes
-            , widths: '600, 900, 1100, 1440, 2180'
-            , preload: preload
-            , class: 'w-full aspect-square absolute inset-0 -z-0'
-            , fetchpriority: fetch_priority
+          {% render 'image',
+            image: section.settings.image,
+            sizes: sizes,
+            widths: '600, 900, 1100, 1440, 2180',
+            preload: preload,
+            class: 'w-full aspect-square absolute inset-0 -z-0',
+            fetchpriority: fetch_priority
           %}
         {% endif %}
 
@@ -79,19 +83,22 @@
 
     <!-- Mobile Image -->
     {% if section.settings.mobile_image != blank or section.settings.background_color != blank %}
-      <div class='relative max-w-none xl:hidden {% if section.settings.layout != 'text_first' %}aspect-square{% endif %}' style='background-color: {{ section.settings.background_color }};'>
+      <div
+        class='relative max-w-none xl:hidden {% if section.settings.layout != 'text_first' %}aspect-square{% endif %}'
+        style='background-color: {{ section.settings.background_color }};'
+      >
         {% assign preload = true %}
         {% if section.index > 2 %}
           {% assign preload = false %}
         {% endif %}
         {% if section.settings.mobile_image != blank %}
-          {% render 'image'
-            , image: section.settings.mobile_image
-            , sizes: '100vw'
-            , widths: '400, 600, 750'
-            , preload: preload
-            , class: 'w-full h-full absolute inset-0 -z-0'
-            , fetchpriority: fetch_priority
+          {% render 'image',
+            image: section.settings.mobile_image,
+            sizes: '100vw',
+            widths: '400, 600, 750',
+            preload: preload,
+            class: 'w-full h-full absolute inset-0 -z-0',
+            fetchpriority: fetch_priority
           %}
         {% endif %}
 
@@ -104,22 +111,27 @@
     {% endif %}
 
     <!-- Second image (desktop only if layout is text_last) -->
-    {% if section.settings.second_image != blank or section.settings.background_color != blank and section.settings.layout == 'text_last'
+    {% if section.settings.second_image != blank
+      or section.settings.background_color != blank
+      and section.settings.layout == 'text_last'
     %}
-      <div class='relative hidden xl:aspect-square max-w-none xl:block' style='background-color: {{ section.settings.background_color }};'>
+      <div
+        class='relative hidden xl:aspect-square max-w-none xl:block'
+        style='background-color: {{ section.settings.background_color }};'
+      >
         {% capture sizes %}(min-width: 1100px) 100vw, (min-width: 750px) 50vw{% endcapture %}
         {% assign preload = true %}
         {% if section.index > 2 %}
           {% assign preload = false %}
         {% endif %}
         {% if section.settings.second_image != blank %}
-          {% render 'image'
-            , image: section.settings.second_image
-            , sizes: sizes
-            , widths: '600, 900, 1100, 1440, 2180'
-            , preload: preload
-            , class: 'w-full aspect-square absolute inset-0 -z-0'
-            , fetchpriority: fetch_priority
+          {% render 'image',
+            image: section.settings.second_image,
+            sizes: sizes,
+            widths: '600, 900, 1100, 1440, 2180',
+            preload: preload,
+            class: 'w-full aspect-square absolute inset-0 -z-0',
+            fetchpriority: fetch_priority
           %}
         {% endif %}
 
@@ -132,21 +144,26 @@
     {% endif %}
 
     <!-- Second Image (mobile) -->
-    {% if section.settings.second_mobile_image != blank or section.settings.background_color != blank and section.settings.layout == 'text_last'
+    {% if section.settings.second_mobile_image != blank
+      or section.settings.background_color != blank
+      and section.settings.layout == 'text_last'
     %}
-      <div class='relative max-w-none xl:hidden {% if section.settings.layout == 'text_first' %}aspect-square{% endif %}' style='background-color: {{ section.settings.background_color }};'>
+      <div
+        class='relative max-w-none xl:hidden {% if section.settings.layout == 'text_first' %}aspect-square{% endif %}'
+        style='background-color: {{ section.settings.background_color }};'
+      >
         {% assign preload = true %}
         {% if section.index > 2 %}
           {% assign preload = false %}
         {% endif %}
         {% if section.settings.second_mobile_image != blank %}
-          {% render 'image'
-            , image: section.settings.second_mobile_image
-            , sizes: '100vw'
-            , widths: '400, 600, 750'
-            , preload: preload
-            , class: 'w-full h-full absolute inset-0 -z-0'
-            , fetchpriority: fetch_priority
+          {% render 'image',
+            image: section.settings.second_mobile_image,
+            sizes: '100vw',
+            widths: '400, 600, 750',
+            preload: preload,
+            class: 'w-full h-full absolute inset-0 -z-0',
+            fetchpriority: fetch_priority
           %}
         {% endif %}
 
@@ -161,190 +178,206 @@
 </div>
 
 {% schema %}
-  {
-    "name": "Hero — Static",
-    "class": "section",
-    "settings": [
-      {
-        "type": "image_picker",
-        "id": "image",
-        "label": "Image"
-      },
-      {
-        "type": "image_picker",
-        "id": "mobile_image",
-        "label": "Mobile Image"
-      },
-      {
-        "type": "image_picker",
-        "id": "second_image",
-        "label": "Second Image (for other side)"
-      },
-      {
-        "type": "image_picker",
-        "id": "second_mobile_image",
-        "label": "Second Mobile Image"
-      },
-      {
-        "type": "color",
-        "id": "background_color",
-        "label": "Background color",
-        "default": "#ffffff",
-        "info": "This color will be used as a fallback for the image"
-      },
-      {
-        "type": "color",
-        "id": "content_background_color",
-        "label": "Content background color",
-        "default": "#ffffff",
-        "info": "This color be applied as a block around the text content"
-      },
-      {
-        "type": "checkbox",
-        "id": "image_overlay",
-        "label": "Add gradient overlay on image",
-        "default": false
-      },
-      {
-        "type": "select",
-        "id": "layout",
-        "options": [
-          {
-            "value": "text_first",
-            "label": "Text first"
-          },
-          {
-            "value": "text_last",
-            "label": "Text last"
-          }
-        ],
-        "default": "text_first",
-        "label": "Layout",
-        "info": "Control the position of the text."
-      }
-    ],
-    "blocks": [
-      {
-        "type": "heading",
-        "name": "Heading",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "inline_richtext",
-            "id": "heading",
-            "default": "Add a heading",
-            "label": "Heading"
-          },
-          {
-            "type": "select",
-            "id": "heading_size",
-            "options": [
-              {
-                "value": "!h1",
-                "label": "H1"
-              },
-              {
-                "value": "!h2",
-                "label": "H2"
-              },
-              {
-                "value": "!h3",
-                "label": "H3"
-              },
-              {
-                "value": "!h4",
-                "label": "H4"
-              }
-            ],
-            "default": "!h2",
-            "label": "Heading size"
-          }
-        ]
-      },
-      {
-        "type": "text",
-        "name": "Text",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "richtext",
-            "id": "text",
-            "default": "<p>Use this section to welcome customers or highlight your store’s main features.</p>",
-            "label": "Text"
-          },
-          {
-            "type": "select",
-            "id": "text_size",
-            "label": "Text size",
-            "options": [
-              {
-                "value": "text-body",
-                "label": "Body"
-              },
-              {
-                "value": "text-body-large",
-                "label": "Large body"
-              }
-            ],
-            "default": "text-body"
-          }
-        ]
-      },
-      {
-        "type": "button",
-        "name": "Button",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "text",
-            "id": "button_label",
-            "default": "Shop now",
-            "label": "Button label"
-          },
-          {
-            "type": "url",
-            "id": "button_link",
-            "label": "Button link"
-          },
-          {
-            "type": "select",
-            "id": "button_variant",
-            "label": "Button variant",
-            "options": [
-              {
-                "value": "primary",
-                "label": "Primary"
-              },
-              {
-                "value": "secondary",
-                "label": "Secondary"
-              },
-              {
-                "value": "tertiary",
-                "label": "Tertiary"
-              }
-            ],
-            "default": "primary"
-          }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Hero — Static",
-        "category": "Custom",
-        "blocks": [
-          {
-            "type": "heading"
-          },
-          {
-            "type": "text"
-          },
-          {
-            "type": "button"
-          }
-        ]
-      }
-    ]
-  }
+{
+  "name": "Hero — Static",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "second_image",
+      "label": "Second Image (for other side)"
+    },
+    {
+      "type": "image_picker",
+      "id": "second_mobile_image",
+      "label": "Second Mobile Image"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff",
+      "info": "This color will be used as a fallback for the image"
+    },
+    {
+      "type": "color",
+      "id": "content_background_color",
+      "label": "Content background color",
+      "default": "#ffffff",
+      "info": "This color be applied as a block around the text content"
+    },
+    {
+      "type": "checkbox",
+      "id": "image_overlay",
+      "label": "Add gradient overlay on image",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "options": [
+        {
+          "value": "text_first",
+          "label": "Text first"
+        },
+        {
+          "value": "text_last",
+          "label": "Text last"
+        }
+      ],
+      "default": "text_first",
+      "label": "Layout",
+      "info": "Control the position of the text."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Add a heading",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "!h1",
+              "label": "H1"
+            },
+            {
+              "value": "!h2",
+              "label": "H2"
+            },
+            {
+              "value": "!h3",
+              "label": "H3"
+            },
+            {
+              "value": "!h4",
+              "label": "H4"
+            }
+          ],
+          "default": "!h2",
+          "label": "Heading size"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Use this section to welcome customers or highlight your store’s main features.</p>",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text size",
+          "options": [
+            {
+              "value": "text-body",
+              "label": "Body"
+            },
+            {
+              "value": "text-body-large",
+              "label": "Large body"
+            }
+          ],
+          "default": "text-body"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Shop now",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "button_variant",
+          "label": "Button variant",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "tertiary",
+              "label": "Tertiary"
+            }
+          ],
+          "default": "primary"
+        },
+        {
+          "type": "select",
+          "id": "button_font",
+          "label": "Button Font",
+          "options": [
+            {
+              "value": "gotham",
+              "label": "Gotham Narrow"
+            },
+            {
+              "value": "tungsten",
+              "label": "Tungsten"
+            }
+          ],
+          "default": "tungsten"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero — Static",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}

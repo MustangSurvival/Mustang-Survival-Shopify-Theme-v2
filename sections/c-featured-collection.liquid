@@ -1,7 +1,7 @@
 <div class='px-pagemargin 2xl:container py-[50px]'>
   <div class='md:flex lg:items-center lg:justify-between'>
     {%- if section.settings.title != blank -%}
-      <h2 class='{{ section.settings.heading_size }} h2 text-[32px] lg:text-[60px] mx-auto text-center'>
+      <h2 class='{{ section.settings.heading_size }} h2 text-[32px] lg:text-[60px] mx-auto text-center featured-collection-heading'>
         {{ section.settings.title }}
       </h2>
     {%- endif -%}
@@ -39,7 +39,6 @@
     "groups": ["header", "footer"]
   },
   "settings": [
-    
     {
       "type": "inline_richtext",
       "id": "title",

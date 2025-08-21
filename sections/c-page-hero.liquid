@@ -32,6 +32,7 @@
                 {% endif %}
                 class='my-2 btn'
                 variant='{% if block.settings.button_style_secondary %}secondary{% else %}primary{% endif %}'
+                data-font='{{ block.settings.button_font | default: "tungsten" }}'
                 {{ block.shopify_attributes }}
               >
                 {{ block.settings.button_label | escape }}
@@ -55,176 +56,192 @@
   {% if section.index > 2 %}
     {% assign preload = false %}
   {% endif %}
-  {% render 'image'
-    , image: section.settings.image
-    , sizes: sizes
-    , widths: '600, 900, 1100, 1440, 2180'
-    , preload: preload
-    , class: 'absolute inset-0 w-full h-full -z-10'
-    , fetchpriority: fetch_priority
+  {% render 'image',
+    image: section.settings.image,
+    sizes: sizes,
+    widths: '600, 900, 1100, 1440, 2180',
+    preload: preload,
+    class: 'absolute inset-0 w-full h-full -z-10',
+    fetchpriority: fetch_priority
   %}
 
   {{ image_overlay }}
 </div>
 
 {% schema %}
-  {
-    "name": "Hero — Page",
-    "class": "section",
-    "settings": [
-      {
-        "type": "image_picker",
-        "id": "image",
-        "label": "Image"
-      },
-      {
-        "type": "checkbox",
-        "id": "image_overlay",
-        "default": false,
-        "label": "Image overlay"
-      }
-    ],
-    "blocks": [
-      {
-        "type": "heading",
-        "name": "Heading",
-        "settings": [
-          {
-            "type": "inline_richtext",
-            "id": "heading",
-            "default": "Add a heading",
-            "label": "Heading"
-          },
-          {
-            "type": "select",
-            "id": "heading_size",
-            "options": [
-              {
-                "value": "!h1",
-                "label": "H1"
-              },
-              {
-                "value": "!h2",
-                "label": "H2"
-              },
-              {
-                "value": "!h3",
-                "label": "H3"
-              },
-              {
-                "value": "!h4",
-                "label": "H4"
-              }
-            ],
-            "default": "!h2",
-            "label": "Heading size"
-          }
-        ]
-      },
-      {
-        "type": "caption",
-        "name": "Caption",
-        "settings": [
-          {
-            "type": "text",
-            "id": "caption",
-            "default": "Add a caption",
-            "label": "Caption"
-          },
-          {
-            "type": "select",
-            "id": "text_size",
-            "options": [
-              {
-                "value": "text-sm",
-                "label": "Small"
-              },
-              {
-                "value": "text-base",
-                "label": "Base"
-              },
-              {
-                "value": "text-lg",
-                "label": "Large"
-              }
-            ],
-            "default": "text-base",
-            "label": "Text size"
-          }
-        ]
-      },
-      {
-        "type": "text",
-        "name": "Text",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "richtext",
-            "id": "text",
-            "default": "<p>Use this section to welcome customers or highlight your store’s main features.</p>",
-            "label": "Text"
-          },
-          {
-            "type": "select",
-            "id": "text_size",
-            "label": "Text size",
-            "options": [
-              {
-                "value": "text-body",
-                "label": "Body"
-              },
-              {
-                "value": "text-body-large",
-                "label": "Large body"
-              }
-            ],
-            "default": "text-body"
-          }
-        ]
-      },
-      {
-        "type": "button",
-        "name": "Button",
-        "settings": [
-          {
-            "type": "text",
-            "id": "button_label",
-            "default": "Shop now",
-            "label": "Button label"
-          },
-          {
-            "type": "url",
-            "id": "button_link",
-            "label": "Button link"
-          },
-          {
-            "type": "checkbox",
-            "id": "button_style_secondary",
-            "default": false,
-            "label": "Use outline style"
-          }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Hero — Page",
-        "category": "Custom",
-        "blocks": [
-          {
-            "type": "caption"
-          },
-          {
-            "type": "heading"
-          },
-          {
-            "type": "text"
-          },
-          {
-            "type": "button"
-          }
-        ]
-      }
-    ]
-  }
+{
+  "name": "Hero — Page",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "image_overlay",
+      "default": false,
+      "label": "Image overlay"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Add a heading",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "!h1",
+              "label": "H1"
+            },
+            {
+              "value": "!h2",
+              "label": "H2"
+            },
+            {
+              "value": "!h3",
+              "label": "H3"
+            },
+            {
+              "value": "!h4",
+              "label": "H4"
+            }
+          ],
+          "default": "!h2",
+          "label": "Heading size"
+        }
+      ]
+    },
+    {
+      "type": "caption",
+      "name": "Caption",
+      "settings": [
+        {
+          "type": "text",
+          "id": "caption",
+          "default": "Add a caption",
+          "label": "Caption"
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "options": [
+            {
+              "value": "text-sm",
+              "label": "Small"
+            },
+            {
+              "value": "text-base",
+              "label": "Base"
+            },
+            {
+              "value": "text-lg",
+              "label": "Large"
+            }
+          ],
+          "default": "text-base",
+          "label": "Text size"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Use this section to welcome customers or highlight your store’s main features.</p>",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text size",
+          "options": [
+            {
+              "value": "text-body",
+              "label": "Body"
+            },
+            {
+              "value": "text-body-large",
+              "label": "Large body"
+            }
+          ],
+          "default": "text-body"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Shop now",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_style_secondary",
+          "default": false,
+          "label": "Use outline style"
+        },
+        {
+          "type": "select",
+          "id": "button_font",
+          "label": "Button Font",
+          "options": [
+            {
+              "value": "gotham",
+              "label": "Gotham Narrow"
+            },
+            {
+              "value": "tungsten",
+              "label": "Tungsten"
+            }
+          ],
+          "default": "tungsten"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero — Page",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "caption"
+        },
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}

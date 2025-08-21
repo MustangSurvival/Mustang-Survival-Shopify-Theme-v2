@@ -11,7 +11,7 @@
         </div>
     {%- endcase -%}
   {%- endfor -%}
-  <div class="flex gap-x-[9.5px] gap-y-[4.75px] flex-wrap mt-[15px] lg:mt-0">
+  <div class="flex gap-x-[9.5px] gap-y-[4.75px] flex-wrap mt-[15px] lg:mt-0 items-center">
     {% assign buttons = 0 %}
     {%- for block in section.blocks -%}
       {% case block.type %}
@@ -25,6 +25,7 @@
               {% endif %}
               class='btn {% if buttons > 0 %}hidden md:block{% endif %} text-center'
               variant='{{ block.settings.button_variant }}'
+              data-font='{{ block.settings.button_font | default: "tungsten" }}'
               {{ block.shopify_attributes }}
               data-btn="{{ buttons }}"
             >
@@ -43,156 +44,172 @@
 </div>
 
 {% schema %}
-  {
-    "name": "Intro Block",
-    "class": "section",
-    "settings": [
-      {
-        "type": "select",
-        "id": "align_content",
-        "label": "Align content",
-        "options": [
-          {
-            "value": "items-start",
-            "label": "Left"
-          },
-          {
-            "value": "items-center",
-            "label": "Center"
-          },
-          {
-            "value": "items-end",
-            "label": "Right"
-          }
-        ],
-        "default": "items-start"
-      }
-    ],
-    "blocks": [
-      {
-        "type": "heading",
-        "name": "Heading",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "inline_richtext",
-            "id": "heading",
-            "default": "Add a heading",
-            "label": "Heading"
-          },
-          {
-            "type": "select",
-            "id": "heading_size",
-            "options": [
-              {
-                "value": "!h1",
-                "label": "H1"
-              },
-              {
-                "value": "!h2",
-                "label": "H2"
-              },
-              {
-                "value": "!h3",
-                "label": "H3"
-              },
-              {
-                "value": "!h4",
-                "label": "H4"
-              }
-            ],
-            "default": "!h2",
-            "label": "Heading size"
-          }
-        ]
-      },
-      {
-        "type": "text",
-        "name": "Text",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "richtext",
-            "id": "text",
-            "default": "<p>Use this section to welcome customers or highlight your store’s main features.</p>",
-            "label": "Text"
-          },
-          {
-            "type": "select",
-            "id": "text_size",
-            "label": "Text size",
-            "options": [
-              {
-                "value": "text-body",
-                "label": "Body"
-              },
-              {
-                "value": "text-body-large",
-                "label": "Large body"
-              }
-            ],
-            "default": "text-body"
-          }
-        ]
-      },
-      {
-        "type": "button",
-        "name": "Button",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "text",
-            "id": "button_label",
-            "default": "Shop now",
-            "label": "Button label"
-          },
-          {
-            "type": "url",
-            "id": "button_link",
-            "label": "Button link"
-          },
-          {
-            "type": "select",
-            "id": "button_variant",
-            "label": "Button variant",
-            "options": [
-              {
-                "value": "primary",
-                "label": "Primary"
-              },
-              {
-                "value": "secondary",
-                "label": "Secondary"
-              },
-              {
-                "value": "tertiary",
-                "label": "Tertiary"
-              },
-              {
-                "value": "quaternary",
-                "label": "Quaternary"
-              }
-            ],
-            "default": "quaternary"
-          }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Intro Block",
-        "blocks": [
-          {
-            "type": "heading"
-          },
-          {
-            "type": "text"
-          },
-          {
-            "type": "button"
-          }
-        ]
-      }
-    ]
-  }
+{
+  "name": "Intro Block",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "align_content",
+      "label": "Align content",
+      "options": [
+        {
+          "value": "items-start",
+          "label": "Left"
+        },
+        {
+          "value": "items-center",
+          "label": "Center"
+        },
+        {
+          "value": "items-end",
+          "label": "Right"
+        }
+      ],
+      "default": "items-start"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Add a heading",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "!h1",
+              "label": "H1"
+            },
+            {
+              "value": "!h2",
+              "label": "H2"
+            },
+            {
+              "value": "!h3",
+              "label": "H3"
+            },
+            {
+              "value": "!h4",
+              "label": "H4"
+            }
+          ],
+          "default": "!h2",
+          "label": "Heading size"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Use this section to welcome customers or highlight your store’s main features.</p>",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text size",
+          "options": [
+            {
+              "value": "text-body",
+              "label": "Body"
+            },
+            {
+              "value": "text-body-large",
+              "label": "Large body"
+            }
+          ],
+          "default": "text-body"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Shop now",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "button_variant",
+          "label": "Button variant",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "tertiary",
+              "label": "Tertiary"
+            },
+            {
+              "value": "quaternary",
+              "label": "Quaternary"
+            }
+          ],
+          "default": "quaternary"
+        },
+        {
+          "type": "select",
+          "id": "button_font",
+          "label": "Button Font",
+          "options": [
+            {
+              "value": "gotham",
+              "label": "Gotham Narrow"
+            },
+            {
+              "value": "tungsten",
+              "label": "Tungsten"
+            }
+          ],
+          "default": "tungsten"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Intro Block",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}

@@ -38,6 +38,7 @@
                 {% endif %}
                 class='my-2 btn'
                 variant='{{ block.settings.button_variant }}'
+                data-font='{{ block.settings.button_font | default: "tungsten" }}'
                 {{ block.shopify_attributes }}
               >
                 {{ block.settings.button_label | escape }}
@@ -200,6 +201,22 @@
             }
           ],
           "default": "primary"
+        },
+        {
+          "type": "select",
+          "id": "button_font",
+          "label": "Button Font",
+          "options": [
+            {
+              "value": "gotham",
+              "label": "Gotham Narrow"
+            },
+            {
+              "value": "tungsten",
+              "label": "Tungsten"
+            }
+          ],
+          "default": "tungsten"
         }
       ]
     }

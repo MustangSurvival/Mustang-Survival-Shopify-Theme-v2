@@ -18,7 +18,7 @@
         </div>
     {%- endcase -%}
   {%- endfor -%}
-  <div class="flex gap-x-[9.5px] gap-y-[4.75px] flex-wrap mt-[15px] lg:mt-0">
+  <div class="flex gap-x-[9.5px] gap-y-[4.75px] flex-wrap mt-[15px] lg:mt-0 items-center">
     {% assign buttons = 0 %}
     {%- for block in section.blocks -%}
       {% case block.type %}
@@ -32,6 +32,7 @@
               {% endif %}
               class='btn {% if buttons > 0 %}hidden md:block{% endif %} text-center'
               variant='{{ block.settings.button_variant }}'
+              data-font='{{ block.settings.button_font | default: "tungsten" }}'
               {{ block.shopify_attributes }}
               data-btn="{{ buttons }}"
             >
@@ -45,7 +46,7 @@
 {% endcapture %}
 
 <div class='max-w-2xl mx-auto md:max-w-none md:mx-0 2xl:mx-unset'>
-  <div class='grid-cols-4 md:grid'>
+  <div class='grid-cols-4 md:grid' style='min-height: {{ section.settings.section_height | default: 450 }}px;'>
     {% if section.settings.image != blank %}
       <div class='relative hidden h-full md:block'>
         {% capture sizes %}(min-width: 1100px) 100vw, (min-width: 750px) 50vw{% endcapture %}
@@ -79,6 +80,16 @@
       "type": "image_picker",
       "id": "image",
       "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "min": 200,
+      "max": 800,
+      "step": 50,
+      "unit": "px",
+      "label": "Section height",
+      "default": 450
     }
   ],
   "blocks": [
@@ -187,6 +198,22 @@
             }
           ],
           "default": "quaternary"
+        },
+        {
+          "type": "select",
+          "id": "button_font",
+          "label": "Button Font",
+          "options": [
+            {
+              "value": "gotham",
+              "label": "Gotham Narrow"
+            },
+            {
+              "value": "tungsten",
+              "label": "Tungsten"
+            }
+          ],
+          "default": "tungsten"
         }
       ]
     }
