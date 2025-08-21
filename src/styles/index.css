@@ -289,12 +289,9 @@
   }
 
   .btn[variant='quaternary'] {
-    @apply text-body normal-case;
-    font-size: 15px !important;
-    line-height: 24px !important;
-    border: 1px solid var(--t-foreground);
-    background-color: var(--t-background);
-    color: var(--t-foreground);
+    border: 1px solid black;
+    background-color: white;
+    color: black;
   }
 
   .btn[variant='quinary'] {
@@ -323,8 +320,16 @@
   .btn[variant='tertiary']:hover,
   .btn[variant='tertiary']:focus,
   .btn[variant='tertiary']:active {
-    background-color: #DDCF2E;
-    border-color: #DDCF2E;
+    background-color: #ddcf2e;
+    border-color: #ddcf2e;
+    color: black;
+  }
+
+  .btn[variant='quaternary']:hover,
+  .btn[variant='quaternary']:focus,
+  .btn[variant='quaternary']:active {
+    background-color: #ddcf2e;
+    border-color: #ddcf2e;
     color: black;
   }
 
