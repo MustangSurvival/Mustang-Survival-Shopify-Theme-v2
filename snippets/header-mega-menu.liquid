@@ -100,7 +100,11 @@
                   </div>
                   {%- comment %} Column 4: Promotional Content {%- endcomment %}
                   {%- if block.settings.promo_image != blank or block.settings.promo_heading != blank -%}
-                    <a class='flex flex-col gap-sm col-span-2 relative' href="{{ block.settings.promo_link_url }}" aria-label="{{ block.settings.promo_link_label | escape }}">
+                    <a
+                      class='flex flex-col gap-sm col-span-2 relative'
+                      href='{{ block.settings.promo_link_url }}'
+                      aria-label='{{ block.settings.promo_link_label | escape }}'
+                    >
                       {%- if block.settings.promo_image != blank -%}
                         {%- render 'image',
                           image: block.settings.promo_image,
@@ -114,7 +118,7 @@
                             class='backdrop-blur-md h5 text-p-lightest border border-p-lightest p-[8px_8px_5px_8px]'
                             data-promo-default-heading='{{ block.settings.promo_heading | escape }}'
                           >
-                              {{ block.settings.promo_heading | escape }}
+                            {{ block.settings.promo_heading | escape }}
                           </h4>
                         {%- endif -%}
                         {%- comment -%}

@@ -1,5 +1,4 @@
-import { LitElement, html } from 'lit';
-
+import { LitElement, html } from 'lit'
 
 // Cache global stylesheets
 let globalSheets: CSSStyleSheet[] = []

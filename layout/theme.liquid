@@ -52,12 +52,20 @@
     {% comment %} Yotpo Widget {% endcomment %}
     <script type='text/javascript'>
       ;(function e() {
-        var e = document.createElement('script')
-        ;(e.type = 'text/javascript'),
-          (e.async = true),
-          (e.src = '//staticw2.yotpo.com/wL1ztZ2e9kD1np3xf8sR2LlCFanNfJ3YxMUE4oWk/widget.js')
-        var t = document.getElementsByTagName('script')[0]
-        t.parentNode.insertBefore(e, t)
+        function loadYotpo() {
+          var e = document.createElement('script')
+          ;(e.type = 'text/javascript'),
+            (e.async = true),
+            (e.src = '//staticw2.yotpo.com/wL1ztZ2e9kD1np3xf8sR2LlCFanNfJ3YxMUE4oWk/widget.js')
+          var t = document.getElementsByTagName('script')[0]
+          t.parentNode.insertBefore(e, t)
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', loadYotpo)
+        } else {
+          loadYotpo()
+        }
       })()
     </script>
   </head>

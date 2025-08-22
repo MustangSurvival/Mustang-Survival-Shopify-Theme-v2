@@ -16,21 +16,21 @@
 %}
 
 {% capture prev_button %}
-  <button id='swiper-button-prev-{{ swiper_id }}' class='p-2'>
+  <button id='swiper-button-prev-{{ swiper_id }}' class='p-2 transition-opacity duration-300 swiper-nav-btn' data-swiper-id='{{ swiper_id }}'>
     {%- render 'icon' with 'c-icon-caret'
       , size: 10
       , class: '-rotate-90 h-[12.5px] w-[25px]' -%}
   </button>
 {% endcapture %}
 {% capture next_button %}
-  <button id='swiper-button-next-{{ swiper_id }}' class='p-2'>
+  <button id='swiper-button-next-{{ swiper_id }}' class='p-2 transition-opacity duration-300 swiper-nav-btn' data-swiper-id='{{ swiper_id }}'>
     {%- render 'icon' with 'c-icon-caret'
       , size: 12
       , class: 'rotate-90 h-[12.5px] w-[25px]' -%}
   </button>
 {% endcapture %}
 
-<div class="relative">
+<div class='relative'>
   <swiper-container
     navigation='
       {
@@ -61,15 +61,16 @@
         }
       }
     '
-    class='flex flex-col overflow-hidden w-full gap-4'>
+    class='flex flex-col overflow-hidden w-full gap-4'
+  >
     {{ slides }}
   </swiper-container>
 
   {% unless arrow_position == 'inline' %}
-  <div class="{% if arrows_on_mobile %}flex{% else %}hidden lg:flex{% endif %} justify-between items-center z-10 transform {{ swiper_button_styles }}">
-    {{ prev_button }}
-    {{ next_button }}
-  </div>
+    <div class='{% if arrows_on_mobile %}flex{% else %}hidden lg:flex{% endif %} justify-between items-center z-10 transform {{ swiper_button_styles }}'>
+      {{ prev_button }}
+      {{ next_button }}
+    </div>
   {% endunless %}
 
   <div class='{% if show_controls_on_desktop == 1 %}flex{% else %}flex lg:hidden{% endif %} justify-center items-center mt-4'>

@@ -9,7 +9,7 @@
 {%- assign remaining_amount = remaining_amount | times: 100 | money -%}
 
 {%- if block.settings.enable_free_shipping -%}
-  <p class="px-[15px] py-[5px] bg-p-lightest text-center">
+  <p class='px-[15px] py-[5px] bg-p-lightest text-center'>
     {% if threshold_reached %}
       {{ 'cart.general.free_shipping_reached' | t }}
     {% else %}

@@ -65,7 +65,7 @@
         </div>
       {% endif %}
 
-      <div class="flex flex-col justify-center">
+      <div class='flex flex-col justify-center'>
         {% if material_name %}
           {% assign material_name_parts = material_name | split: '|' %}
           <h3>
@@ -77,13 +77,13 @@
         <h4 class='h5'>{{ product.title }}</h4>
 
         {% if material_graph %}
-            <img
-              src='{{ graph_object.src | image_url: "1000x" }}'
-              width='{{ graph_object.width }}'
-              height='{{ graph_object.height }}'
-              alt='Material performance graph illustrating key properties such as durability, breathability, and water resistance. The graph is set against a clean technical background, emphasizing clarity and precision. Any visible text in the graph: {{ graph_object.alt }}. The tone is informative and professional.'
-              class="my-[14px] lg:max-w-[400px]"
-            >
+          <img
+            src='{{ graph_object.src | image_url: "1000x" }}'
+            width='{{ graph_object.width }}'
+            height='{{ graph_object.height }}'
+            alt='Material performance graph illustrating key properties such as durability, breathability, and water resistance. The graph is set against a clean technical background, emphasizing clarity and precision. Any visible text in the graph: {{ graph_object.alt }}. The tone is informative and professional.'
+            class='my-[14px] lg:max-w-[400px]'
+          >
         {% endif %}
 
         {% if material_description %}

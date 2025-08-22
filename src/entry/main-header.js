@@ -1,6 +1,5 @@
-import { BaseElementWithoutShadowDOM } from '@/base/BaseElement';
-import '@/components/mega-menu';
-
+import { BaseElementWithoutShadowDOM } from '@/base/BaseElement'
+import '@/components/mega-menu'
 
 export class MainHeader extends BaseElementWithoutShadowDOM {
   #resizeObserver = new ResizeObserver(() => this.#setHeightCSSProperty())

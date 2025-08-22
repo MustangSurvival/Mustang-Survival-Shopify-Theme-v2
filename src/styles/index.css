@@ -337,6 +337,18 @@
     @apply !flex-col gap-[3.4px];
   }
 
+  .collection-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 26.794px;
+  letter-spacing: 0.957px;
+  text-transform: uppercase;
+}
+
+
+
+
+
   [product-form] .yotpo-sr-bottom-line-summary {
     @apply mb-[8px] !flex-row gap-px lg:mb-[13px];
   }

@@ -335,12 +335,12 @@ export class CustomSelect extends FormElement {
         ?selected=${option.selected}
         ?disabled=${option.disabled}
       >
-        <span class="group-focus:ring-u-focus group-focus-visible:ring-2 flex items-center gap-2">
-          ${
-            option.icon
-              ? html`<img src="${option.icon}" class="size-[25px]"></img>`
-              : nothing
-          }
+        <span
+          class="flex items-center gap-2 group-focus:ring-u-focus group-focus-visible:ring-2"
+        >
+          ${option.icon
+            ? html`<img src="${option.icon}" class="size-[25px]"></img>`
+            : nothing}
           ${this.renderOptionLabel(option.label, option)}
         </span>
       </button>
@@ -389,7 +389,7 @@ export class CustomSelect extends FormElement {
     )
     return html`
       <div
-        class="group peer relative ${this.inline ? 'border-none' : 'w-full'}"
+        class="${this.inline ? 'border-none' : 'w-full'} group peer relative"
         ?error=${this.error}
         ?open=${this._expanded}
         @click=${this._handleClick}
@@ -409,14 +409,14 @@ export class CustomSelect extends FormElement {
           aria-label="${this.label}"
           ?disabled=${this.disabled}
           ${this.helpText ? `aria-describedby="${this.id}_text"` : ''}
-          class=${this.inline ? CLASSES_MAPPING.TOGGLE_INLINE : CLASSES_MAPPING.TOGGLE}
+          class=${this.inline
+            ? CLASSES_MAPPING.TOGGLE_INLINE
+            : CLASSES_MAPPING.TOGGLE}
         >
           <span class="block truncate pr-[5px]">
-            ${
-              selectedOption?.icon
-                ? html`<img src="${selectedOption.icon}" class="size-[25px]"></img>`
-                : nothing
-            }
+            ${selectedOption?.icon
+              ? html`<img src="${selectedOption.icon}" class="size-[25px]"></img>`
+              : nothing}
             ${this._currentToggleLabel}
           </span>
           <div class=${CLASSES_MAPPING.TOGGLE_ICON}>
@@ -427,7 +427,7 @@ export class CustomSelect extends FormElement {
             ></svg-icon>
           </div>
         </button>
-        
+
         <div
           ${ref(this.listboxElement)}
           id="dropdown"

@@ -54,11 +54,7 @@
         -%}
 
         <li class='w-full flex'>
-          {% render 'product-card',
-            product: product,
-            media_aspect_ratio: 'square',
-            lazy_load: lazy_load
-          %}
+          {% render 'product-card', product: product, media_aspect_ratio: 'square', lazy_load: lazy_load %}
         </li>
       {%- endfor -%}
     </ul>

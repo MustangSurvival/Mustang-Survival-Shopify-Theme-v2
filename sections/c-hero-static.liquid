@@ -21,9 +21,11 @@
       {%- for block in section.blocks -%}
         {% case block.type %}
           {%- when 'heading' -%}
-            <h2 class='text-balance {{ block.settings.heading_size }}' {{ block.shopify_attributes }}>
-              {{ block.settings.heading }}
-            </h2>
+            {% render 'heading-tag', 
+              heading_size: block.settings.heading_size, 
+              content: block.settings.heading, 
+              class: 'text-balance', 
+              attributes: block.shopify_attributes %}
           {%- when 'text' -%}
             <div class='rte max-w-[549px] {{ block.settings.text_size }}' {{ block.shopify_attributes }}>
               {{ block.settings.text }}

@@ -23,7 +23,6 @@
   endif
 -%}
 
-
 {% capture swatch_class %}
   block max-w-full overflow-clip relative aspect-square bg-cover bg-origin-border
   border border-p-lightest border-solid
@@ -37,22 +36,22 @@
   group-has-[:checked]/swatch:shadow-[0_0_0_1px_black]
   group-focus-within/swatch:shadow-[0_0_0_4px_black]
 {% endcapture %}
-  
-  <span
-    {% if swatch_value %}
-      class="{{ swatch_class }} {{ class }}"
-      style="--swatch--background: {{ swatch_value }};{% if swatch_focal_point %} --swatch-focal-point: {{ swatch_focal_point }};{% endif %}"
-    {% else %}
-      class="border-dashed border-t-foreground-secondary"
-    {% endif %}
-  >
-    {%- if swatch.image -%}
-      {%- render 'image',
-        image: swatch.image,
-        width: 40,
-        widths: '30,60,90,120',
-        loading: 'lazy',
-        class: 'absolute inset-0 w-full h-full'
-      -%}
-    {%- endif -%}
-  </span>
+
+<span
+  {% if swatch_value %}
+    class='{{ swatch_class }} {{ class }}'
+    style='--swatch--background: {{ swatch_value }};{% if swatch_focal_point %} --swatch-focal-point: {{ swatch_focal_point }};{% endif %}'
+  {% else %}
+    class='border-dashed border-t-foreground-secondary'
+  {% endif %}
+>
+  {%- if swatch.image -%}
+    {%- render 'image',
+      image: swatch.image,
+      width: 40,
+      widths: '30,60,90,120',
+      loading: 'lazy',
+      class: 'absolute inset-0 w-full h-full'
+    -%}
+  {%- endif -%}
+</span>

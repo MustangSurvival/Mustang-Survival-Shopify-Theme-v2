@@ -1,0 +1,55 @@
+{%- comment -%}
+  Renders proper HTML heading tag based on heading_size setting
+
+  Accepts:
+  - heading_size: {String} The heading size setting value (e.g., "!h2", "h1", etc.)
+  - content: {String} The heading content/text
+  - class: {String} Additional CSS classes (optional)
+  - attributes: {String} Additional HTML attributes (optional)
+
+  Usage:
+  {% render 'heading-tag', heading_size: block.settings.heading_size, content: block.settings.heading, class: 'text-balance', attributes: block.shopify_attributes %}
+{%- endcomment -%}
+
+{%- liquid
+  comment
+    Extract the actual heading level from the setting value
+  endcomment
+  assign heading_tag = 'h2'
+
+  comment
+    Handle values like "!h1", "!h2", "!h3", "!h4"
+  endcomment
+  if heading_size contains '!h'
+    assign heading_tag = heading_size | remove: '!'
+    comment
+      Handle values like "h1", "h2", "h3", "h4", "h5", "h6"
+    endcomment
+  elsif heading_size contains 'h'
+    assign heading_tag = heading_size
+    comment
+      Handle edge cases like "p" or "caption" - use div instead
+    endcomment
+  elsif heading_size == 'p' or heading_size == 'caption'
+    assign heading_tag = 'div'
+  endif
+
+  comment
+    Build the CSS classes
+  endcomment
+  assign css_classes = heading_size
+  if class != blank
+    assign css_classes = css_classes | append: ' ' | append: class
+  endif
+-%}
+
+<{{ heading_tag }}
+  {% if css_classes != blank %}
+    class='{{ css_classes }}'
+  {% endif -%}
+  {% if attributes != blank %}
+    {{ attributes -}}
+  {% endif %}
+>
+  {{ content }}
+</{{ heading_tag }}>

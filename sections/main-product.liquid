@@ -13,10 +13,10 @@
 {%- endif -%}
 
 {% if section.settings.show_breadcrumbs %}
-<div class='mt-[21px] lg:mt-[57px] flex flex-col gap-[8px] lg:gap-[9px] items-center justify-center mb-[3px] lg:mb-[41px]'>
-  {%- render 'product--breadcrumbs' -%}
-  <h1 class='h3 font-[600] text-[40px] lg:text-[84px]'>{{ product.title | escape }}</h1>
-</div>
+  <div class='mt-[21px] lg:mt-[57px] flex flex-col gap-[8px] lg:gap-[9px] items-center justify-center mb-[3px] lg:mb-[41px]'>
+    {%- render 'product--breadcrumbs' -%}
+    <h1 class='h3 font-[600] text-[40px] lg:text-[84px]'>{{ product.title | escape }}</h1>
+  </div>
 {% endif %}
 
 <main-product

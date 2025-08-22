@@ -3,9 +3,11 @@
   <div class='2xl:container px-pagemargin py-sm'>
     <div class='md:flex md:items-center md:justify-between'>
       {%- if section.settings.title != blank -%}
-        <h2 class='text-gray-900 {{ section.settings.heading_size }}'>
-          {{ section.settings.title }}
-        </h2>
+        {% render 'heading-tag',
+          heading_size: section.settings.heading_size,
+          content: section.settings.title,
+          class: 'text-gray-900'
+        %}
       {%- endif -%}
     </div>
 

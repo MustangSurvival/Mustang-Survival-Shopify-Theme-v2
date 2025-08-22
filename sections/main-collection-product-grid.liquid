@@ -135,7 +135,7 @@
                     assign adjusted_index_mobile = index_with_offset | plus: count_mobile
 
                     if collection_ingrids_mobile_positions contains adjusted_index_mobile
-                      unless occupied_positions_mobile contains adjusted_index_mobile 
+                      unless occupied_positions_mobile contains adjusted_index_mobile
                         assign in_grid_for_position = collection_ingrids | where: 'grid_position_small_screen', adjusted_index_mobile | first
                         if section.settings.klaviyo_pesonalization_enable_group
                           render 'personalization-collection-ingrid-item', item: in_grid_for_position, is_mobile: true, index: index_with_offset, allowed_groups: allowed_groups
@@ -153,7 +153,7 @@
                     if collection_ingrids_positions contains adjusted_index_desktop
                       unless occupied_positions_desktop contains adjusted_index_desktop
                         assign in_grid_for_position = collection_ingrids | where: 'grid_position', adjusted_index_desktop | first
-                        
+
                         if section.settings.klaviyo_pesonalization_enable_group
                           render 'personalization-collection-ingrid-item', item: in_grid_for_position, is_mobile: false, index: index_with_offset, allowed_groups: allowed_groups
                         else

@@ -104,7 +104,7 @@ export class GiftCardBalance extends WithApiClientMixin(BaseElement) {
     }
 
     if (this.fetchCartWithGiftCardTask.status === TaskStatus.ERROR) {
-      return html`<p class="caption p-xs text-u-error ring-1 ring-u-error">
+      return html`<p class="caption text-u-error ring-1 ring-u-error p-xs">
         ${(this.fetchCartWithGiftCardTask.error as Error).message}
       </p>`
     }

@@ -17,13 +17,13 @@
 <article aria-labelledby='Page-{{ page.id }}' class='grid grid-cols-1 gap-y-[20px]'>
   {%- if image -%}
     <div class='relative aspect-video'>
-      {%- render 'image'
-        , image: image
-        , class: 'h-full w-full inset-0 absolute'
-        , sizes: sizes
-        , width: 300
-        , widths: image_widths
-        , loading: true
+      {%- render 'image',
+        image: image,
+        class: 'h-full w-full inset-0 absolute',
+        sizes: sizes,
+        width: 300,
+        widths: image_widths,
+        loading: true
       -%}
     </div>
   {%- endif -%}

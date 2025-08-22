@@ -38,17 +38,15 @@
                 </ul>
               {% endcapture %}
               {%- assign block_nav_id = 'block-nav-id-' | append: block.id %}
-              {%- render 'accordion-item',
-                id: block_nav_id,
-                title: block.settings.top_label,
-                content: block_menu
-              -%}
+              {%- render 'accordion-item', id: block_nav_id, title: block.settings.top_label, content: block_menu -%}
             {% else %}
               <a
                 id='HeaderDrawer-{{ block.id }}'
                 href='{{ block.settings.link }}'
                 class='block text-[24px] leading-[40px] h6 {% if block.settings.link == blank %}cursor-default{% endif %}'
-                {% if block.settings.link == blank %}aria-disabled='true'{% endif %}
+                {% if block.settings.link == blank %}
+                  aria-disabled='true'
+                {% endif %}
               >
                 {{ block.settings.top_label | escape }}
               </a>
@@ -61,27 +59,27 @@
 
   {% comment %} 2. Additional Mobile Links (from Blocks) {% endcomment %}
   {%- comment -%}
-  {%- assign mobile_link_blocks = section.blocks | where: 'type', 'mobile_link' -%}
-  {%- if mobile_link_blocks.size > 0 -%}
-    <div class='px-sm mt-sm border-t border-p-border pt-sm'>
-      <ul class='list-none grid grid-cols-1 gap-y-sm' role='list'>
-        {%- for block in mobile_link_blocks -%}
-          {%- if block.settings.link != blank and block.settings.text != blank -%}
-            <li class='list-none'>
-              <a href='{{ block.settings.link }}' class='flex items-center gap-xs text-base hover:underline'>
-                {%- if block.settings.icon != blank -%}
-                  {% render 'icon' with block.settings.icon, size: 20 %}
-                {%- else -%}
-                  <span class='w-[20px] h-[20px] inline-block'></span>
-                {%- endif -%}
-                <span>{{ block.settings.text | escape }}</span>
-              </a>
-            </li>
-          {%- endif -%}
-        {%- endfor -%}
-      </ul>
-    </div>
-  {%- endif -%}
+    {%- assign mobile_link_blocks = section.blocks | where: 'type', 'mobile_link' -%}
+    {%- if mobile_link_blocks.size > 0 -%}
+      <div class='px-sm mt-sm border-t border-p-border pt-sm'>
+        <ul class='list-none grid grid-cols-1 gap-y-sm' role='list'>
+          {%- for block in mobile_link_blocks -%}
+            {%- if block.settings.link != blank and block.settings.text != blank -%}
+              <li class='list-none'>
+                <a href='{{ block.settings.link }}' class='flex items-center gap-xs text-base hover:underline'>
+                  {%- if block.settings.icon != blank -%}
+                    {% render 'icon' with block.settings.icon, size: 20 %}
+                  {%- else -%}
+                    <span class='w-[20px] h-[20px] inline-block'></span>
+                  {%- endif -%}
+                  <span>{{ block.settings.text | escape }}</span>
+                </a>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
   {%- endcomment -%}
 
   {%- liquid

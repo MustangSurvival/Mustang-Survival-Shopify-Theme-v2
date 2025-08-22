@@ -101,7 +101,7 @@
     </div>
 
     {% comment %} Per price column {% endcomment %}
-    <div class="hidden lg:block">
+    <div class='hidden lg:block'>
       <p class='mb-[5px]'>{{ 'cart.line_item.price' | t }}</p>
       {%- if item.original_price != item.final_price -%}
         <div>
@@ -142,7 +142,7 @@
     {% comment %} Price Column {% endcomment %}
     <div class='lg:text-right flex-col flex lg:justify-between lg:items-end'>
       <div>
-      <p class='mb-[5px] hidden lg:block'>{{ 'cart.line_item.total' | t }}</p>
+        <p class='mb-[5px] hidden lg:block'>{{ 'cart.line_item.total' | t }}</p>
         {%- if item.original_line_price != item.final_line_price -%}
           <dl class='inline-flex items-center justify-end gap-x-2xs flex-wrap'>
             <dt class='sr-only'>

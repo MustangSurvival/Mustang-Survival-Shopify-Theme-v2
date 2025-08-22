@@ -1,5 +1,5 @@
 .dialog::backdrop {
-  @apply bg-u-overlay hidden transform-gpu opacity-0 transition-[display,opacity,overlay] delay-100 duration-300 [transition-behavior:allow-discrete] motion-reduce:transition-none;
+  @apply hidden transform-gpu bg-u-overlay opacity-0 transition-[display,opacity,overlay] delay-100 duration-300 [transition-behavior:allow-discrete] motion-reduce:transition-none;
 }
 
 .dialog[open]::backdrop {
@@ -32,7 +32,7 @@
 }
 
 .modal {
-  @apply bg-p-lightest h-full w-full translate-y-full overflow-y-auto overscroll-contain opacity-0 transition-[opacity,transform,overlay] delay-0 duration-300 ease-in-out motion-reduce:transition-none md:h-auto md:w-10/12 md:translate-y-16 lg:max-h-dvh lg:max-w-2xl;
+  @apply h-full w-full translate-y-full overflow-y-auto overscroll-contain bg-p-lightest opacity-0 transition-[opacity,transform,overlay] delay-0 duration-300 ease-in-out motion-reduce:transition-none md:h-auto md:w-10/12 md:translate-y-16 lg:max-h-dvh lg:max-w-2xl;
 }
 
 .modal[size='modal-max'] {
@@ -44,7 +44,7 @@
 }
 
 .drawer {
-  @apply bg-p-lightest scrollbar-thumb-p-neutral fixed right-0 h-full w-full translate-x-full overflow-y-auto overscroll-contain transition-transform delay-0 duration-300 ease-in-out scrollbar-thin scrollbar-track-[transparent] motion-reduce:transition-none sm:max-w-[400px];
+  @apply fixed right-0 h-full w-full translate-x-full overflow-y-auto overscroll-contain bg-p-lightest transition-transform delay-0 duration-300 ease-in-out scrollbar-thin scrollbar-track-[transparent] scrollbar-thumb-p-neutral motion-reduce:transition-none sm:max-w-[400px];
 }
 
 .drawer[anchor='left'] {

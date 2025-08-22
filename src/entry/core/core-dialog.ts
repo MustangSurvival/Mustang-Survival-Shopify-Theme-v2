@@ -196,7 +196,7 @@ export class ModalDialog extends WithApiClientMixin(
     return html`
       ${this._loadURLContentTask.render({
         pending: () =>
-          html`<p class="caption animate-pulse p-md text-center">
+          html`<p class="caption animate-pulse text-center p-md">
             Loading...
           </p>`,
         complete: (data) => (data ? html`${unsafeHTML(data)}` : nothing),
@@ -224,16 +224,14 @@ export class ModalDialog extends WithApiClientMixin(
         @click=${this._handleBackdropClick}
       >
         <div
-          class="${
-            this.type || 'modal'
-          } grid grid-cols-1 grid-rows-[81px_minmax(0,_1fr)_auto]"
+          class="${this.type ||
+          'modal'} grid grid-cols-1 grid-rows-[81px_minmax(0,_1fr)_auto]"
           size=${this.size}
           anchor=${this.anchor}
         >
           <div
-            class="${
-              this.headerClasses
-            } sticky top-0 z-50 flex items-center justify-between bg-p-lightest px-sm py-xs h-max border-b border-b-t-line-break"
+            class="${this
+              .headerClasses} sticky top-0 z-50 flex h-max items-center justify-between border-b border-b-t-line-break bg-p-lightest px-sm py-xs"
           >
             <div
               class="${this.withoutTitle ? 'sr-only' : ''} flex-grow"
@@ -244,7 +242,7 @@ export class ModalDialog extends WithApiClientMixin(
 
             <button
               @click=${this.#handleClose}
-              class="inline-flex leading-none focus:outline-none focus-visible:ring-1 focus-visible:ring-u-focus ml-[25px]"
+              class="ml-[25px] inline-flex leading-none focus:outline-none focus-visible:ring-1 focus-visible:ring-u-focus"
             >
               <slot name="close-icon">
                 <svg-icon

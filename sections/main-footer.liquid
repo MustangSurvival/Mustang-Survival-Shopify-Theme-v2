@@ -86,17 +86,18 @@
   <div class='px-pagemargin 2xl:container'>
     {%- if section.blocks.size > 0 -%}
       {% liquid
-      if section.blocks.size == 1
-        assign grid_class = 'lg:grid-cols-2'
-      elsif section.blocks.size == 2
-        assign grid_class = 'lg:grid-cols-3'
-      elsif section.blocks.size == 3
-        assign grid_class = 'lg:grid-cols-4'
-      elsif section.blocks.size == 4
-        assign grid_class = 'lg:grid-cols-5'
-      else
-        assign grid_class = 'lg:grid-cols-6'
-      endif %}
+        if section.blocks.size == 1
+          assign grid_class = 'lg:grid-cols-2'
+        elsif section.blocks.size == 2
+          assign grid_class = 'lg:grid-cols-3'
+        elsif section.blocks.size == 3
+          assign grid_class = 'lg:grid-cols-4'
+        elsif section.blocks.size == 4
+          assign grid_class = 'lg:grid-cols-5'
+        else
+          assign grid_class = 'lg:grid-cols-6'
+        endif
+      %}
       <div class='justify-start grid lg:pl-2 gap-[25px] lg:gap-[20px] {{ grid_class }}'>
         {%- assign first_link_list = true -%}
         {%- for block in section.blocks -%}

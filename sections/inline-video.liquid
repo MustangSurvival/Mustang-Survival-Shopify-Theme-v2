@@ -15,7 +15,7 @@
   {%- if section.settings.heading != blank or section.settings.description != blank -%}
     <div class='grid grid-cols-1 gap-y-xs {% if section.settings.full_width %} 2xl:container px-pagemargin{% endif %}'>
       {%- unless section.settings.heading == blank -%}
-        <h2 class='{{ section.settings.heading_size }}'>{{ section.settings.heading }}</h2>
+        {% render 'heading-tag', heading_size: section.settings.heading_size, content: section.settings.heading %}
       {%- endunless -%}
       {%- unless section.settings.description == blank -%}
         <p class='rte'>{{ section.settings.description }}</p>

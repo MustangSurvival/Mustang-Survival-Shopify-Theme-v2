@@ -114,7 +114,12 @@
 %}
 
 {% if product %}
-  <product-card default-image="{{ product.featured_image | image_url: width: 300 }}" class="w-full relative group">
+  <product-card
+    {% if product.featured_image %}
+      default-image='{{ product.featured_image | image_url: width: 300 }}'
+    {% endif %}
+    class='w-full relative group'
+  >
     {% render 'border-target' %}
     <{{ wrapper_tag }}
       class='w-full group relative flex flex-col overflow-hidden bg-white {{ class }}'
@@ -127,7 +132,7 @@
             sizes: sizes,
             width: 300,
             widths: image_widths,
-            loading: loading
+            loading: loading,
             attributes: "data-product-image=''"
           -%}
 

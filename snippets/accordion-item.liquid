@@ -35,7 +35,9 @@
       type='{% if connected %}radio{% else %}checkbox{% endif %}'
       id='accordion-checkbox-{{ id }}'
       name='{{ group_name | default: 'accordion' }}'
-      {% if open %}checked{% endif %}
+      {% if open %}
+        checked
+      {% endif %}
     >
     <div class='flex gap-[10px] items-center w-full peer-focus-visible:ring-1 ring-u-focus {{ container_classes }}'>
       {% if alternate_layout %}
@@ -44,7 +46,10 @@
           class: 'group-has-[:checked]:rotate-180 duration-300 transition-transform relative bottom-px'
         -%}
       {% endif %}
-      <h2 class='{% if alternate_layout %}text-body font-[500] text-[16px]{% else %}h6 text-[24px] leading-[40px]{% endif %} {{ title_classes }}' id='accordion-title-{{ id }}'>
+      <h2
+        class='{% if alternate_layout %}text-body font-[500] text-[16px]{% else %}h6 text-[24px] leading-[40px]{% endif %} {{ title_classes }}'
+        id='accordion-title-{{ id }}'
+      >
         {{ title }}
       </h2>
       {% unless alternate_layout %}

@@ -1,9 +1,11 @@
 <div class='lg:px-pagemargin 2xl:container py-[50px] lg:pt-[50px]'>
   <div class='md:flex lg:items-center lg:justify-between'>
     {%- if section.settings.title != blank -%}
-      <h2 class='h2 text-[32px] lg:text-[60px] mx-auto text-center'>
-        {{ section.settings.title }}
-      </h2>
+      {% render 'heading-tag',
+        heading_size: section.settings.heading_size,
+        content: section.settings.title,
+        class: 'h2 text-[32px] lg:text-[60px] mx-auto text-center'
+      %}
     {%- endif -%}
   </div>
 
@@ -37,107 +39,108 @@
       </swiper-slide>
     {% endfor %}
   {% endcapture %}
-  <div class="mt-[45px] {% unless section.settings.mobile_slider %}hidden lg:block{% endunless %}">
-    {% render 'c-carousel'
-      , slides: slides
-      , arrows: 'inline'
-      , slides_per_view_mobile: 1
-      , slides_per_view_desktop: 3
-      , show_controls_on_desktop: 0
-      , gap: 8 %}
+  <div class='mt-[45px] {% unless section.settings.mobile_slider %}hidden lg:block{% endunless %}'>
+    {% render 'c-carousel',
+      slides: slides,
+      arrows: 'inline',
+      slides_per_view_mobile: 1,
+      slides_per_view_desktop: 3,
+      show_controls_on_desktop: 0,
+      gap: 8
+    %}
   </div>
   {%- unless section.settings.mobile_slider -%}
-    <div class="lg:hidden flex flex-col gap-[25px] mt-[45px]">
+    <div class='lg:hidden flex flex-col gap-[25px] mt-[45px]'>
       {{ slides }}
     </div>
   {%- endunless -%}
 </div>
 
 {% schema %}
-  {
-    "name": "Content Cards",
-    "tag": "section",
-    "class": "section",
-    "disabled_on": {
-      "groups": ["header", "footer"]
+{
+  "name": "Content Cards",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "The Captains Blog",
+      "label": "Heading"
     },
-    "max_blocks": 3,
-    "settings": [
-      {
-        "type": "inline_richtext",
-        "id": "title",
-        "default": "The Captains Blog",
-        "label": "Heading"
-      },
-      {
-        "type": "select",
-        "id": "heading_size",
-        "options": [
-          {
-            "value": "!h1",
-            "label": "H1"
-          },
-          {
-            "value": "!h2",
-            "label": "H2"
-          },
-          {
-            "value": "!h3",
-            "label": "H3"
-          },
-          {
-            "value": "!h4",
-            "label": "H4"
-          }
-        ],
-        "default": "!h2",
-        "label": "Heading Size"
-      },
-      {
-        "type": "richtext",
-        "id": "description",
-        "label": "Description"
-      },
-      {
-        "type": "checkbox",
-        "id": "mobile_slider",
-        "label": "Use slider on mobile"
-      }
-    ],
-    "blocks": [
-      {
-        "type": "article",
-        "name": "Article",
-        "settings": [
-          {
-            "type": "article",
-            "id": "article",
-            "label": "Article"
-          }
-        ]
-      },
-      {
-        "type": "page",
-        "name": "Page",
-        "settings": [
-          {
-            "type": "page",
-            "id": "page",
-            "label": "Page"
-          },
-          {
-            "type": "image_picker",
-            "id": "image",
-            "label": "Image"
-          }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Content Cards",
-        "category": "Custom"
-      }
-    ]
-  }
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "!h1",
+          "label": "H1"
+        },
+        {
+          "value": "!h2",
+          "label": "H2"
+        },
+        {
+          "value": "!h3",
+          "label": "H3"
+        },
+        {
+          "value": "!h4",
+          "label": "H4"
+        }
+      ],
+      "default": "!h2",
+      "label": "Heading Size"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_slider",
+      "label": "Use slider on mobile"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "article",
+      "name": "Article",
+      "settings": [
+        {
+          "type": "article",
+          "id": "article",
+          "label": "Article"
+        }
+      ]
+    },
+    {
+      "type": "page",
+      "name": "Page",
+      "settings": [
+        {
+          "type": "page",
+          "id": "page",
+          "label": "Page"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Content Cards",
+      "category": "Custom"
+    }
+  ]
+}
 {% endschema %}

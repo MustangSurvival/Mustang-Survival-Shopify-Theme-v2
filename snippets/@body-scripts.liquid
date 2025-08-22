@@ -41,6 +41,7 @@
 
 {%- if content contains '<swiper' -%}
   <script defer type='module' src='{{ '-vendor-swiper.js' | asset_url }}'></script>
+  <script defer src='{{ 'swiper-navigation-states.js' | asset_url }}'></script>
 {%- endif -%}
 <script defer type='module' src='{{ '-core-dynamic-product-card.js' | asset_url }}'></script>
 

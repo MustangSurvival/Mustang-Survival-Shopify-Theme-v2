@@ -31,7 +31,7 @@ export class ProductForm extends WithShopifyCartClientMixin(BaseElement) {
   get errorHTML() {
     if (this.error) {
       return html`<p
-        class="body mt-sm p-2xs text-u-error ring-1 ring-u-error"
+        class="body text-u-error ring-1 ring-u-error mt-sm p-2xs"
         ${ref(this.$errorMessage)}
       >
         ${this.error}

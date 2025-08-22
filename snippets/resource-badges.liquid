@@ -13,7 +13,7 @@
 {%- endcomment -%}
 
 {%- capture badge_classes -%}
-w-[113px] text-ellipsis overflow-hidden whitespace-pre px-[3px] !bg-p-background border-[2px] border-p-foreground bg-p-lightest text-center caption uppercase w-full text-[10px] lg:text-[12px] font-medium letter-spacing-[1px]
+min-w-[113px] w-auto whitespace-nowrap px-[3px] !bg-p-background border border-solid border-black bg-p-lightest text-center caption uppercase text-[14px] font-medium letter-spacing-[1px]
 {%- endcapture -%}
 
 {% liquid
@@ -33,7 +33,10 @@ w-[113px] text-ellipsis overflow-hidden whitespace-pre px-[3px] !bg-p-background
   endif
 %}
 {% if resource != blank or settings.show_sold_out_badge or settings.show_sale_badge %}
-  <div class='flex flex-col {{ container_class }} z-10 w-[113px]'>
+  <div
+    class='flex flex-col {{ container_class }} z-10 w-auto'
+    style='{% if resource_type == "collection" %}top: 10px; left: 10px;{% else %}top: 16px;{% endif %}'
+  >
     {% for badge in resource.metafields.custom.badges.value %}
       <span
         class='{{ badge_classes }} {{ badge_class }}'

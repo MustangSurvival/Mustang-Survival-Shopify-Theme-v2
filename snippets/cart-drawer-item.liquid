@@ -4,7 +4,10 @@
   Accepts:
     - item: The cart item object.
 {% endcomment %}
-<div id='CartDrawer-Item-{{ item.index | plus: 1 }}' class='grid col-span-3 grid-cols-subgrid gap-x-xs pb-[20px] mb-[20px] border-b border-b-t-line-break'>
+<div
+  id='CartDrawer-Item-{{ item.index | plus: 1 }}'
+  class='grid col-span-3 grid-cols-subgrid gap-x-xs pb-[20px] mb-[20px] border-b border-b-t-line-break'
+>
   <div class='relative aspect-[9/11]'>
     {% if item.image %}
       {%- render 'image',
